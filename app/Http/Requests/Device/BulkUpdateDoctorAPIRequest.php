@@ -20,11 +20,12 @@ class BulkUpdateDoctorAPIRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'data.*.start_of_service' => ['nullable', 'string'],
-            'data.*.awards' => ['nullable', 'string'],
-            'data.*.description' => ['nullable', 'string'],
+            'data.*.user_id' => ['nullable', 'exists:users,id'],
+            'data.*.start_of_service' => ['nullable'],
+            'data.*.awards' => ['nullable'],
+            'data.*.description' => ['nullable'],
             'data.*.designation_id' => ['nullable', 'string'],
-            'data.*.qualification_id' => ['nullable', 'string'],
+            'data.*.qualification_id' => ['nullable', 'exists:qualifications,id'],
             'data.*.faq' => ['nullable'],
             'data.*.time_slots' => ['nullable'],
             'data.*.is_active' => ['boolean'],

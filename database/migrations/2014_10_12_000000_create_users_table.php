@@ -37,6 +37,10 @@ class CreateUsersTable extends Migration
             $table->timestamp('reset_password_expire_time')->nullable();
             $table->string('reset_password_code')->nullable();
             $table->integer('user_type')->nullable();
+            $table->integer('otp')->nullable();
+            $table->integer('otp_attempt')->default(0);
+            $table->timestamp('otp_last_attempt')->nullable();
+            $table->timestamp('otp_created_at')->nullable();
         });
     }
 

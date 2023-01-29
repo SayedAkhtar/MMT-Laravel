@@ -21,6 +21,7 @@ class DoctorResource extends BaseAPIResource
 
         return [
             'id' => $this->id,
+            'user_id' => $this->user_id,
             'start_of_service' => $this->start_of_service,
             'awards' => $this->awards,
             'description' => $this->description,

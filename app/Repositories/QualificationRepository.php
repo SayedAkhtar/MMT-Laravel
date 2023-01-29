@@ -40,6 +40,6 @@ class QualificationRepository extends BaseRepository
      */
     public function getAvailableRelations(): array
     {
-        return ['addedByUser', 'updatedByUser'];
+        return ['addedByUser', 'updatedByUser', 'doctor'];
     }
 }

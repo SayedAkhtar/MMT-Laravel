@@ -35,4 +35,12 @@ class Qualification extends Model
         'added_by' => 'integer',
         'updated_by' => 'integer',
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class, 'qualification_id', 'id');
+    }
 }

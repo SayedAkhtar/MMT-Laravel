@@ -21,7 +21,6 @@ class LoginAPIRequest extends FormRequest
     {
         return [
             'username' => ['required'],
-            'password' => ['required'],
         ];
     }
 }

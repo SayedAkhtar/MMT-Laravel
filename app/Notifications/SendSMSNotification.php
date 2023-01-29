@@ -2,9 +2,11 @@
 
 namespace App\Notifications;
 
-use Illuminate\Notifications\Messages\NexmoMessage;
+use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\URL;
+use NotificationChannels\Twilio\TwilioChannel;
+use NotificationChannels\Twilio\TwilioSmsMessage;
 
 class SendSMSNotification extends Notification
 {
@@ -17,20 +19,20 @@ class SendSMSNotification extends Notification
      */
     public function via($notifiable): array
     {
-        return ['nexmo'];
+        return [TwilioChannel::class];
     }
 
     /**
-     * @param  $notifiable
+     * @param    mixed  $notifiable
      *
-     * @return  NexmoMessage
+     * @return  TwilioSmsMessage
      */
-    public function toNexmo($notifiable): NexmoMessage
+    public function toTwilio($notifiable): TwilioSmsMessage
     {
         $code = $notifiable->reset_password_code;
         $link = URL::to('reset-password/'.$code);
 
-        return (new NexmoMessage)
+        return (new TwilioSmsMessage())
             ->content(html_entity_decode(view('sms.password_reset', compact('link'))));
     }
 }

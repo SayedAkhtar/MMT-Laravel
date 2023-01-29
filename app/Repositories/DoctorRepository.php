@@ -7,10 +7,11 @@ use App\Models\Doctor;
 class DoctorRepository extends BaseRepository
 {
     /**
-     * @var string[]
-     */
+    * @var  string[]
+    */
     protected $fieldSearchable = [
         'id',
+        'user_id',
         'start_of_service',
         'awards',
         'description',
@@ -26,26 +27,27 @@ class DoctorRepository extends BaseRepository
     ];
 
     /**
-     * @return string[]
-     */
+    * @return  string[]
+    */
     public function getFieldsSearchable(): array
     {
         return $this->fieldSearchable;
     }
 
     /**
-     * @return string
-     */
+    * @return  string
+    */
     public function model(): string
     {
         return Doctor::class;
     }
 
+
     /**
-     * @return string[]
+     * @return  string[]
      */
     public function getAvailableRelations(): array
     {
-        return ['addedByUser', 'updatedByUser'];
+       return ['addedByUser','updatedByUser','doctorPatientTestimonials','doctorTags','doctorSpecializations','doctorHospitals','doctorTreatments''user','qualification'];
     }
 }

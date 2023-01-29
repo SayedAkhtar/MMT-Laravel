@@ -76,9 +76,9 @@ class DefaultUserSeeder extends Seeder
             'country' => $faker->word,
             'dob' => $faker->date(),
             'role' => $faker->numberBetween(1,5),
-            'username' => 'hansen.anabelle',
-            'email' => 'nayeli63@hotmail.com',
-            'password' => Hash::make('(O}80Hm\n'),
+            'username' => 'konopelski.dejon',
+            'email' => 'conn.elyssa@spinka.biz',
+            'password' => Hash::make('`@?i:w;+Y'),
             'email_verified_at' => Carbon::now(),
             'user_type' => User::TYPE_ADMIN
         ];
