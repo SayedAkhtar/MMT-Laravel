@@ -1,0 +1,5429 @@
+{
+"info": {
+"_postman_id": "b9337051-585d-48e0-9de1-791ea317f362",
+"name": "mmt_backend",
+"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+},
+"item": [
+{
+"name": "Admin",
+"description": "admin APIs",
+"item": [
+{
+"name": "Qualification",
+"description": "Qualification Model APIs",
+"item": [
+{
+"name": "Add Qualification",
+"request": {
+"url": "{{host}}/api/admin/qualifications",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"name\": \"hic\", \n  \"is_active\": false  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Add Qualification response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/qualifications"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 3, \n    \"name\": \"harum\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Qualification Details",
+"request": {
+"url": "{{host}}/api/admin/qualifications/id",
+"method": "GET",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Qualification Details response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/qualifications/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 3, \n    \"name\": \"harum\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Qualification Listing",
+"request": {
+"method": "GET",
+"url": {
+"raw": "{{host}}/api/admin/qualifications",
+"host": [
+"{{host}}"
+],
+"path": [
+"api",
+"admin",
+"qualifications"
+],
+"query": [
+{
+"key": "limit",
+"value": null,
+"disabled": true
+},
+{
+"key": "skip",
+"value": null,
+"disabled": true
+},
+{
+"key": "filter[field_name]",
+"value": null,
+"description": "e.g filter[email] : Search records by field",
+"disabled": true
+},
+{
+"key": "filter[relation.field]",
+"value": null,
+"description": "e.g filter[addedByUser.username] : Search records by relationship fields",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "field_name",
+"description": "e.g created_at : Sort data by field in asc order",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "-field_name",
+"description": "e.g -created_at : Sort data by field in desc order, add dash (-) before field to sort in desc order",
+"disabled": true
+},
+{
+"key": "fields[table_name]",
+"value": "field1,field2,field2",
+"description": "e.g fields[users] : id,username.email => get only given field in response",
+"disabled": true
+},
+{
+"key": "include",
+"value": "relationshipName",
+"disabled": true,
+"description": "e.g include : addedByUser or include : addedByUser,updatedByUser get added relations into response"
+}
+]
+},
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Qualification Listing",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/qualifications"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\":[\n\t\t{\n\t\t\t\"id\": 3, \n\t\t\t\"name\": \"harum\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Update Qualification",
+"request": {
+"url": "{{host}}/api/admin/qualifications/id",
+"method": "PUT",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"name\": \"hic\", \n  \"is_active\": false  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Update Qualification response",
+"originalRequest": {
+"method": "PUT",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/qualifications/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 3, \n    \"name\": \"harum\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Delete Qualification",
+"request": {
+"url": "{{host}}/api/admin/qualifications/id",
+"method": "DELETE",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Delete Qualification response",
+"originalRequest": {
+"method": "DELETE",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/qualifications/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"Qualification deleted successfully.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Add Qualification",
+"request": {
+"url": "{{host}}/api/admin/qualifications/bulk-create",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"name\": \"hic\", \n\t\t\"is_active\": false  \n\t}, \n\t{\n\t\t\"name\": \"hic\", \n\t\t\"is_active\": false  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Add Qualification response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/qualifications/bulk-create"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 3, \n\t\t\t\"name\": \"harum\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Update Qualification",
+"request": {
+"url": "{{host}}/api/admin/qualifications/bulk-update",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"name\": \"hic\", \n\t\t\"is_active\": false  \n\t}, \n\t{\n\t\t\"id\": 2,\n\t\t\"name\": \"hic\", \n\t\t\"is_active\": false  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Update Qualification response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/qualifications/bulk-update"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 3, \n\t\t\t\"name\": \"harum\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+]
+},
+{
+"name": "Degisnation",
+"description": "Degisnation Model APIs",
+"item": [
+{
+"name": "Add Degisnation",
+"request": {
+"url": "{{host}}/api/admin/degisnations",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"name\": \"adipisci\", \n  \"is_active\": false  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Add Degisnation response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/degisnations"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 3, \n    \"name\": \"quas\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Degisnation Details",
+"request": {
+"url": "{{host}}/api/admin/degisnations/id",
+"method": "GET",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Degisnation Details response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/degisnations/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 3, \n    \"name\": \"quas\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Degisnation Listing",
+"request": {
+"method": "GET",
+"url": {
+"raw": "{{host}}/api/admin/degisnations",
+"host": [
+"{{host}}"
+],
+"path": [
+"api",
+"admin",
+"degisnations"
+],
+"query": [
+{
+"key": "limit",
+"value": null,
+"disabled": true
+},
+{
+"key": "skip",
+"value": null,
+"disabled": true
+},
+{
+"key": "filter[field_name]",
+"value": null,
+"description": "e.g filter[email] : Search records by field",
+"disabled": true
+},
+{
+"key": "filter[relation.field]",
+"value": null,
+"description": "e.g filter[addedByUser.username] : Search records by relationship fields",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "field_name",
+"description": "e.g created_at : Sort data by field in asc order",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "-field_name",
+"description": "e.g -created_at : Sort data by field in desc order, add dash (-) before field to sort in desc order",
+"disabled": true
+},
+{
+"key": "fields[table_name]",
+"value": "field1,field2,field2",
+"description": "e.g fields[users] : id,username.email => get only given field in response",
+"disabled": true
+},
+{
+"key": "include",
+"value": "relationshipName",
+"disabled": true,
+"description": "e.g include : addedByUser or include : addedByUser,updatedByUser get added relations into response"
+}
+]
+},
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Degisnation Listing",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/degisnations"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\":[\n\t\t{\n\t\t\t\"id\": 3, \n\t\t\t\"name\": \"quas\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Update Degisnation",
+"request": {
+"url": "{{host}}/api/admin/degisnations/id",
+"method": "PUT",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"name\": \"adipisci\", \n  \"is_active\": false  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Update Degisnation response",
+"originalRequest": {
+"method": "PUT",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/degisnations/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 3, \n    \"name\": \"quas\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Delete Degisnation",
+"request": {
+"url": "{{host}}/api/admin/degisnations/id",
+"method": "DELETE",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Delete Degisnation response",
+"originalRequest": {
+"method": "DELETE",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/degisnations/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"Degisnation deleted successfully.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Add Degisnation",
+"request": {
+"url": "{{host}}/api/admin/degisnations/bulk-create",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"name\": \"adipisci\", \n\t\t\"is_active\": false  \n\t}, \n\t{\n\t\t\"name\": \"adipisci\", \n\t\t\"is_active\": false  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Add Degisnation response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/degisnations/bulk-create"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 3, \n\t\t\t\"name\": \"quas\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Update Degisnation",
+"request": {
+"url": "{{host}}/api/admin/degisnations/bulk-update",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"name\": \"adipisci\", \n\t\t\"is_active\": false  \n\t}, \n\t{\n\t\t\"id\": 2,\n\t\t\"name\": \"adipisci\", \n\t\t\"is_active\": false  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Update Degisnation response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/degisnations/bulk-update"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 3, \n\t\t\t\"name\": \"quas\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+]
+},
+{
+"name": "Doctor",
+"description": "Doctor Model APIs",
+"item": [
+{
+"name": "Add Doctor",
+"request": {
+"url": "{{host}}/api/admin/doctors",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"start_of_service\": \"vitae\", \n  \"awards\": \"qui\", \n  \"description\": \"nobis\", \n  \"designation_id\": \"amet\", \n  \"qualification_id\": \"expedita\", \n  \"faq\": \"aspernatur\", \n  \"time_slots\": \"in\", \n  \"is_active\": false  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Add Doctor response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/doctors"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 2, \n    \"start_of_service\": \"cupiditate\", \n    \"awards\": \"voluptatem\", \n    \"description\": \"ratione\", \n    \"designation_id\": \"molestiae\", \n    \"qualification_id\": \"voluptates\", \n    \"faq\": \"est\", \n    \"time_slots\": \"ratione\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Doctor Details",
+"request": {
+"url": "{{host}}/api/admin/doctors/id",
+"method": "GET",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Doctor Details response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/doctors/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 2, \n    \"start_of_service\": \"cupiditate\", \n    \"awards\": \"voluptatem\", \n    \"description\": \"ratione\", \n    \"designation_id\": \"molestiae\", \n    \"qualification_id\": \"voluptates\", \n    \"faq\": \"est\", \n    \"time_slots\": \"ratione\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Doctor Listing",
+"request": {
+"method": "GET",
+"url": {
+"raw": "{{host}}/api/admin/doctors",
+"host": [
+"{{host}}"
+],
+"path": [
+"api",
+"admin",
+"doctors"
+],
+"query": [
+{
+"key": "limit",
+"value": null,
+"disabled": true
+},
+{
+"key": "skip",
+"value": null,
+"disabled": true
+},
+{
+"key": "filter[field_name]",
+"value": null,
+"description": "e.g filter[email] : Search records by field",
+"disabled": true
+},
+{
+"key": "filter[relation.field]",
+"value": null,
+"description": "e.g filter[addedByUser.username] : Search records by relationship fields",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "field_name",
+"description": "e.g created_at : Sort data by field in asc order",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "-field_name",
+"description": "e.g -created_at : Sort data by field in desc order, add dash (-) before field to sort in desc order",
+"disabled": true
+},
+{
+"key": "fields[table_name]",
+"value": "field1,field2,field2",
+"description": "e.g fields[users] : id,username.email => get only given field in response",
+"disabled": true
+},
+{
+"key": "include",
+"value": "relationshipName",
+"disabled": true,
+"description": "e.g include : addedByUser or include : addedByUser,updatedByUser get added relations into response"
+}
+]
+},
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Doctor Listing",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/doctors"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\":[\n\t\t{\n\t\t\t\"id\": 2, \n\t\t\t\"start_of_service\": \"cupiditate\", \n\t\t\t\"awards\": \"voluptatem\", \n\t\t\t\"description\": \"ratione\", \n\t\t\t\"designation_id\": \"molestiae\", \n\t\t\t\"qualification_id\": \"voluptates\", \n\t\t\t\"faq\": \"est\", \n\t\t\t\"time_slots\": \"ratione\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Update Doctor",
+"request": {
+"url": "{{host}}/api/admin/doctors/id",
+"method": "PUT",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"start_of_service\": \"vitae\", \n  \"awards\": \"qui\", \n  \"description\": \"nobis\", \n  \"designation_id\": \"amet\", \n  \"qualification_id\": \"expedita\", \n  \"faq\": \"aspernatur\", \n  \"time_slots\": \"in\", \n  \"is_active\": false  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Update Doctor response",
+"originalRequest": {
+"method": "PUT",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/doctors/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 2, \n    \"start_of_service\": \"cupiditate\", \n    \"awards\": \"voluptatem\", \n    \"description\": \"ratione\", \n    \"designation_id\": \"molestiae\", \n    \"qualification_id\": \"voluptates\", \n    \"faq\": \"est\", \n    \"time_slots\": \"ratione\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Delete Doctor",
+"request": {
+"url": "{{host}}/api/admin/doctors/id",
+"method": "DELETE",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Delete Doctor response",
+"originalRequest": {
+"method": "DELETE",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/doctors/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"Doctor deleted successfully.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Add Doctor",
+"request": {
+"url": "{{host}}/api/admin/doctors/bulk-create",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"start_of_service\": \"vitae\", \n\t\t\"awards\": \"qui\", \n\t\t\"description\": \"nobis\", \n\t\t\"designation_id\": \"amet\", \n\t\t\"qualification_id\": \"expedita\", \n\t\t\"faq\": \"aspernatur\", \n\t\t\"time_slots\": \"in\", \n\t\t\"is_active\": false  \n\t}, \n\t{\n\t\t\"start_of_service\": \"vitae\", \n\t\t\"awards\": \"qui\", \n\t\t\"description\": \"nobis\", \n\t\t\"designation_id\": \"amet\", \n\t\t\"qualification_id\": \"expedita\", \n\t\t\"faq\": \"aspernatur\", \n\t\t\"time_slots\": \"in\", \n\t\t\"is_active\": false  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Add Doctor response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/doctors/bulk-create"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 2, \n\t\t\t\"start_of_service\": \"cupiditate\", \n\t\t\t\"awards\": \"voluptatem\", \n\t\t\t\"description\": \"ratione\", \n\t\t\t\"designation_id\": \"molestiae\", \n\t\t\t\"qualification_id\": \"voluptates\", \n\t\t\t\"faq\": \"est\", \n\t\t\t\"time_slots\": \"ratione\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Update Doctor",
+"request": {
+"url": "{{host}}/api/admin/doctors/bulk-update",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"start_of_service\": \"vitae\", \n\t\t\"awards\": \"qui\", \n\t\t\"description\": \"nobis\", \n\t\t\"designation_id\": \"amet\", \n\t\t\"qualification_id\": \"expedita\", \n\t\t\"faq\": \"aspernatur\", \n\t\t\"time_slots\": \"in\", \n\t\t\"is_active\": false  \n\t}, \n\t{\n\t\t\"id\": 2,\n\t\t\"start_of_service\": \"vitae\", \n\t\t\"awards\": \"qui\", \n\t\t\"description\": \"nobis\", \n\t\t\"designation_id\": \"amet\", \n\t\t\"qualification_id\": \"expedita\", \n\t\t\"faq\": \"aspernatur\", \n\t\t\"time_slots\": \"in\", \n\t\t\"is_active\": false  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Update Doctor response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/doctors/bulk-update"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 2, \n\t\t\t\"start_of_service\": \"cupiditate\", \n\t\t\t\"awards\": \"voluptatem\", \n\t\t\t\"description\": \"ratione\", \n\t\t\t\"designation_id\": \"molestiae\", \n\t\t\t\"qualification_id\": \"voluptates\", \n\t\t\t\"faq\": \"est\", \n\t\t\t\"time_slots\": \"ratione\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+]
+},
+{
+"name": "Role",
+"description": "Role Model APIs",
+"item": [
+{
+"name": "Add Role",
+"request": {
+"url": "{{host}}/api/admin/roles",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"name\": \"sequi\", \n  \"is_active\": true  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Add Role response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/roles"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 3, \n    \"name\": \"quas\", \n    \"is_active\": true, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Role Details",
+"request": {
+"url": "{{host}}/api/admin/roles/id",
+"method": "GET",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Role Details response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/roles/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 3, \n    \"name\": \"quas\", \n    \"is_active\": true, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Role Listing",
+"request": {
+"method": "GET",
+"url": {
+"raw": "{{host}}/api/admin/roles",
+"host": [
+"{{host}}"
+],
+"path": [
+"api",
+"admin",
+"roles"
+],
+"query": [
+{
+"key": "limit",
+"value": null,
+"disabled": true
+},
+{
+"key": "skip",
+"value": null,
+"disabled": true
+},
+{
+"key": "filter[field_name]",
+"value": null,
+"description": "e.g filter[email] : Search records by field",
+"disabled": true
+},
+{
+"key": "filter[relation.field]",
+"value": null,
+"description": "e.g filter[addedByUser.username] : Search records by relationship fields",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "field_name",
+"description": "e.g created_at : Sort data by field in asc order",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "-field_name",
+"description": "e.g -created_at : Sort data by field in desc order, add dash (-) before field to sort in desc order",
+"disabled": true
+},
+{
+"key": "fields[table_name]",
+"value": "field1,field2,field2",
+"description": "e.g fields[users] : id,username.email => get only given field in response",
+"disabled": true
+},
+{
+"key": "include",
+"value": "relationshipName",
+"disabled": true,
+"description": "e.g include : addedByUser or include : addedByUser,updatedByUser get added relations into response"
+}
+]
+},
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Role Listing",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/roles"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\":[\n\t\t{\n\t\t\t\"id\": 3, \n\t\t\t\"name\": \"quas\", \n\t\t\t\"is_active\": true, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Update Role",
+"request": {
+"url": "{{host}}/api/admin/roles/id",
+"method": "PUT",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"name\": \"sequi\", \n  \"is_active\": true  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Update Role response",
+"originalRequest": {
+"method": "PUT",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/roles/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 3, \n    \"name\": \"quas\", \n    \"is_active\": true, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Delete Role",
+"request": {
+"url": "{{host}}/api/admin/roles/id",
+"method": "DELETE",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Delete Role response",
+"originalRequest": {
+"method": "DELETE",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/roles/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"Role deleted successfully.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Add Role",
+"request": {
+"url": "{{host}}/api/admin/roles/bulk-create",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"name\": \"sequi\", \n\t\t\"is_active\": true  \n\t}, \n\t{\n\t\t\"name\": \"sequi\", \n\t\t\"is_active\": true  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Add Role response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/roles/bulk-create"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 3, \n\t\t\t\"name\": \"quas\", \n\t\t\t\"is_active\": true, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Update Role",
+"request": {
+"url": "{{host}}/api/admin/roles/bulk-update",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"name\": \"sequi\", \n\t\t\"is_active\": true  \n\t}, \n\t{\n\t\t\"id\": 2,\n\t\t\"name\": \"sequi\", \n\t\t\"is_active\": true  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Update Role response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/roles/bulk-update"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 3, \n\t\t\t\"name\": \"quas\", \n\t\t\t\"is_active\": true, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+]
+},
+{
+"name": "User",
+"description": "User Model APIs",
+"item": [
+{
+"name": "Add User",
+"request": {
+"url": "{{host}}/api/admin/users",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"name\": \"rerum\", \n  \"username\": \"quae\", \n  \"password\": \"magni\", \n  \"email\": \"possimus\", \n  \"phone\": 5, \n  \"email_verified_at\": \"2023-01-22 17:31:18\", \n  \"is_active\": true, \n  \"image\": \"dolore\", \n  \"gender\": \"ex\", \n  \"country\": \"saepe\", \n  \"dob\": \"2023-01-22\", \n  \"role\": 5, \n  \"user_type\": 1  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Add User response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/users"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 2, \n    \"name\": \"amet\", \n    \"username\": \"unde\", \n    \"password\": \"perspiciatis\", \n    \"email\": \"sunt\", \n    \"phone\": 3, \n    \"email_verified_at\": \"2023-01-22 17:31:18\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\", \n    \"image\": \"repudiandae\", \n    \"gender\": \"labore\", \n    \"country\": \"perferendis\", \n    \"dob\": \"2023-01-22\", \n    \"role\": 2, \n    \"user_type\": 1  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "User Details",
+"request": {
+"url": "{{host}}/api/admin/users/id",
+"method": "GET",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "User Details response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/users/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 2, \n    \"name\": \"amet\", \n    \"username\": \"unde\", \n    \"password\": \"perspiciatis\", \n    \"email\": \"sunt\", \n    \"phone\": 3, \n    \"email_verified_at\": \"2023-01-22 17:31:18\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\", \n    \"image\": \"repudiandae\", \n    \"gender\": \"labore\", \n    \"country\": \"perferendis\", \n    \"dob\": \"2023-01-22\", \n    \"role\": 2, \n    \"user_type\": 1  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "User Listing",
+"request": {
+"method": "GET",
+"url": {
+"raw": "{{host}}/api/admin/users",
+"host": [
+"{{host}}"
+],
+"path": [
+"api",
+"admin",
+"users"
+],
+"query": [
+{
+"key": "limit",
+"value": null,
+"disabled": true
+},
+{
+"key": "skip",
+"value": null,
+"disabled": true
+},
+{
+"key": "filter[field_name]",
+"value": null,
+"description": "e.g filter[email] : Search records by field",
+"disabled": true
+},
+{
+"key": "filter[relation.field]",
+"value": null,
+"description": "e.g filter[addedByUser.username] : Search records by relationship fields",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "field_name",
+"description": "e.g created_at : Sort data by field in asc order",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "-field_name",
+"description": "e.g -created_at : Sort data by field in desc order, add dash (-) before field to sort in desc order",
+"disabled": true
+},
+{
+"key": "fields[table_name]",
+"value": "field1,field2,field2",
+"description": "e.g fields[users] : id,username.email => get only given field in response",
+"disabled": true
+},
+{
+"key": "include",
+"value": "relationshipName",
+"disabled": true,
+"description": "e.g include : addedByUser or include : addedByUser,updatedByUser get added relations into response"
+}
+]
+},
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "User Listing",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/users"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\":[\n\t\t{\n\t\t\t\"id\": 2, \n\t\t\t\"name\": \"amet\", \n\t\t\t\"username\": \"unde\", \n\t\t\t\"password\": \"perspiciatis\", \n\t\t\t\"email\": \"sunt\", \n\t\t\t\"phone\": 3, \n\t\t\t\"email_verified_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"image\": \"repudiandae\", \n\t\t\t\"gender\": \"labore\", \n\t\t\t\"country\": \"perferendis\", \n\t\t\t\"dob\": \"2023-01-22\", \n\t\t\t\"role\": 2, \n\t\t\t\"user_type\": 1  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Update User",
+"request": {
+"url": "{{host}}/api/admin/users/id",
+"method": "PUT",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"name\": \"rerum\", \n  \"username\": \"quae\", \n  \"password\": \"magni\", \n  \"email\": \"possimus\", \n  \"phone\": 5, \n  \"email_verified_at\": \"2023-01-22 17:31:18\", \n  \"is_active\": true, \n  \"image\": \"dolore\", \n  \"gender\": \"ex\", \n  \"country\": \"saepe\", \n  \"dob\": \"2023-01-22\", \n  \"role\": 5, \n  \"user_type\": 1  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Update User response",
+"originalRequest": {
+"method": "PUT",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/users/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 2, \n    \"name\": \"amet\", \n    \"username\": \"unde\", \n    \"password\": \"perspiciatis\", \n    \"email\": \"sunt\", \n    \"phone\": 3, \n    \"email_verified_at\": \"2023-01-22 17:31:18\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\", \n    \"image\": \"repudiandae\", \n    \"gender\": \"labore\", \n    \"country\": \"perferendis\", \n    \"dob\": \"2023-01-22\", \n    \"role\": 2, \n    \"user_type\": 1  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Delete User",
+"request": {
+"url": "{{host}}/api/admin/users/id",
+"method": "DELETE",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Delete User response",
+"originalRequest": {
+"method": "DELETE",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/users/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"User deleted successfully.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Add User",
+"request": {
+"url": "{{host}}/api/admin/users/bulk-create",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"name\": \"rerum\", \n\t\t\"username\": \"quae\", \n\t\t\"password\": \"magni\", \n\t\t\"email\": \"possimus\", \n\t\t\"phone\": 5, \n\t\t\"email_verified_at\": \"2023-01-22 17:31:18\", \n\t\t\"is_active\": true, \n\t\t\"image\": \"dolore\", \n\t\t\"gender\": \"ex\", \n\t\t\"country\": \"saepe\", \n\t\t\"dob\": \"2023-01-22\", \n\t\t\"role\": 5, \n\t\t\"user_type\": 1  \n\t}, \n\t{\n\t\t\"name\": \"rerum\", \n\t\t\"username\": \"quae\", \n\t\t\"password\": \"magni\", \n\t\t\"email\": \"possimus\", \n\t\t\"phone\": 5, \n\t\t\"email_verified_at\": \"2023-01-22 17:31:18\", \n\t\t\"is_active\": true, \n\t\t\"image\": \"dolore\", \n\t\t\"gender\": \"ex\", \n\t\t\"country\": \"saepe\", \n\t\t\"dob\": \"2023-01-22\", \n\t\t\"role\": 5, \n\t\t\"user_type\": 1  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Add User response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/users/bulk-create"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 2, \n\t\t\t\"name\": \"amet\", \n\t\t\t\"username\": \"unde\", \n\t\t\t\"password\": \"perspiciatis\", \n\t\t\t\"email\": \"sunt\", \n\t\t\t\"phone\": 3, \n\t\t\t\"email_verified_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"image\": \"repudiandae\", \n\t\t\t\"gender\": \"labore\", \n\t\t\t\"country\": \"perferendis\", \n\t\t\t\"dob\": \"2023-01-22\", \n\t\t\t\"role\": 2, \n\t\t\t\"user_type\": 1  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Update User",
+"request": {
+"url": "{{host}}/api/admin/users/bulk-update",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"name\": \"rerum\", \n\t\t\"username\": \"quae\", \n\t\t\"password\": \"magni\", \n\t\t\"email\": \"possimus\", \n\t\t\"phone\": 5, \n\t\t\"email_verified_at\": \"2023-01-22 17:31:18\", \n\t\t\"is_active\": true, \n\t\t\"image\": \"dolore\", \n\t\t\"gender\": \"ex\", \n\t\t\"country\": \"saepe\", \n\t\t\"dob\": \"2023-01-22\", \n\t\t\"role\": 5, \n\t\t\"user_type\": 1  \n\t}, \n\t{\n\t\t\"id\": 2,\n\t\t\"name\": \"rerum\", \n\t\t\"username\": \"quae\", \n\t\t\"password\": \"magni\", \n\t\t\"email\": \"possimus\", \n\t\t\"phone\": 5, \n\t\t\"email_verified_at\": \"2023-01-22 17:31:18\", \n\t\t\"is_active\": true, \n\t\t\"image\": \"dolore\", \n\t\t\"gender\": \"ex\", \n\t\t\"country\": \"saepe\", \n\t\t\"dob\": \"2023-01-22\", \n\t\t\"role\": 5, \n\t\t\"user_type\": 1  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Update User response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/users/bulk-update"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 2, \n\t\t\t\"name\": \"amet\", \n\t\t\t\"username\": \"unde\", \n\t\t\t\"password\": \"perspiciatis\", \n\t\t\t\"email\": \"sunt\", \n\t\t\t\"phone\": 3, \n\t\t\t\"email_verified_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"image\": \"repudiandae\", \n\t\t\t\"gender\": \"labore\", \n\t\t\t\"country\": \"perferendis\", \n\t\t\t\"dob\": \"2023-01-22\", \n\t\t\t\"role\": 2, \n\t\t\t\"user_type\": 1  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+]
+},
+{
+"name": "Role",
+"description": "admin Roles API",
+"item": [
+{
+"name": "Role Details",
+"request": {
+"url": "{{host}}/api/admin/roles/id",
+"method": "GET",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "Authorization",
+"value": "Bearer {{token}}",
+"type": "text"
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Role details response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/users/bulk-update"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n\t\"id\":\"1\",\n\t\"name\":\"User\",\n\t\"guard_name\":\"web\",\n\t\"created_at\":\"2021-12-16 12:01:27\",\n\t\"updated_at\":\"2021-12-16 12:01:27\",\n\t\"permissions\":\"[]\"\n\t}\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Role Listing",
+"request": {
+"url": "{{host}}/api/admin/roles",
+"method": "GET",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "Authorization",
+"value": "Bearer {{token}}",
+"type": "text"
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Role listing response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/roles"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\"id\":\"1\",\n\t\t\"name\":\"User\",\n\t\t\"guard_name\":\"web\",\n\t\t\"created_at\":\"2021-12-16 12:01:27\",\n\t\t\"updated_at\":\"2021-12-16 12:01:27\",\n\t\t\"permissions\":\"[]\"\n\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+
+"_postman_isSubFolder": true
+},
+{
+"name": "Add role",
+"request": {
+"url": "{{host}}/api/admin/roles",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "Authorization",
+"value": "Bearer {{token}}",
+"type": "text"
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"name\": \"Client\",\n  \"guard_name\": \"web\",\n  \"permissions\": [1,2,3]\n }"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Add role response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/roles"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n\t\"id\":\"1\",\n\t\"name\":\"User\",\n\t\"guard_name\":\"web\",\n\t\"created_at\":\"2021-12-16 12:01:27\",\n\t\"updated_at\":\"2021-12-16 12:01:27\",\n\t\"permissions\":\"[]\"\n\t}\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Update role",
+"request": {
+"url": "{{host}}/api/admin/roles/id",
+"method": "PUT",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "Authorization",
+"value": "Bearer {{token}}",
+"type": "text"
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Update role response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/roles/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n\t\"id\":\"1\",\n\t\"name\":\"User\",\n\t\"guard_name\":\"web\",\n\t\"created_at\":\"2021-12-16 12:01:27\",\n\t\"updated_at\":\"2021-12-16 12:01:27\",\n\t\"permissions\":\"[]\"\n\t}\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Delete role",
+"request": {
+"url": "{{host}}/api/admin/roles/id",
+"method": "DELETE",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "Authorization",
+"value": "Bearer {{token}}",
+"type": "text"
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Delete role response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/roles/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"Role deleted successfully.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Bulk Add role",
+"request": {
+"url": "{{host}}/api/admin/roles/bulk-create",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "Authorization",
+"value": "Bearer {{token}}",
+"type": "text"
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Bulk add role response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/roles/bulk-create"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\"id\":\"1\",\n\t\t\"name\":\"User\",\n\t\t\"guard_name\":\"web\",\n\t\t\"created_at\":\"2021-12-16 12:01:27\",\n\t\t\"updated_at\":\"2021-12-16 12:01:27\",\n\t\t\"permissions\":\"[]\"\n\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Bulk Update role",
+"request": {
+"url": "{{host}}/api/admin/roles/bulk-update",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "Authorization",
+"value": "Bearer {{token}}",
+"type": "text"
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Bulk update role response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/roles/bulk-update"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\"id\":\"1\",\n\t\t\"name\":\"User\",\n\t\t\"guard_name\":\"web\",\n\t\t\"created_at\":\"2021-12-16 12:01:27\",\n\t\t\"updated_at\":\"2021-12-16 12:01:27\",\n\t\t\"permissions\":\"[]\"\n\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+]
+},
+{
+"name": "Permission",
+"description": "admin Permission API",
+"item": [
+{
+"name": "Permission Details",
+"request": {
+"url": "{{host}}/api/admin/permissions/id",
+"method": "GET",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "Authorization",
+"value": "Bearer {{token}}",
+"type": "text"
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Permission details response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/permissions/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n\t\"id\":\"1\",\n\t\"name\":\"User\",\n\t\"guard_name\":\"web\",\n\t\"created_at\":\"2021-12-16 12:01:27\",\n\t\"updated_at\":\"2021-12-16 12:01:27\"\n\t}\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Permission Listing",
+"request": {
+"url": "{{host}}/api/admin/permissions",
+"method": "GET",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "Authorization",
+"value": "Bearer {{token}}",
+"type": "text"
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Permission listing response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/permissions"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\"id\":\"1\",\n\t\t\"name\":\"permission_name\",\n\t\t\"guard_name\":\"web\",\n\t\t\"created_at\":\"2021-12-16 12:01:27\",\n\t\t\"updated_at\":\"2021-12-16 12:01:27\"\n\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+
+"_postman_isSubFolder": true
+}
+]
+},
+{
+"name": "User Role",
+"description": "admin User Role API",
+"item": [
+{
+"name": "Assign Role to User",
+"request": {
+"url": "{{host}}/api/admin/users/assign-role",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "Authorization",
+"value": "Bearer {{token}}",
+"type": "text"
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"user_id\": \"1\",\n  \"role_id\": \"1\"\n }"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Assign role to user response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/users/assign-role"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"Role assign successfully.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Get Users Role",
+"request": {
+"url": "{{host}}/api/admin/users/id/roles",
+"method": "GET",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "Authorization",
+"value": "Bearer {{token}}",
+"type": "text"
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Get users role response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/users/id/roles"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n\t\"id\":\"1\",\n\t\"name\":\"User\",\n\t\"guard_name\":\"web\",\n\t\"created_at\":\"2021-12-16 12:01:27\",\n\t\"updated_at\":\"2021-12-16 12:01:27\",\n\t\"permissions\":\"[]\"\n\t}\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Update Users Role",
+"request": {
+"url": "{{host}}/api/admin/users/id/update-role",
+"method": "PUT",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "Authorization",
+"value": "Bearer {{token}}",
+"type": "text"
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"role_id\": \"1\"\n }"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Update users role response",
+"originalRequest": {
+"method": "PUT",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/users/id/update-role"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"Role updated successfully.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Bulk Assign Users Role",
+"request": {
+"url": "{{host}}/api/admin/users/bulk-assign-role",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "Authorization",
+"value": "Bearer {{token}}",
+"type": "text"
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"user_id\": \"\" , \n\t\t\"role_id\": \"\"\n\t}, \n\t{\n\t\t\"user_id\": \"\" , \n\t\t\"role_id\": \"\" \n\t}\n\t]\n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Bulk assign users role response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/users/bulk-assign-role"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"Role assign successfully.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+]
+},
+{
+"name": "Login",
+"description": "admin Login API",
+"item": [
+{
+"name": "Register",
+"request": {
+"url": "{{host}}/api/admin/register",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n \"username\": \"Tony\",\n  \"password\": \"Tony123\",\n  \"email\": \"tony123@gamil.com\",\n  \"name\": \"Tony\",\n  \"is_active\": true,\n  \"role\": \"1\"\n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Register response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/register"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 2, \n    \"name\": \"amet\", \n    \"username\": \"unde\", \n    \"password\": \"perspiciatis\", \n    \"email\": \"sunt\", \n    \"phone\": 3, \n    \"email_verified_at\": \"2023-01-22 17:31:18\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\", \n    \"image\": \"repudiandae\", \n    \"gender\": \"labore\", \n    \"country\": \"perferendis\", \n    \"dob\": \"2023-01-22\", \n    \"role\": 2, \n    \"user_type\": 1  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Login",
+"request": {
+"url": "{{host}}/api/admin/login",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"username\": \"albina19@hotmail.com\",\n  \"password\": \"ya4dEFBaqYvp1ar\"\n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Login response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/login"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Login Successful\",\n  \"data\": {\n    \"id\": 2,\n    \"name\": \"amet\",\n    \"username\": \"unde\",\n    \"password\": \"perspiciatis\",\n    \"email\": \"sunt\",\n    \"phone\": 3,\n    \"email_verified_at\": \"2023-01-22 17:31:18\",\n    \"is_active\": false,\n    \"created_at\": \"2023-01-22 17:31:18\",\n    \"updated_at\": \"2023-01-22 17:31:18\",\n    \"image\": \"repudiandae\",\n    \"gender\": \"labore\",\n    \"country\": \"perferendis\",\n    \"dob\": \"2023-01-22\",\n    \"role\": 2,\n    \"user_type\": 1, \n    \"token\": \"cQOkQdVTqnQR8e07AlP5pQkLp4zsjz05wJPW1EeGcQOkQdVTqnQR8e07AlP5pQkLp4zsjz05wJPW1EeG\"\n\t}\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Forgot Password",
+"request": {
+"url": "{{host}}/api/admin/forgot-password",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"email\": \"yourmail@gmail.com\"\n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Forgot password response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/forgot-password"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"otp successfully send to your email.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Validate Reset Password OTP",
+"request": {
+"url": "{{host}}/api/admin/validate-otp",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"otp\": \"icR86F\"\n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Validate reset password OTP response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/validate-otp"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"Invalid OTP.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Reset Password",
+"request": {
+"url": "{{host}}/api/admin/reset-password",
+"method": "PUT",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"code\": \"icR86F\",\n  \"new_password\": \"Your Password\"\n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Reset password response",
+"originalRequest": {
+"method": "PUT",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/reset-password"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"Password reset successfully.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Change Password",
+"request": {
+"url": "{{host}}/api/admin/change-password",
+"method": "PUT",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "Authorization",
+"value": "Bearer {{token}}",
+"type": "text"
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"old_password\": \"Your Old Password\",\n  \"new_password\": \"Your New Password\"\n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Change password response",
+"originalRequest": {
+"method": "PUT",
+"header": [],
+"url": {
+"raw": "{{host}}/api/admin/change-password"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Logout",
+"request": {
+"url": "{{host}}/api/admin/logout",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "Authorization",
+"value": "Bearer {{token}}",
+"type": "text"
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": ""
+},
+"description": ""
+},
+"_postman_isSubFolder": true
+}
+]
+} 
+]
+}
+,
+{
+"name": "Device",
+"description": "device APIs",
+"item": [
+{
+"name": "Qualification",
+"description": "Qualification Model APIs",
+"item": [
+{
+"name": "Add Qualification",
+"request": {
+"url": "{{host}}/api/device/qualifications",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"name\": \"hic\", \n  \"is_active\": false  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Add Qualification response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/qualifications"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 3, \n    \"name\": \"harum\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Qualification Details",
+"request": {
+"url": "{{host}}/api/device/qualifications/id",
+"method": "GET",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Qualification Details response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/qualifications/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 3, \n    \"name\": \"harum\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Qualification Listing",
+"request": {
+"method": "GET",
+"url": {
+"raw": "{{host}}/api/device/qualifications",
+"host": [
+"{{host}}"
+],
+"path": [
+"api",
+"device",
+"qualifications"
+],
+"query": [
+{
+"key": "limit",
+"value": null,
+"disabled": true
+},
+{
+"key": "skip",
+"value": null,
+"disabled": true
+},
+{
+"key": "filter[field_name]",
+"value": null,
+"description": "e.g filter[email] : Search records by field",
+"disabled": true
+},
+{
+"key": "filter[relation.field]",
+"value": null,
+"description": "e.g filter[addedByUser.username] : Search records by relationship fields",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "field_name",
+"description": "e.g created_at : Sort data by field in asc order",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "-field_name",
+"description": "e.g -created_at : Sort data by field in desc order, add dash (-) before field to sort in desc order",
+"disabled": true
+},
+{
+"key": "fields[table_name]",
+"value": "field1,field2,field2",
+"description": "e.g fields[users] : id,username.email => get only given field in response",
+"disabled": true
+},
+{
+"key": "include",
+"value": "relationshipName",
+"disabled": true,
+"description": "e.g include : addedByUser or include : addedByUser,updatedByUser get added relations into response"
+}
+]
+},
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Qualification Listing",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/qualifications"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\":[\n\t\t{\n\t\t\t\"id\": 3, \n\t\t\t\"name\": \"harum\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Update Qualification",
+"request": {
+"url": "{{host}}/api/device/qualifications/id",
+"method": "PUT",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"name\": \"hic\", \n  \"is_active\": false  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Update Qualification response",
+"originalRequest": {
+"method": "PUT",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/qualifications/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 3, \n    \"name\": \"harum\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Delete Qualification",
+"request": {
+"url": "{{host}}/api/device/qualifications/id",
+"method": "DELETE",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Delete Qualification response",
+"originalRequest": {
+"method": "DELETE",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/qualifications/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"Qualification deleted successfully.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Add Qualification",
+"request": {
+"url": "{{host}}/api/device/qualifications/bulk-create",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"name\": \"hic\", \n\t\t\"is_active\": false  \n\t}, \n\t{\n\t\t\"name\": \"hic\", \n\t\t\"is_active\": false  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Add Qualification response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/qualifications/bulk-create"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 3, \n\t\t\t\"name\": \"harum\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Update Qualification",
+"request": {
+"url": "{{host}}/api/device/qualifications/bulk-update",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"name\": \"hic\", \n\t\t\"is_active\": false  \n\t}, \n\t{\n\t\t\"id\": 2,\n\t\t\"name\": \"hic\", \n\t\t\"is_active\": false  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Update Qualification response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/qualifications/bulk-update"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 3, \n\t\t\t\"name\": \"harum\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+]
+},
+{
+"name": "Degisnation",
+"description": "Degisnation Model APIs",
+"item": [
+{
+"name": "Add Degisnation",
+"request": {
+"url": "{{host}}/api/device/degisnations",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"name\": \"adipisci\", \n  \"is_active\": false  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Add Degisnation response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/degisnations"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 3, \n    \"name\": \"quas\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Degisnation Details",
+"request": {
+"url": "{{host}}/api/device/degisnations/id",
+"method": "GET",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Degisnation Details response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/degisnations/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 3, \n    \"name\": \"quas\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Degisnation Listing",
+"request": {
+"method": "GET",
+"url": {
+"raw": "{{host}}/api/device/degisnations",
+"host": [
+"{{host}}"
+],
+"path": [
+"api",
+"device",
+"degisnations"
+],
+"query": [
+{
+"key": "limit",
+"value": null,
+"disabled": true
+},
+{
+"key": "skip",
+"value": null,
+"disabled": true
+},
+{
+"key": "filter[field_name]",
+"value": null,
+"description": "e.g filter[email] : Search records by field",
+"disabled": true
+},
+{
+"key": "filter[relation.field]",
+"value": null,
+"description": "e.g filter[addedByUser.username] : Search records by relationship fields",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "field_name",
+"description": "e.g created_at : Sort data by field in asc order",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "-field_name",
+"description": "e.g -created_at : Sort data by field in desc order, add dash (-) before field to sort in desc order",
+"disabled": true
+},
+{
+"key": "fields[table_name]",
+"value": "field1,field2,field2",
+"description": "e.g fields[users] : id,username.email => get only given field in response",
+"disabled": true
+},
+{
+"key": "include",
+"value": "relationshipName",
+"disabled": true,
+"description": "e.g include : addedByUser or include : addedByUser,updatedByUser get added relations into response"
+}
+]
+},
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Degisnation Listing",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/degisnations"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\":[\n\t\t{\n\t\t\t\"id\": 3, \n\t\t\t\"name\": \"quas\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Update Degisnation",
+"request": {
+"url": "{{host}}/api/device/degisnations/id",
+"method": "PUT",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"name\": \"adipisci\", \n  \"is_active\": false  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Update Degisnation response",
+"originalRequest": {
+"method": "PUT",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/degisnations/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 3, \n    \"name\": \"quas\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Delete Degisnation",
+"request": {
+"url": "{{host}}/api/device/degisnations/id",
+"method": "DELETE",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Delete Degisnation response",
+"originalRequest": {
+"method": "DELETE",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/degisnations/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"Degisnation deleted successfully.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Add Degisnation",
+"request": {
+"url": "{{host}}/api/device/degisnations/bulk-create",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"name\": \"adipisci\", \n\t\t\"is_active\": false  \n\t}, \n\t{\n\t\t\"name\": \"adipisci\", \n\t\t\"is_active\": false  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Add Degisnation response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/degisnations/bulk-create"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 3, \n\t\t\t\"name\": \"quas\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Update Degisnation",
+"request": {
+"url": "{{host}}/api/device/degisnations/bulk-update",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"name\": \"adipisci\", \n\t\t\"is_active\": false  \n\t}, \n\t{\n\t\t\"id\": 2,\n\t\t\"name\": \"adipisci\", \n\t\t\"is_active\": false  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Update Degisnation response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/degisnations/bulk-update"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 3, \n\t\t\t\"name\": \"quas\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+]
+},
+{
+"name": "Doctor",
+"description": "Doctor Model APIs",
+"item": [
+{
+"name": "Add Doctor",
+"request": {
+"url": "{{host}}/api/device/doctors",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"start_of_service\": \"vitae\", \n  \"awards\": \"qui\", \n  \"description\": \"nobis\", \n  \"designation_id\": \"amet\", \n  \"qualification_id\": \"expedita\", \n  \"faq\": \"aspernatur\", \n  \"time_slots\": \"in\", \n  \"is_active\": false  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Add Doctor response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/doctors"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 2, \n    \"start_of_service\": \"cupiditate\", \n    \"awards\": \"voluptatem\", \n    \"description\": \"ratione\", \n    \"designation_id\": \"molestiae\", \n    \"qualification_id\": \"voluptates\", \n    \"faq\": \"est\", \n    \"time_slots\": \"ratione\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Doctor Details",
+"request": {
+"url": "{{host}}/api/device/doctors/id",
+"method": "GET",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Doctor Details response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/doctors/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 2, \n    \"start_of_service\": \"cupiditate\", \n    \"awards\": \"voluptatem\", \n    \"description\": \"ratione\", \n    \"designation_id\": \"molestiae\", \n    \"qualification_id\": \"voluptates\", \n    \"faq\": \"est\", \n    \"time_slots\": \"ratione\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Doctor Listing",
+"request": {
+"method": "GET",
+"url": {
+"raw": "{{host}}/api/device/doctors",
+"host": [
+"{{host}}"
+],
+"path": [
+"api",
+"device",
+"doctors"
+],
+"query": [
+{
+"key": "limit",
+"value": null,
+"disabled": true
+},
+{
+"key": "skip",
+"value": null,
+"disabled": true
+},
+{
+"key": "filter[field_name]",
+"value": null,
+"description": "e.g filter[email] : Search records by field",
+"disabled": true
+},
+{
+"key": "filter[relation.field]",
+"value": null,
+"description": "e.g filter[addedByUser.username] : Search records by relationship fields",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "field_name",
+"description": "e.g created_at : Sort data by field in asc order",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "-field_name",
+"description": "e.g -created_at : Sort data by field in desc order, add dash (-) before field to sort in desc order",
+"disabled": true
+},
+{
+"key": "fields[table_name]",
+"value": "field1,field2,field2",
+"description": "e.g fields[users] : id,username.email => get only given field in response",
+"disabled": true
+},
+{
+"key": "include",
+"value": "relationshipName",
+"disabled": true,
+"description": "e.g include : addedByUser or include : addedByUser,updatedByUser get added relations into response"
+}
+]
+},
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Doctor Listing",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/doctors"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\":[\n\t\t{\n\t\t\t\"id\": 2, \n\t\t\t\"start_of_service\": \"cupiditate\", \n\t\t\t\"awards\": \"voluptatem\", \n\t\t\t\"description\": \"ratione\", \n\t\t\t\"designation_id\": \"molestiae\", \n\t\t\t\"qualification_id\": \"voluptates\", \n\t\t\t\"faq\": \"est\", \n\t\t\t\"time_slots\": \"ratione\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Update Doctor",
+"request": {
+"url": "{{host}}/api/device/doctors/id",
+"method": "PUT",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"start_of_service\": \"vitae\", \n  \"awards\": \"qui\", \n  \"description\": \"nobis\", \n  \"designation_id\": \"amet\", \n  \"qualification_id\": \"expedita\", \n  \"faq\": \"aspernatur\", \n  \"time_slots\": \"in\", \n  \"is_active\": false  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Update Doctor response",
+"originalRequest": {
+"method": "PUT",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/doctors/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 2, \n    \"start_of_service\": \"cupiditate\", \n    \"awards\": \"voluptatem\", \n    \"description\": \"ratione\", \n    \"designation_id\": \"molestiae\", \n    \"qualification_id\": \"voluptates\", \n    \"faq\": \"est\", \n    \"time_slots\": \"ratione\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Delete Doctor",
+"request": {
+"url": "{{host}}/api/device/doctors/id",
+"method": "DELETE",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Delete Doctor response",
+"originalRequest": {
+"method": "DELETE",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/doctors/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"Doctor deleted successfully.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Add Doctor",
+"request": {
+"url": "{{host}}/api/device/doctors/bulk-create",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"start_of_service\": \"vitae\", \n\t\t\"awards\": \"qui\", \n\t\t\"description\": \"nobis\", \n\t\t\"designation_id\": \"amet\", \n\t\t\"qualification_id\": \"expedita\", \n\t\t\"faq\": \"aspernatur\", \n\t\t\"time_slots\": \"in\", \n\t\t\"is_active\": false  \n\t}, \n\t{\n\t\t\"start_of_service\": \"vitae\", \n\t\t\"awards\": \"qui\", \n\t\t\"description\": \"nobis\", \n\t\t\"designation_id\": \"amet\", \n\t\t\"qualification_id\": \"expedita\", \n\t\t\"faq\": \"aspernatur\", \n\t\t\"time_slots\": \"in\", \n\t\t\"is_active\": false  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Add Doctor response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/doctors/bulk-create"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 2, \n\t\t\t\"start_of_service\": \"cupiditate\", \n\t\t\t\"awards\": \"voluptatem\", \n\t\t\t\"description\": \"ratione\", \n\t\t\t\"designation_id\": \"molestiae\", \n\t\t\t\"qualification_id\": \"voluptates\", \n\t\t\t\"faq\": \"est\", \n\t\t\t\"time_slots\": \"ratione\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Update Doctor",
+"request": {
+"url": "{{host}}/api/device/doctors/bulk-update",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"start_of_service\": \"vitae\", \n\t\t\"awards\": \"qui\", \n\t\t\"description\": \"nobis\", \n\t\t\"designation_id\": \"amet\", \n\t\t\"qualification_id\": \"expedita\", \n\t\t\"faq\": \"aspernatur\", \n\t\t\"time_slots\": \"in\", \n\t\t\"is_active\": false  \n\t}, \n\t{\n\t\t\"id\": 2,\n\t\t\"start_of_service\": \"vitae\", \n\t\t\"awards\": \"qui\", \n\t\t\"description\": \"nobis\", \n\t\t\"designation_id\": \"amet\", \n\t\t\"qualification_id\": \"expedita\", \n\t\t\"faq\": \"aspernatur\", \n\t\t\"time_slots\": \"in\", \n\t\t\"is_active\": false  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Update Doctor response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/doctors/bulk-update"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 2, \n\t\t\t\"start_of_service\": \"cupiditate\", \n\t\t\t\"awards\": \"voluptatem\", \n\t\t\t\"description\": \"ratione\", \n\t\t\t\"designation_id\": \"molestiae\", \n\t\t\t\"qualification_id\": \"voluptates\", \n\t\t\t\"faq\": \"est\", \n\t\t\t\"time_slots\": \"ratione\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+]
+},
+{
+"name": "Role",
+"description": "Role Model APIs",
+"item": [
+{
+"name": "Add Role",
+"request": {
+"url": "{{host}}/api/device/roles",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"name\": \"sequi\", \n  \"is_active\": true  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Add Role response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/roles"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 3, \n    \"name\": \"quas\", \n    \"is_active\": true, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Role Details",
+"request": {
+"url": "{{host}}/api/device/roles/id",
+"method": "GET",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Role Details response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/roles/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 3, \n    \"name\": \"quas\", \n    \"is_active\": true, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Role Listing",
+"request": {
+"method": "GET",
+"url": {
+"raw": "{{host}}/api/device/roles",
+"host": [
+"{{host}}"
+],
+"path": [
+"api",
+"device",
+"roles"
+],
+"query": [
+{
+"key": "limit",
+"value": null,
+"disabled": true
+},
+{
+"key": "skip",
+"value": null,
+"disabled": true
+},
+{
+"key": "filter[field_name]",
+"value": null,
+"description": "e.g filter[email] : Search records by field",
+"disabled": true
+},
+{
+"key": "filter[relation.field]",
+"value": null,
+"description": "e.g filter[addedByUser.username] : Search records by relationship fields",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "field_name",
+"description": "e.g created_at : Sort data by field in asc order",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "-field_name",
+"description": "e.g -created_at : Sort data by field in desc order, add dash (-) before field to sort in desc order",
+"disabled": true
+},
+{
+"key": "fields[table_name]",
+"value": "field1,field2,field2",
+"description": "e.g fields[users] : id,username.email => get only given field in response",
+"disabled": true
+},
+{
+"key": "include",
+"value": "relationshipName",
+"disabled": true,
+"description": "e.g include : addedByUser or include : addedByUser,updatedByUser get added relations into response"
+}
+]
+},
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Role Listing",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/roles"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\":[\n\t\t{\n\t\t\t\"id\": 3, \n\t\t\t\"name\": \"quas\", \n\t\t\t\"is_active\": true, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Update Role",
+"request": {
+"url": "{{host}}/api/device/roles/id",
+"method": "PUT",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"name\": \"sequi\", \n  \"is_active\": true  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Update Role response",
+"originalRequest": {
+"method": "PUT",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/roles/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 3, \n    \"name\": \"quas\", \n    \"is_active\": true, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\"  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Delete Role",
+"request": {
+"url": "{{host}}/api/device/roles/id",
+"method": "DELETE",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Delete Role response",
+"originalRequest": {
+"method": "DELETE",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/roles/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"Role deleted successfully.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Add Role",
+"request": {
+"url": "{{host}}/api/device/roles/bulk-create",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"name\": \"sequi\", \n\t\t\"is_active\": true  \n\t}, \n\t{\n\t\t\"name\": \"sequi\", \n\t\t\"is_active\": true  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Add Role response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/roles/bulk-create"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 3, \n\t\t\t\"name\": \"quas\", \n\t\t\t\"is_active\": true, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Update Role",
+"request": {
+"url": "{{host}}/api/device/roles/bulk-update",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"name\": \"sequi\", \n\t\t\"is_active\": true  \n\t}, \n\t{\n\t\t\"id\": 2,\n\t\t\"name\": \"sequi\", \n\t\t\"is_active\": true  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Update Role response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/roles/bulk-update"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 3, \n\t\t\t\"name\": \"quas\", \n\t\t\t\"is_active\": true, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\"  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+]
+},
+{
+"name": "User",
+"description": "User Model APIs",
+"item": [
+{
+"name": "Add User",
+"request": {
+"url": "{{host}}/api/device/users",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"name\": \"rerum\", \n  \"username\": \"quae\", \n  \"password\": \"magni\", \n  \"email\": \"possimus\", \n  \"phone\": 5, \n  \"email_verified_at\": \"2023-01-22 17:31:18\", \n  \"is_active\": true, \n  \"image\": \"dolore\", \n  \"gender\": \"ex\", \n  \"country\": \"saepe\", \n  \"dob\": \"2023-01-22\", \n  \"role\": 5, \n  \"user_type\": 1  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Add User response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/users"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 2, \n    \"name\": \"amet\", \n    \"username\": \"unde\", \n    \"password\": \"perspiciatis\", \n    \"email\": \"sunt\", \n    \"phone\": 3, \n    \"email_verified_at\": \"2023-01-22 17:31:18\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\", \n    \"image\": \"repudiandae\", \n    \"gender\": \"labore\", \n    \"country\": \"perferendis\", \n    \"dob\": \"2023-01-22\", \n    \"role\": 2, \n    \"user_type\": 1  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "User Details",
+"request": {
+"url": "{{host}}/api/device/users/id",
+"method": "GET",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "User Details response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/users/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 2, \n    \"name\": \"amet\", \n    \"username\": \"unde\", \n    \"password\": \"perspiciatis\", \n    \"email\": \"sunt\", \n    \"phone\": 3, \n    \"email_verified_at\": \"2023-01-22 17:31:18\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\", \n    \"image\": \"repudiandae\", \n    \"gender\": \"labore\", \n    \"country\": \"perferendis\", \n    \"dob\": \"2023-01-22\", \n    \"role\": 2, \n    \"user_type\": 1  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "User Listing",
+"request": {
+"method": "GET",
+"url": {
+"raw": "{{host}}/api/device/users",
+"host": [
+"{{host}}"
+],
+"path": [
+"api",
+"device",
+"users"
+],
+"query": [
+{
+"key": "limit",
+"value": null,
+"disabled": true
+},
+{
+"key": "skip",
+"value": null,
+"disabled": true
+},
+{
+"key": "filter[field_name]",
+"value": null,
+"description": "e.g filter[email] : Search records by field",
+"disabled": true
+},
+{
+"key": "filter[relation.field]",
+"value": null,
+"description": "e.g filter[addedByUser.username] : Search records by relationship fields",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "field_name",
+"description": "e.g created_at : Sort data by field in asc order",
+"disabled": true
+},
+{
+"key": "sort",
+"value": "-field_name",
+"description": "e.g -created_at : Sort data by field in desc order, add dash (-) before field to sort in desc order",
+"disabled": true
+},
+{
+"key": "fields[table_name]",
+"value": "field1,field2,field2",
+"description": "e.g fields[users] : id,username.email => get only given field in response",
+"disabled": true
+},
+{
+"key": "include",
+"value": "relationshipName",
+"disabled": true,
+"description": "e.g include : addedByUser or include : addedByUser,updatedByUser get added relations into response"
+}
+]
+},
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "User Listing",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/users"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\":[\n\t\t{\n\t\t\t\"id\": 2, \n\t\t\t\"name\": \"amet\", \n\t\t\t\"username\": \"unde\", \n\t\t\t\"password\": \"perspiciatis\", \n\t\t\t\"email\": \"sunt\", \n\t\t\t\"phone\": 3, \n\t\t\t\"email_verified_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"image\": \"repudiandae\", \n\t\t\t\"gender\": \"labore\", \n\t\t\t\"country\": \"perferendis\", \n\t\t\t\"dob\": \"2023-01-22\", \n\t\t\t\"role\": 2, \n\t\t\t\"user_type\": 1  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Update User",
+"request": {
+"url": "{{host}}/api/device/users/id",
+"method": "PUT",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"name\": \"rerum\", \n  \"username\": \"quae\", \n  \"password\": \"magni\", \n  \"email\": \"possimus\", \n  \"phone\": 5, \n  \"email_verified_at\": \"2023-01-22 17:31:18\", \n  \"is_active\": true, \n  \"image\": \"dolore\", \n  \"gender\": \"ex\", \n  \"country\": \"saepe\", \n  \"dob\": \"2023-01-22\", \n  \"role\": 5, \n  \"user_type\": 1  \n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Update User response",
+"originalRequest": {
+"method": "PUT",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/users/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 2, \n    \"name\": \"amet\", \n    \"username\": \"unde\", \n    \"password\": \"perspiciatis\", \n    \"email\": \"sunt\", \n    \"phone\": 3, \n    \"email_verified_at\": \"2023-01-22 17:31:18\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\", \n    \"image\": \"repudiandae\", \n    \"gender\": \"labore\", \n    \"country\": \"perferendis\", \n    \"dob\": \"2023-01-22\", \n    \"role\": 2, \n    \"user_type\": 1  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Delete User",
+"request": {
+"url": "{{host}}/api/device/users/id",
+"method": "DELETE",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Delete User response",
+"originalRequest": {
+"method": "DELETE",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/users/id"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"User deleted successfully.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Add User",
+"request": {
+"url": "{{host}}/api/device/users/bulk-create",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"name\": \"rerum\", \n\t\t\"username\": \"quae\", \n\t\t\"password\": \"magni\", \n\t\t\"email\": \"possimus\", \n\t\t\"phone\": 5, \n\t\t\"email_verified_at\": \"2023-01-22 17:31:18\", \n\t\t\"is_active\": true, \n\t\t\"image\": \"dolore\", \n\t\t\"gender\": \"ex\", \n\t\t\"country\": \"saepe\", \n\t\t\"dob\": \"2023-01-22\", \n\t\t\"role\": 5, \n\t\t\"user_type\": 1  \n\t}, \n\t{\n\t\t\"name\": \"rerum\", \n\t\t\"username\": \"quae\", \n\t\t\"password\": \"magni\", \n\t\t\"email\": \"possimus\", \n\t\t\"phone\": 5, \n\t\t\"email_verified_at\": \"2023-01-22 17:31:18\", \n\t\t\"is_active\": true, \n\t\t\"image\": \"dolore\", \n\t\t\"gender\": \"ex\", \n\t\t\"country\": \"saepe\", \n\t\t\"dob\": \"2023-01-22\", \n\t\t\"role\": 5, \n\t\t\"user_type\": 1  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Add User response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/users/bulk-create"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 2, \n\t\t\t\"name\": \"amet\", \n\t\t\t\"username\": \"unde\", \n\t\t\t\"password\": \"perspiciatis\", \n\t\t\t\"email\": \"sunt\", \n\t\t\t\"phone\": 3, \n\t\t\t\"email_verified_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"image\": \"repudiandae\", \n\t\t\t\"gender\": \"labore\", \n\t\t\t\"country\": \"perferendis\", \n\t\t\t\"dob\": \"2023-01-22\", \n\t\t\t\"role\": 2, \n\t\t\t\"user_type\": 1  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+,
+{
+"name": "Bulk Update User",
+"request": {
+"url": "{{host}}/api/device/users/bulk-update",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"name\": \"rerum\", \n\t\t\"username\": \"quae\", \n\t\t\"password\": \"magni\", \n\t\t\"email\": \"possimus\", \n\t\t\"phone\": 5, \n\t\t\"email_verified_at\": \"2023-01-22 17:31:18\", \n\t\t\"is_active\": true, \n\t\t\"image\": \"dolore\", \n\t\t\"gender\": \"ex\", \n\t\t\"country\": \"saepe\", \n\t\t\"dob\": \"2023-01-22\", \n\t\t\"role\": 5, \n\t\t\"user_type\": 1  \n\t}, \n\t{\n\t\t\"id\": 2,\n\t\t\"name\": \"rerum\", \n\t\t\"username\": \"quae\", \n\t\t\"password\": \"magni\", \n\t\t\"email\": \"possimus\", \n\t\t\"phone\": 5, \n\t\t\"email_verified_at\": \"2023-01-22 17:31:18\", \n\t\t\"is_active\": true, \n\t\t\"image\": \"dolore\", \n\t\t\"gender\": \"ex\", \n\t\t\"country\": \"saepe\", \n\t\t\"dob\": \"2023-01-22\", \n\t\t\"role\": 5, \n\t\t\"user_type\": 1  \n\t}\n\t]\n}" },
+"description": ""
+},
+"response": [
+{
+"name": "Bulk Update User response",
+"originalRequest": {
+"method": "GET",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/users/bulk-update"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": [\n\t\t{\n\t\t\t\"id\": 2, \n\t\t\t\"name\": \"amet\", \n\t\t\t\"username\": \"unde\", \n\t\t\t\"password\": \"perspiciatis\", \n\t\t\t\"email\": \"sunt\", \n\t\t\t\"phone\": 3, \n\t\t\t\"email_verified_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"is_active\": false, \n\t\t\t\"created_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"updated_at\": \"2023-01-22 17:31:18\", \n\t\t\t\"image\": \"repudiandae\", \n\t\t\t\"gender\": \"labore\", \n\t\t\t\"country\": \"perferendis\", \n\t\t\t\"dob\": \"2023-01-22\", \n\t\t\t\"role\": 2, \n\t\t\t\"user_type\": 1  \n\t\t}\n\t]\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+}
+]
+},
+{
+"name": "Login",
+"description": "device Login API",
+"item": [
+{
+"name": "Register",
+"request": {
+"url": "{{host}}/api/device/register",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n \"username\": \"Tony\",\n  \"password\": \"Tony123\",\n  \"email\": \"tony123@gamil.com\",\n  \"name\": \"Tony\",\n  \"is_active\": true,\n  \"role\": \"1\"\n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Register response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/register"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": {\n    \"id\": 2, \n    \"name\": \"amet\", \n    \"username\": \"unde\", \n    \"password\": \"perspiciatis\", \n    \"email\": \"sunt\", \n    \"phone\": 3, \n    \"email_verified_at\": \"2023-01-22 17:31:18\", \n    \"is_active\": false, \n    \"created_at\": \"2023-01-22 17:31:18\", \n    \"updated_at\": \"2023-01-22 17:31:18\", \n    \"image\": \"repudiandae\", \n    \"gender\": \"labore\", \n    \"country\": \"perferendis\", \n    \"dob\": \"2023-01-22\", \n    \"role\": 2, \n    \"user_type\": 1  \n   }\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Login",
+"request": {
+"url": "{{host}}/api/device/login",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"username\": \"junior14@hotmail.com\",\n  \"password\": \"C_plfAwdVz9nQCb\"\n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Login response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/login"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Login Successful\",\n  \"data\": {\n    \"id\": 2,\n    \"name\": \"amet\",\n    \"username\": \"unde\",\n    \"password\": \"perspiciatis\",\n    \"email\": \"sunt\",\n    \"phone\": 3,\n    \"email_verified_at\": \"2023-01-22 17:31:18\",\n    \"is_active\": false,\n    \"created_at\": \"2023-01-22 17:31:18\",\n    \"updated_at\": \"2023-01-22 17:31:18\",\n    \"image\": \"repudiandae\",\n    \"gender\": \"labore\",\n    \"country\": \"perferendis\",\n    \"dob\": \"2023-01-22\",\n    \"role\": 2,\n    \"user_type\": 1, \n    \"token\": \"cQOkQdVTqnQR8e07AlP5pQkLp4zsjz05wJPW1EeGcQOkQdVTqnQR8e07AlP5pQkLp4zsjz05wJPW1EeG\"\n\t}\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Forgot Password",
+"request": {
+"url": "{{host}}/api/device/forgot-password",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"email\": \"yourmail@gmail.com\"\n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Forgot password response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/forgot-password"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"otp successfully send to your email.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Validate Reset Password OTP",
+"request": {
+"url": "{{host}}/api/device/validate-otp",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"otp\": \"icR86F\"\n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Validate reset password OTP response",
+"originalRequest": {
+"method": "POST",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/validate-otp"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"Invalid OTP.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Reset Password",
+"request": {
+"url": "{{host}}/api/device/reset-password",
+"method": "PUT",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"code\": \"icR86F\",\n  \"new_password\": \"Your Password\"\n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Reset password response",
+"originalRequest": {
+"method": "PUT",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/reset-password"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"Password reset successfully.\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Change Password",
+"request": {
+"url": "{{host}}/api/device/change-password",
+"method": "PUT",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "Authorization",
+"value": "Bearer {{token}}",
+"type": "text"
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"old_password\": \"Your Old Password\",\n  \"new_password\": \"Your New Password\"\n}"
+},
+"description": ""
+},
+"response": [
+{
+"name": "Change password response",
+"originalRequest": {
+"method": "PUT",
+"header": [],
+"url": {
+"raw": "{{host}}/api/device/change-password"
+}
+},
+"status": "OK",
+"code": 200,
+"_postman_previewlanguage": "json",
+"body": "{\n  \"status\": \"SUCCESS\",\n  \"message\": \"Your request is successfully executed\",\n  \"data\": \"\"\n}",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"cookie": []
+}
+],
+"_postman_isSubFolder": true
+},
+{
+"name": "Logout",
+"request": {
+"url": "{{host}}/api/device/logout",
+"method": "POST",
+"header": [
+{
+"key": "Content-Type",
+"value": "application/json",
+"description": ""
+},
+{
+"key": "Authorization",
+"value": "Bearer {{token}}",
+"type": "text"
+},
+{
+"key": "X-Requested-With",
+"value": "XMLHttpRequest",
+"type": "text"
+}
+],
+"body": {
+"mode": "raw",
+"raw": ""
+},
+"description": ""
+},
+"_postman_isSubFolder": true
+}
+]
+} 
+]
+}
+],
+"variable": [
+{
+"key": "host",
+"value": "http://127.0.0.1:8000"
+},
+{
+"key": "token",
+"value": "token here"
+}
+]
+}
