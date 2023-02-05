@@ -45,6 +45,6 @@ class PastQueryRepository extends BaseRepository
      */
     public function getAvailableRelations(): array
     {
-       return ['addedByUser','updatedByUser','user''specialization','query'];
+       return ['addedByUser','updatedByUser','user','specialization','query'];
     }
 }

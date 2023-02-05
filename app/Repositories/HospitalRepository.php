@@ -46,6 +46,6 @@ class HospitalRepository extends BaseRepository
      */
     public function getAvailableRelations(): array
     {
-       return ['addedByUser','updatedByUser','query','patientTestimony''hospitalTreatments','accreditationHospitals','doctorHospitals','hospitalTags'];
+       return ['addedByUser','updatedByUser','query','patientTestimony','hospitalTreatments','accreditationHospitals','doctorHospitals','hospitalTags'];
     }
 }

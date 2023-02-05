@@ -56,6 +56,6 @@ class QueryRepository extends BaseRepository
      */
     public function getAvailableRelations(): array
     {
-       return ['addedByUser','updatedByUser','pastQueries''confirmedQuery''user','user','specialization','hospital','user'];
+       return ['addedByUser','updatedByUser','pastQueries','confirmedQuery','user','patientFamily','specialization','hospital','doctor'];
     }
 }

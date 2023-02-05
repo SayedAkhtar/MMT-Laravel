@@ -49,6 +49,6 @@ class UserRepository extends BaseRepository
      */
     public function getAvailableRelations(): array
     {
-       return ['addedByUser','updatedByUser','pastQuery','confirmedQuery','query','query','query','patientTestimony','patientTestimony','doctor''patientFamilies','patientDetails','patientFamilyDetails'];
+       return ['addedByUser','updatedByUser','pastQuery','confirmedQuery','patientQuery','patientFamilyQuery','doctorQuery','patientTestimony','doctorTestimony','doctor','patientFamilies','patientDetails','patientFamilyDetails'];
     }
 }
