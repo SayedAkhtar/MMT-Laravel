@@ -133,17 +133,17 @@ class User extends Authenticatable implements HasMedia
         return $this->belongsTo(ConfirmedQuery::class, 'coordinator_id', 'id');
     }
 
-    public function query()
+    public function patientQuery()
     {
         return $this->belongsTo(Query::class, 'patient_id', 'id');
     }
 
-    public function query()
+    public function patientFamilyQuery()
     {
         return $this->belongsTo(Query::class, 'patient_family_id', 'id');
     }
 
-    public function query()
+    public function doctorQuery()
     {
         return $this->belongsTo(Query::class, 'doctor_id', 'id');
     }
@@ -153,7 +153,7 @@ class User extends Authenticatable implements HasMedia
         return $this->belongsTo(PatientTestimony::class, 'patient_id', 'id');
     }
 
-    public function patientTestimony()
+    public function doctorTestimony()
     {
         return $this->belongsTo(PatientTestimony::class, 'doctor_id', 'id');
     }

@@ -92,7 +92,7 @@ class Query extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
-    public function user()
+    public function patientFamily()
     {
         return $this->hasOne(User::class, 'id', 'patient_family_id');
     }
@@ -116,7 +116,7 @@ class Query extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
-    public function user()
+    public function doctor()
     {
         return $this->hasOne(User::class, 'id', 'doctor_id');
     }

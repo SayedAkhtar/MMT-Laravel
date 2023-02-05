@@ -27,12 +27,12 @@ class DefaultUserSeeder extends Seeder
             'is_active' => $faker->boolean(true),
             'created_at' => $faker->dateTime(),
             'updated_at' => $faker->dateTime(),
-            'image' => $faker->word,
-            'gender' => $faker->word,
+            'image' => $faker->imageUrl,
+            'gender' => $faker->randomElement(['male', 'female', 'other']),
             'country' => $faker->word,
             'dob' => $faker->date(),
             'email' => 'junior14@hotmail.com',
-            'password' => Hash::make('C_plfAwdVz9nQCb'),
+            'password' => Hash::make('password'),
             'email_verified_at' => Carbon::now(),
             'user_type' => User::TYPE_USER
         ];
@@ -48,12 +48,12 @@ class DefaultUserSeeder extends Seeder
             'is_active' => $faker->boolean(true),
             'created_at' => $faker->dateTime(),
             'updated_at' => $faker->dateTime(),
-            'image' => $faker->word,
-            'gender' => $faker->word,
+            'image' => $faker->imageUrl,
+            'gender' => 'male',
             'country' => $faker->word,
             'dob' => $faker->date(),
             'email' => 'albina19@hotmail.com',
-            'password' => Hash::make('ya4dEFBaqYvp1ar'),
+            'password' => Hash::make('password'),
             'email_verified_at' => Carbon::now(),
             'user_type' => User::TYPE_ADMIN
         ];
@@ -69,13 +69,13 @@ class DefaultUserSeeder extends Seeder
             'is_active' => $faker->boolean(true),
             'created_at' => $faker->dateTime(),
             'updated_at' => $faker->dateTime(),
-            'image' => $faker->word,
-            'gender' => $faker->word,
+            'image' => $faker->imageUrl,
+            'gender' => "male",
             'country' => $faker->word,
             'dob' => $faker->date(),
             'username' => 'morris07',
             'email' => 'elwyn01@reichel.biz',
-            'password' => Hash::make('eX?dqNk?E'),
+            'password' => Hash::make('password'),
             'email_verified_at' => Carbon::now(),
             'user_type' => User::TYPE_ADMIN
         ];

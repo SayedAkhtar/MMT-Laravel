@@ -81,7 +81,7 @@ class PatientTestimony extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
-    public function user()
+    public function docter()
     {
         return $this->hasOne(User::class, 'id', 'doctor_id');
     }
