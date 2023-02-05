@@ -45,7 +45,7 @@ class ConfirmedQuery extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
-    public function query()
+    public function queries()
     {
         return $this->hasOne(Query::class, 'id', 'query_id');
     }

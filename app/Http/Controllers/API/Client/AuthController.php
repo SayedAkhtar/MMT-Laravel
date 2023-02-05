@@ -132,7 +132,6 @@ class AuthController extends AppBaseController
             ]);
             throw new LoginFailedException('Password is incorrect.');
         }
-
         $roles = $user->getRoleNames();
         if (!$roles->count()) {
             throw new LoginFailedException('You have not assigned any role.');

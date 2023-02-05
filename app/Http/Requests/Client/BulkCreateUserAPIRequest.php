@@ -33,7 +33,6 @@ class BulkCreateUserAPIRequest extends FormRequest
             'data.*.gender' => ['required', 'unique:users,gender'],
             'data.*.country' => ['nullable', 'string'],
             'data.*.dob' => ['nullable', 'date'],
-            'data.*.role' => ['required', 'exists:roles,id'],
             'data.*.user_type' => ['required', Rule::in([User::TYPE_ADMIN, User::TYPE_USER])],
         ];
     }

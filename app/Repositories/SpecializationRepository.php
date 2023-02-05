@@ -42,6 +42,6 @@ class SpecializationRepository extends BaseRepository
      */
     public function getAvailableRelations(): array
     {
-       return ['addedByUser','updatedByUser','pastQueries','doctorSpecializations','specializationTreatments''query','patientDetails'];
+       return ['addedByUser','updatedByUser','pastQueries','doctorSpecializations','specializationTreatments','query','patientDetails'];
     }
 }

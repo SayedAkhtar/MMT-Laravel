@@ -46,6 +46,6 @@ class PatientTestimonyRepository extends BaseRepository
      */
     public function getAvailableRelations(): array
     {
-       return ['addedByUser','updatedByUser','doctorPatientTestimonials','patientTestimonyTags''user','hospital','user'];
+       return ['addedByUser','updatedByUser','doctorPatientTestimonials','patientTestimonyTags','user','hospital','doctor'];
     }
 }

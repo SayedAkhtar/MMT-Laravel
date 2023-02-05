@@ -31,16 +31,11 @@ class CreateUsersTable extends Migration
             $table->char('gender');
             $table->string('country')->nullable();
             $table->date('dob')->nullable();
-            $table->unsignedBigInteger('role');
             $table->timestamp('login_reactive_time')->nullable();
             $table->integer('login_retry_limit')->default(0);
             $table->timestamp('reset_password_expire_time')->nullable();
             $table->string('reset_password_code')->nullable();
             $table->integer('user_type')->nullable();
-            $table->integer('otp')->nullable();
-            $table->integer('otp_attempt')->default(0);
-            $table->timestamp('otp_last_attempt')->nullable();
-            $table->timestamp('otp_created_at')->nullable();
         });
     }
 

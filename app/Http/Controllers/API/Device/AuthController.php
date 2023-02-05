@@ -8,7 +8,6 @@ use App\Exceptions\LoginFailedException;
 use App\Exceptions\LoginUnAuthorizeException;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Device\ChangePasswordApiRequest;
-use App\Http\Requests\Device\CreateVerifyLoginOTPAPIRequest;
 use App\Http\Requests\Device\ForgotPasswordAPIRequest;
 use App\Http\Requests\Device\LoginAPIRequest;
 use App\Http\Requests\Device\RegisterAPIRequest;
@@ -16,7 +15,6 @@ use App\Http\Requests\Device\ResetPasswordAPIRequest;
 use App\Http\Requests\Device\ValidateResetPasswordOtpApiRequest;
 use App\Mail\MailService;
 use App\Models\User;
-use App\Notifications\SendLoginOTPSMSNotification;
 use App\Notifications\SendSMSNotification;
 use App\Repositories\UserRepository;
 use Carbon\Carbon;
@@ -74,6 +72,91 @@ class AuthController extends AppBaseController
             $data));
 
         return $this->successResponse($user);
+    }
+
+    /**
+     * @param LoginAPIRequest $request
+     *
+     * @throws LoginFailedException
+     * @throws LoginUnAuthorizeException
+     *
+     * @return JsonResponse
+     */
+    public function login(LoginAPIRequest $request): JsonResponse
+    {
+        $input = $request->all();
+        /** @var User $user */
+        $user = User::where('username', $input['username'])->first();
+        if (empty($user)) {
+            $user = User::where('email', $input['username'])->first();
+        }
+
+        if (empty($user)) {
+            throw new LoginFailedException('User not exists.');
+        }
+
+        if (!$user->email_verified_at) {
+            throw new LoginUnAuthorizeException('Your account is not verified.');
+        }
+
+        if (!$user->is_active) {
+            throw new LoginUnAuthorizeException('Your account is deactivated. please contact your administrator.');
+        }
+
+        if ($user->login_retry_limit >= User::MAX_LOGIN_RETRY_LIMIT) {
+            $now = Carbon::now();
+            if (empty($user->login_reactive_time)) {
+                $expireTime = Carbon::now()->addMinutes(User::LOGIN_REACTIVE_TIME)->toISOString();
+                $user->update([
+                    'login_reactive_time' => $expireTime,
+                    'login_retry_limit' => $user->login_retry_limit + 1,
+                ]);
+                throw new LoginFailedException('you have exceed the number of limit.you can login after '.User::LOGIN_REACTIVE_TIME.' minutes.');
+            }
+
+            $limitTime = Carbon::parse($user->login_reactive_time);
+            if ($limitTime > $now) {
+                $expireTime = Carbon::now()->addMinutes(User::LOGIN_REACTIVE_TIME)->toISOString();
+                $user->update([
+                    'login_reactive_time' => $expireTime,
+                    'login_retry_limit' => $user->login_retry_limit + 1,
+                ]);
+
+                throw new LoginFailedException('you have exceed the number of limit.you can login after '.User::LOGIN_REACTIVE_TIME.' minutes.');
+            }
+        }
+
+        if (!Hash::check($input['password'], $user->password)) {
+            $user->update([
+                'login_retry_limit' => $user->login_retry_limit + 1,
+            ]);
+            throw new LoginFailedException('Password is incorrect.');
+        }
+
+        $roles = $user->getRoleNames();
+        if (!$roles->count()) {
+            throw new LoginFailedException('You have not assigned any role.');
+        }
+
+        if (User::DEFAULT_ROLE != $roles->first()) {
+            if (is_null($user->user_type)) {
+                throw new LoginFailedException('You have not assigned any user type.');
+            }
+
+            if (!in_array(User::PLATFORM['DEVICE'], User::LOGIN_ACCESS[User::USER_TYPE[$user->user_type]])) {
+                throw new LoginFailedException('you are unable to access this platform.');
+            }
+        }
+
+        $data = $user->toArray();
+        $data['token'] = $user->createToken('Device Login')->plainTextToken;
+
+        $user->update([
+            'login_reactive_time' => null,
+            'login_retry_limit' => 0,
+        ]);
+
+        return $this->loginSuccess($data);
     }
 
     /**
@@ -271,188 +354,5 @@ class AuthController extends AppBaseController
         }
 
         return $code;
-    }
-
-    /**
-     * @param LoginAPIRequest $request
-     *
-     * @throws LoginFailedException
-     * @throws LoginUnAuthorizeException
-     *
-     * @return JsonResponse
-     */
-    public function loginWithOTP(LoginAPIRequest $request): JsonResponse
-    {
-        $input = $request->all();
-        /** @var User $user */
-        $user = User::where('username', $input['username'])->first();
-        if (empty($user)) {
-            $user = User::where('email', $input['username'])->first();
-        }
-
-        if (empty($user)) {
-            throw new LoginFailedException('User not exists.');
-        }
-
-        if (!$user->email_verified_at) {
-            throw new LoginUnAuthorizeException('Your account is not verified.');
-        }
-
-        if (!$user->is_active) {
-            throw new LoginUnAuthorizeException('Your account is deactivated. please contact your administrator.');
-        }
-
-        if ($user->login_retry_limit >= User::MAX_LOGIN_RETRY_LIMIT) {
-            $now = Carbon::now();
-            if (empty($user->login_reactive_time)) {
-                $expireTime = Carbon::now()->addMinutes(User::LOGIN_REACTIVE_TIME)->toISOString();
-                $user->update([
-                    'login_reactive_time' => $expireTime,
-                    'login_retry_limit' => $user->login_retry_limit + 1,
-                ]);
-                throw new LoginFailedException('you have exceed the number of limit.you can login after '.User::LOGIN_REACTIVE_TIME.' minutes.');
-            }
-
-            $limitTime = Carbon::parse($user->login_reactive_time);
-            if ($limitTime > $now) {
-                $expireTime = Carbon::now()->addMinutes(User::LOGIN_REACTIVE_TIME)->toISOString();
-                $user->update([
-                    'login_reactive_time' => $expireTime,
-                    'login_retry_limit' => $user->login_retry_limit + 1,
-                ]);
-            }
-            throw new LoginFailedException('you have exceed the number of limit.you can login after '.User::LOGIN_REACTIVE_TIME.' minutes.');
-        }
-
-        $roles = $user->getRoleNames();
-        if (!$roles->count()) {
-            throw new LoginFailedException('You have not assigned any role.');
-        }
-
-        if (User::DEFAULT_ROLE != $roles->first()) {
-            if (is_null($user->user_type)) {
-                throw new LoginFailedException('You have not assigned any user type.');
-            }
-
-            if (!in_array(User::PLATFORM['DEVICE'], User::LOGIN_ACCESS[User::USER_TYPE[$user->user_type]])) {
-                throw new LoginFailedException('you are unable to access this platform.');
-            }
-        }
-
-        $code = $this->generateOTP();
-        $data = [];
-
-        $this->sendOTPSms($user, $code);
-        $data['message'] = 'Please check your sms for OTP.';
-
-        $user->update([
-            'login_reactive_time' => null,
-            'login_retry_limit' => 0,
-            'otp_attempt' => 0,
-            'otp_last_attempt' => null,
-        ]);
-
-        return $this->successResponse($data);
-    }
-
-    /**
-     * @param CreateVerifyLoginOTPAPIRequest $request
-     *
-     * @throws LoginFailedException
-     *
-     * @return JsonResponse
-     */
-    public function verifyLoginOTP(CreateVerifyLoginOTPAPIRequest $request): JsonResponse
-    {
-        $input = $request->all();
-        /** @var User $user */
-        $user = User::where('username', $input['username'])->first();
-        if (empty($user)) {
-            $user = User::where('email', $input['username'])->first();
-        }
-
-        if (empty($user)) {
-            throw new LoginFailedException('User not exists.');
-        }
-
-        if ($user->otp_attempt >= User::OTP['max_attempts']) {
-            $user->update([
-                'otp_attempt' => $user->otp_attempt + 1,
-                'otp_last_attempt' => Carbon::now(),
-            ]);
-
-            return $this->errorResponse('Your OTP attempt exceeded please resend OTP.');
-        }
-
-        if ($user->otp != $input['otp'] || empty($user->otp_created_at)) {
-            $user->update([
-                'otp_attempt' => $user->otp_attempt + 1,
-                'otp_last_attempt' => Carbon::now(),
-            ]);
-
-            throw new LoginFailedException('Invalid OTP.');
-        }
-
-        $expirationTime = Carbon::parse($user->otp_created_at)->addMinutes(User::OTP['expire_time']);
-        if (Carbon::now() > $expirationTime) {
-            $user->update([
-                'otp_attempt' => $user->otp_attempt + 1,
-                'otp_last_attempt' => Carbon::now(),
-            ]);
-
-            throw new LoginFailedException('Your OTP is expired.');
-        }
-
-        $user->update([
-            'otp' => null,
-            'otp_created_at' => null,
-            'otp_attempt' => 0,
-            'otp_last_attempt' => null,
-        ]);
-
-        $data = $user->toArray();
-        $data['token'] = $user->createToken('Device Login')->plainTextToken;
-
-        return $this->loginSuccess($data);
-    }
-
-    /**
-     * Generate OTP for login.
-     *
-     * @throws \Exception
-     *
-     * @return string
-     */
-    public function generateOTP(): string
-    {
-        $code = random_int(100000, 999999);
-        while (true) {
-            $codeExists = User::where('otp', $code)->exists();
-            if ($codeExists) {
-                return $this->generateOTP();
-            }
-            break;
-        }
-
-        return $code;
-    }
-
-    /**
-     * @param        $user
-     * @param string $code
-     *
-     * @return bool
-     */
-    public function sendOTPSms($user, string $code): bool
-    {
-        $user->update([
-            'otp_created_at' => Carbon::now(),
-            'otp' => $code,
-        ]);
-
-        // sms send code
-        $user->notify(new SendLoginOTPSMSNotification('login_otp'));
-
-        return true;
     }
 }

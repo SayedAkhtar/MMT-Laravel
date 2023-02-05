@@ -44,6 +44,6 @@ class PatientDetailsRepository extends BaseRepository
      */
     public function getAvailableRelations(): array
     {
-       return ['addedByUser','updatedByUser','user''specialization'];
+       return ['addedByUser','updatedByUser','user','specialization'];
     }
 }

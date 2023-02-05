@@ -2,45 +2,16 @@
 
 namespace App\Models;
 
-use App\Traits\HasRecordOwnerProperties;
-use Illuminate\Database\Eloquent\Model as Model;
+use Spatie\Permission\Models\Role as RoleModel;
 
-class Role extends Model
+class Role extends RoleModel
 {
-    use HasRecordOwnerProperties;
-
-    /**
-     * @var string
-     */
-    protected $table = 'roles';
-
-    /**
-     * @var string[]
-     */
-    protected $fillable = [
-        'name',
-        'is_active',
-        'created_at',
-        'updated_at',
-        'added_by',
-        'updated_by',
-    ];
-
-    /**
-     * @var string[]
-     */
-    protected $casts = [
-        'name' => 'string',
-        'is_active' => 'boolean',
-        'added_by' => 'integer',
-        'updated_by' => 'integer',
-    ];
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
-     */
-    public function user()
+    public function __construct(array $attributes = [])
     {
-        return $this->belongsTo(User::class, 'role', 'id');
+        $attributes['guard_name'] = $attributes['guard_name'] ?? config('auth.defaults.guard');
+
+        parent::__construct($attributes);
     }
+
+    protected $with = ['permissions'];
 }

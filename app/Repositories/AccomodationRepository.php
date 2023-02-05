@@ -45,6 +45,6 @@ class AccomodationRepository extends BaseRepository
      */
     public function getAvailableRelations(): array
     {
-       return ['addedByUser','updatedByUser','confirmedQuery''accomodationFacitities''accomodationType'];
+       return ['addedByUser','updatedByUser','confirmedQuery','accomodationFacitities','accomodationType'];
     }
 }

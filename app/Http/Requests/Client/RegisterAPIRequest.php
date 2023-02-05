@@ -28,10 +28,9 @@ class RegisterAPIRequest extends FormRequest
             'email_verified_at' => ['nullable'],
             'is_active' => ['boolean'],
             'image' => ['nullable', 'string'],
-            'gender' => ['required', 'unique:users,gender'],
+            'gender' => ['required', 'in:male, female, other'],
             'country' => ['nullable', 'string'],
             'dob' => ['nullable', 'date'],
-            'role' => ['required', 'exists:roles,id'],
             'role' => ['integer', 'required'],
         ];
     }

@@ -63,7 +63,7 @@ class PastQuery extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo
      */
-    public function query()
+    public function queries()
     {
         return $this->belongsTo(Query::class, 'query_id', 'id');
     }

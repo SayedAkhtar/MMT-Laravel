@@ -65,7 +65,7 @@ class Specialization extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo
      */
-    public function query()
+    public function specializationQuery()
     {
         return $this->belongsTo(Query::class, 'specialization_id', 'id');
     }
