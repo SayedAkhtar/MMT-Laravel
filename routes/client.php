@@ -30,7 +30,6 @@ use App\Http\Controllers\API\Client\PatientTestimonyTagController;
 use App\Http\Controllers\API\Client\PushNotificationController;
 use App\Http\Controllers\API\Client\QualificationController;
 use App\Http\Controllers\API\Client\QueryController;
-use App\Http\Controllers\API\Client\RoleController;
 use App\Http\Controllers\API\Client\SpecializationController;
 use App\Http\Controllers\API\Client\SpecializationTreatmentController;
 use App\Http\Controllers\API\Client\TagsController;
@@ -700,28 +699,6 @@ Route::group(['middleware' => ['auth:sanctum', 'validate.user']], function () {
     Route::post('doctors/bulk-update', [DoctorController::class, 'bulkUpdate'])
         ->name('doctor.update.bulk')
         ->middleware(['permission:update_doctor']);
-
-    Route::post('roles', [RoleController::class, 'store'])
-        ->name('role.store')
-        ->middleware(['permission:create_role']);
-    Route::get('roles', [RoleController::class, 'index'])
-        ->name('roles.index')
-        ->middleware(['permission:read_role']);
-    Route::get('roles/{role}', [RoleController::class, 'show'])
-        ->name('role.show')
-        ->middleware(['permission:read_role']);
-    Route::put('roles/{role}', [RoleController::class, 'update'])
-        ->name('role.update')
-        ->middleware(['permission:update_role']);
-    Route::delete('roles/{role}', [RoleController::class, 'delete'])
-        ->name('role.delete')
-        ->middleware(['permission:delete_role']);
-    Route::post('roles/bulk-create', [RoleController::class, 'bulkStore'])
-        ->name('role.store.bulk')
-        ->middleware(['permission:create_role']);
-    Route::post('roles/bulk-update', [RoleController::class, 'bulkUpdate'])
-        ->name('role.update.bulk')
-        ->middleware(['permission:update_role']);
 });
 
 Route::get('past-queries', [PastQueryController::class, 'index'])

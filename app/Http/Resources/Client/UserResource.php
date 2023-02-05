@@ -37,7 +37,6 @@ class UserResource extends BaseAPIResource
             'gender' => $this->gender,
             'country' => $this->country,
             'dob' => $this->dob,
-            'role' => $this->role,
             'login_reactive_time' => $this->login_reactive_time,
             'login_retry_limit' => $this->login_retry_limit,
             'user_type' => $this->user_type,

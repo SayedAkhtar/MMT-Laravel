@@ -33,7 +33,6 @@ class CreateUserAPIRequest extends FormRequest
             'gender' => ['required', 'unique:users,gender'],
             'country' => ['nullable', 'string'],
             'dob' => ['nullable', 'date'],
-            'role' => ['required', 'exists:roles,id'],
             'user_type' => ['required', Rule::in([User::TYPE_ADMIN, User::TYPE_USER])],
         ];
     }

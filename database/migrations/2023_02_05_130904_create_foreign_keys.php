@@ -229,15 +229,9 @@ class CreateForeignKeys extends Migration
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null')->onUpdate('set null');
         });
 
-        Schema::table('roles', function (Blueprint $table) {
-            $table->foreign('added_by')->references('id')->on('users')->onDelete('set null')->onUpdate('set null');
-            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null')->onUpdate('set null');
-        });
-
         Schema::table('users', function (Blueprint $table) {
             $table->foreign('added_by')->references('id')->on('users')->onDelete('set null')->onUpdate('set null');
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null')->onUpdate('set null');
-            $table->foreign('role')->references('id')->on('roles')->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 }

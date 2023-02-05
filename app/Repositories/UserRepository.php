@@ -25,7 +25,6 @@ class UserRepository extends BaseRepository
         'gender',
         'country',
         'dob',
-        'role',
     ];
 
     /**
@@ -50,6 +49,6 @@ class UserRepository extends BaseRepository
      */
     public function getAvailableRelations(): array
     {
-       return ['addedByUser','updatedByUser','pastQuery','confirmedQuery','query','query','query','patientTestimony','patientTestimony','doctor''patientFamilies','patientDetails','patientFamilyDetails''role'];
+       return ['addedByUser','updatedByUser','pastQuery','confirmedQuery','query','query','query','patientTestimony','patientTestimony','doctor''patientFamilies','patientDetails','patientFamilyDetails'];
     }
 }

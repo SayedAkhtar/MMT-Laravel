@@ -45,26 +45,17 @@ class User extends Authenticatable implements HasMedia
         'gender',
         'country',
         'dob',
-        'role',
         'login_reactive_time',
         'login_retry_limit',
         'reset_password_expire_time',
         'reset_password_code',
         'user_type',
-        'otp',
-        'otp_attempt',
-        'otp_last_attempt',
-        'otp_created_at',
     ];
 
     /**
      * @var string[]
      */
     protected $hidden = [
-        'otp',
-        'otp_attempt',
-        'otp_last_attempt',
-        'otp_created_at',
     ];
 
     /**
@@ -84,16 +75,11 @@ class User extends Authenticatable implements HasMedia
         'gender' => 'string',
         'country' => 'string',
         'dob' => 'date',
-        'role' => 'integer',
         'login_reactive_time' => 'datetime',
         'login_retry_limit' => 'integer',
         'reset_password_expire_time' => 'datetime',
         'reset_password_code' => 'string',
         'user_type' => 'integer',
-        'otp' => 'integer',
-        'otp_attempt' => 'integer',
-        'otp_created_at' => 'datetime',
-        'otp_last_attempt' => 'datetime',
     ];
 
     public const DEFAULT_ROLE = 'System User';
@@ -130,12 +116,6 @@ class User extends Authenticatable implements HasMedia
     public const LOGIN_ACCESS = [
         'User' => [self::PLATFORM['DEVICE']],
         'Admin' => [self::PLATFORM['CLIENT']],
-    ];
-
-    public const OTP = [
-        'reset_attempt_time' => 5, // in minutes
-        'max_attempts' => 5,
-        'expire_time' => 60,  // in minutes
     ];
 
     public function routeNotificationForTwilio()
@@ -196,10 +176,5 @@ class User extends Authenticatable implements HasMedia
     public function patientFamilyDetails()
     {
         return $this->hasMany(PatientFamilyDetails::class, 'patient_id', 'id');
-    }
-
-    public function role()
-    {
-        return $this->hasOne(Role::class, 'id', 'role');
     }
 }

@@ -33,7 +33,6 @@ class UpdateUserAPIRequest extends FormRequest
             'gender' => ['required', 'unique:users,gender,'.$this->route('user')],
             'country' => ['nullable', 'string'],
             'dob' => ['nullable', 'date'],
-            'role' => ['required', 'exists:roles,id'],
             'user_type' => [Rule::in([User::TYPE_ADMIN, User::TYPE_USER])],
         ];
     }

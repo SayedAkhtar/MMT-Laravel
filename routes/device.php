@@ -31,7 +31,6 @@ use App\Http\Controllers\API\Device\PatientTestimonyTagController;
 use App\Http\Controllers\API\Device\PushNotificationController;
 use App\Http\Controllers\API\Device\QualificationController;
 use App\Http\Controllers\API\Device\QueryController;
-use App\Http\Controllers\API\Device\RoleController;
 use App\Http\Controllers\API\Device\SpecializationController;
 use App\Http\Controllers\API\Device\SpecializationTreatmentController;
 use App\Http\Controllers\API\Device\TagsController;
@@ -701,28 +700,6 @@ Route::group(['middleware' => ['auth:sanctum', 'validate.user']], function () {
     Route::delete('doctors/{doctor}', [DoctorController::class, 'delete'])
         ->name('doctor.delete')
         ->middleware(['permission:delete_doctor']);
-
-    Route::post('roles', [RoleController::class, 'store'])
-        ->name('role.store')
-        ->middleware(['permission:create_role']);
-    Route::post('roles/bulk-create', [RoleController::class, 'bulkStore'])
-        ->name('role.store.bulk')
-        ->middleware(['permission:create_role']);
-    Route::get('roles', [RoleController::class, 'index'])
-        ->name('roles.index')
-        ->middleware(['permission:read_role']);
-    Route::get('roles/{role}', [RoleController::class, 'show'])
-        ->name('role.show')
-        ->middleware(['permission:read_role']);
-    Route::put('roles/{role}', [RoleController::class, 'update'])
-        ->name('role.update')
-        ->middleware(['permission:update_role']);
-    Route::post('roles/bulk-update', [RoleController::class, 'bulkUpdate'])
-        ->name('role.update.bulk')
-        ->middleware(['permission:update_role']);
-    Route::delete('roles/{role}', [RoleController::class, 'delete'])
-        ->name('role.delete')
-        ->middleware(['permission:delete_role']);
 });
 
 Route::get('past-queries', [PastQueryController::class, 'index'])
@@ -807,10 +784,8 @@ Route::post('push-notifications/remove-device-id', [PushNotificationController::
 
 Route::post('register', [AuthController::class, 'register'])
     ->name('register');
-Route::post('login-with-otp', [AuthController::class, 'loginWithOTP'])
-    ->name('login.with.otp');
-Route::post('verify-login-otp', [AuthController::class, 'verifyLoginOTP'])
-    ->name('verify.login.otp');
+Route::post('login', [AuthController::class, 'login'])
+    ->name('login');
 Route::post('logout', [AuthController::class, 'logout'])
     ->name('logout')
     ->middleware('auth:sanctum');
