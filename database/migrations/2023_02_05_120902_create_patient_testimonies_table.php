@@ -15,10 +15,10 @@ class CreatePatientTestimoniesTable extends Migration
     {
         Schema::create('patient_testimonies', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('patient_id')->nullable();
+            $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('hospital_id')->nullable();
             $table->unsignedBigInteger('doctor_id')->nullable();
-            $table->text('description')->nullable();
+            $table->text('description');
             $table->json('images')->nullable();
             $table->json('videos')->nullable();
             $table->boolean('is_active')->default(true);

@@ -15,7 +15,7 @@ class CreatePastQueriesTable extends Migration
     {
         Schema::create('past_queries', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('user_id');
             $table->dateTime('opening_date')->nullable();
             $table->dateTime('closing_date')->nullable();
             $table->unsignedBigInteger('specialization_id')->nullable();

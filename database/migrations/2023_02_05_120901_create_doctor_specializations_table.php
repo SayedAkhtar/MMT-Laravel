@@ -15,8 +15,8 @@ class CreateDoctorSpecializationsTable extends Migration
     {
         Schema::create('doctor_specializations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('doctor_id')->nullable();
-            $table->unsignedBigInteger('specialization_id')->nullable();
+            $table->unsignedBigInteger('doctor_id');
+            $table->unsignedBigInteger('specialization_id');
             $table->boolean('is_active')->default(true);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

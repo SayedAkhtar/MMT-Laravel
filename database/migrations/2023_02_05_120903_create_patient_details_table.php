@@ -15,10 +15,10 @@ class CreatePatientDetailsTable extends Migration
     {
         Schema::create('patient_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('speciality')->nullable();
-            $table->string('treatment_country')->nullable();
-            $table->text('medical_ifo')->nullable();
+            $table->string('treatment_country');
+            $table->text('medical_ifo');
             $table->boolean('is_active')->default(true);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

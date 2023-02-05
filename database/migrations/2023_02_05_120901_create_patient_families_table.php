@@ -15,8 +15,8 @@ class CreatePatientFamiliesTable extends Migration
     {
         Schema::create('patient_families', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('patient_id')->nullable();
-            $table->unsignedBigInteger('family_id')->nullable();
+            $table->unsignedBigInteger('patient_id');
+            $table->unsignedBigInteger('family_id');
             $table->boolean('is_active')->default(true);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

@@ -15,11 +15,11 @@ class CreateDoctorsTable extends Migration
     {
         Schema::create('doctors', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->dateTime('start_of_service')->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->dateTime('start_of_service');
             $table->text('awards')->nullable();
             $table->text('description')->nullable();
-            $table->string('designation_id')->nullable();
+            $table->string('designation_id');
             $table->unsignedBigInteger('qualification_id')->nullable();
             $table->json('faq')->nullable();
             $table->json('time_slots')->nullable();

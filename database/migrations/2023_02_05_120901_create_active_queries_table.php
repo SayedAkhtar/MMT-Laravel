@@ -23,8 +23,8 @@ class CreateActiveQueriesTable extends Migration
             $table->string('medical_visa')->nullable();
             $table->boolean('is_payment_required')->default(false);
             $table->boolean('is_payment_done')->default(false);
-            $table->string('country')->nullable();
-            $table->string('state')->nullable();
+            $table->string('country');
+            $table->string('state');
             $table->boolean('is_active')->default(true);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

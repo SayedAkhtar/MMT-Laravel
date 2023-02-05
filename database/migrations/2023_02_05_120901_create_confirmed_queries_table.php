@@ -15,8 +15,8 @@ class CreateConfirmedQueriesTable extends Migration
     {
         Schema::create('confirmed_queries', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('query_id')->nullable();
-            $table->unsignedBigInteger('accomodation_id')->nullable();
+            $table->unsignedBigInteger('query_id');
+            $table->unsignedBigInteger('accommodation_id')->nullable();
             $table->text('cab_detail')->nullable();
             $table->unsignedBigInteger('coordinator_id')->nullable();
             $table->boolean('is_active')->default(true);

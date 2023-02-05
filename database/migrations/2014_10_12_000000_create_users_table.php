@@ -28,7 +28,7 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('added_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->string('image')->nullable();
-            $table->char('gender')->unique();
+            $table->char('gender');
             $table->string('country')->nullable();
             $table->date('dob')->nullable();
             $table->timestamp('login_reactive_time')->nullable();

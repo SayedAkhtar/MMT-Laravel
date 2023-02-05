@@ -15,7 +15,7 @@ class CreateAccreditationsTable extends Migration
     {
         Schema::create('accreditations', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
+            $table->string('name');
             $table->string('logo')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamp('created_at')->nullable();

@@ -13,10 +13,10 @@ class CreateDetoxificationWellnessesTable extends Migration
      */
     public function up()
     {
-        Schema::create('detoxification_wellnesses', function (Blueprint $table) {
+        Schema::create('detoxification_wellness', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('detoxification_category_id')->nullable();
-            $table->unsignedBigInteger('wellness_center_id')->nullable();
+            $table->unsignedBigInteger('detoxification_category_id');
+            $table->unsignedBigInteger('wellness_center_id');
             $table->boolean('is_active')->default(true);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

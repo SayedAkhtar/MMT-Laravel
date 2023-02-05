@@ -15,8 +15,8 @@ class CreateHospitalsTable extends Migration
     {
         Schema::create('hospitals', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->text('address')->nullable();
+            $table->string('name');
+            $table->text('address');
             $table->text('description')->nullable();
             $table->json('geo_location')->nullable();
             $table->string('logo')->nullable();

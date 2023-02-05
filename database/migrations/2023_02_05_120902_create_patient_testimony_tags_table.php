@@ -15,8 +15,8 @@ class CreatePatientTestimonyTagsTable extends Migration
     {
         Schema::create('patient_testimony_tags', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('testimony_id')->nullable();
-            $table->unsignedBigInteger('tag_id')->nullable();
+            $table->unsignedBigInteger('testimony_id');
+            $table->unsignedBigInteger('tag_id');
             $table->boolean('is_active')->default(true);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

@@ -17,12 +17,12 @@ class CreateQueriesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('patient_family_id');
-            $table->string('name')->unique();
+            $table->string('name');
             $table->unsignedBigInteger('specialization_id');
             $table->unsignedBigInteger('hospital_id');
             $table->unsignedBigInteger('doctor_id')->nullable();
             $table->text('medical_history')->nullable();
-            $table->string('preffered_country')->nullable();
+            $table->string('preferred_country')->nullable();
             $table->text('medical_report')->nullable();
             $table->string('passport')->nullable();
             $table->string('passport_image')->nullable();

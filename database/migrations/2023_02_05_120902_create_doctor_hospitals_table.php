@@ -15,8 +15,8 @@ class CreateDoctorHospitalsTable extends Migration
     {
         Schema::create('doctor_hospitals', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('doctor_id')->nullable();
-            $table->unsignedBigInteger('hospital_id')->nullable();
+            $table->unsignedBigInteger('doctor_id');
+            $table->unsignedBigInteger('hospital_id');
             $table->boolean('is_active')->default(true);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

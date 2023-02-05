@@ -15,7 +15,7 @@ class CreateDetoxificationCategoriesTable extends Migration
     {
         Schema::create('detoxification_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
+            $table->string('name');
             $table->boolean('is_active')->default(true);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

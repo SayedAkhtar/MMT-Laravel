@@ -15,8 +15,8 @@ class CreateDoctorPatientTestimonialsTable extends Migration
     {
         Schema::create('doctor_patient_testimonials', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('doctor_id')->nullable();
-            $table->unsignedBigInteger('testimonial_id')->nullable();
+            $table->unsignedBigInteger('doctor_id');
+            $table->unsignedBigInteger('testimonial_id');
             $table->boolean('is_active')->default(true);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

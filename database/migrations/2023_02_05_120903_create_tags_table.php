@@ -17,7 +17,7 @@ class CreateTagsTable extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('slug')->nullable()->unique();
-            $table->string('model')->unique();
+            $table->string('model');
             $table->boolean('is_active')->default(true);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

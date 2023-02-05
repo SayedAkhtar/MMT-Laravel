@@ -16,7 +16,7 @@ class CreateWellnessCentersTable extends Migration
         Schema::create('wellness_centers', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->text('adress')->unique();
+            $table->text('address')->nullable();
             $table->text('description')->nullable();
             $table->string('logo')->nullable();
             $table->json('image')->nullable();

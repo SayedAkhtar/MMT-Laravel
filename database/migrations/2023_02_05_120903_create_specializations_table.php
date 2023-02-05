@@ -15,7 +15,7 @@ class CreateSpecializationsTable extends Migration
     {
         Schema::create('specializations', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->string('logo')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamp('created_at')->nullable();

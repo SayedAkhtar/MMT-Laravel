@@ -15,12 +15,12 @@ class CreatePatientFamilyDetailsTable extends Migration
     {
         Schema::create('patient_family_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('patient_id')->nullable();
-            $table->string('name')->nullable();
-            $table->string('phone')->nullable();
-            $table->string('relationship')->nullable();
+            $table->unsignedBigInteger('patient_id');
+            $table->string('name');
+            $table->string('phone');
+            $table->string('relationship');
             $table->dateTime('dob')->nullable();
-            $table->string('gender')->nullable()->unique();
+            $table->string('gender');
             $table->json('geo_location')->nullable();
             $table->string('treatment_country')->nullable();
             $table->text('medical_info')->nullable();
