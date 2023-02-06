@@ -40,7 +40,7 @@ use App\Http\Controllers\API\Device\UserController;
 use App\Http\Controllers\API\Device\WellnessCenterController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => ['auth:sanctum', 'validate.user']], function () {
+Route::group(['middleware' => ['auth', 'validate.user']], function () {
     Route::post('queries', [QueryController::class, 'store'])
         ->name('query.store')
         ->middleware(['permission:create_query']);
@@ -781,8 +781,7 @@ Route::post('push-notifications/add-device-id', [PushNotificationController::cla
     ->name('pushNotification.add-device');
 Route::post('push-notifications/remove-device-id', [PushNotificationController::class, 'removeDeviceId'])
     ->name('pushNotification.remove-device');
-
-Route::post('register', [AuthController::class, 'register'])
+Route::any('register', [AuthController::class, 'register'])
     ->name('register');
 Route::post('login', [AuthController::class, 'login'])
     ->name('login');
@@ -798,3 +797,6 @@ Route::post('validate-otp', [AuthController::class, 'validateResetPasswordOtp'])
     ->name('reset.password.validate.otp');
 Route::put('reset-password', [AuthController::class, 'resetPassword'])
     ->name('reset.password');
+
+Route::get('dashboard', [\App\Http\Controllers\Device\HomeController::class, 'dashboard'])->name('dashboard');
+Route::get('/', [\App\Http\Controllers\Device\HomeController::class, 'index'])->name('home');

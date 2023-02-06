@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\Device;
+namespace App\Http\Controllers\Device;
 
 use App\Exceptions\ChangePasswordFailureException;
 use App\Exceptions\FailureResponseException;
@@ -84,9 +84,6 @@ class AuthController extends AppBaseController
      */
     public function login(LoginAPIRequest $request): JsonResponse
     {
-        if($request->get()){
-            return "Hello";
-        }
         $input = $request->all();
         /** @var User $user */
         $user = User::where('username', $input['username'])->first();

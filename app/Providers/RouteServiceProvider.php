@@ -49,27 +49,27 @@ class RouteServiceProvider extends ServiceProvider
 
             $this->deviceRoutes();
 
-            $this->clientRoutes();
+//            $this->clientRoutes();
 
         });
     }
-    
-    public function deviceRoutes() 
+
+    public function deviceRoutes()
     {
-        Route::prefix('api/device')
-        ->middleware('api')
+        Route::prefix('admin')
+        ->middleware('web')
         ->namespace($this->namespace)
         ->group(base_path('routes/device.php'));
     }
-    
-    public function clientRoutes() 
-    {
-        Route::prefix('api/client')
-        ->middleware('api')
-        ->namespace($this->namespace)
-        ->group(base_path('routes/client.php'));
-    }
-    
+
+//    public function clientRoutes()
+//    {
+//        Route::prefix('api/client')
+//        ->middleware('api')
+//        ->namespace($this->namespace)
+//        ->group(base_path('routes/client.php'));
+//    }
+
     /**
      * Configure the rate limiters for the application.
      *
