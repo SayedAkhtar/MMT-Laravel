@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model as Model;
 
 class Specialization extends Model
 {
-    use HasRecordOwnerProperties;
+    use HasRecordOwnerProperties, HasFactory;
 
     /**
      * @var string

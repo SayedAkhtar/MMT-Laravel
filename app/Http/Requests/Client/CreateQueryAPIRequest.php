@@ -21,7 +21,7 @@ class CreateQueryAPIRequest extends FormRequest
     {
         return [
             'patient_id' => ['required', 'exists:users,id'],
-            'patient_family_id' => ['required', 'exists:users,id'],
+            'patient_family_id' => ['nullable', 'exists:users,id'],
             'name' => ['string', 'required', 'unique:queries,name'],
             'specialization_id' => ['required', 'exists:specializations,id'],
             'hospital_id' => ['required', 'exists:hospitals,id'],
@@ -31,7 +31,7 @@ class CreateQueryAPIRequest extends FormRequest
             'medical_report' => ['nullable'],
             'passport' => ['nullable', 'string'],
             'passport_image' => ['nullable', 'string'],
-            'status' => ['string', 'required', 'unique:queries,status'],
+            'status' => ['string', 'required',],
             'model' => ['nullable', 'string'],
             'model_id' => ['nullable'],
             'is_active' => ['boolean'],

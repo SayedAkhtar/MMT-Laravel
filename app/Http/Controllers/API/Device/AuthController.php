@@ -19,6 +19,7 @@ use App\Notifications\SendSMSNotification;
 use App\Repositories\UserRepository;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
@@ -82,10 +83,10 @@ class AuthController extends AppBaseController
      *
      * @return JsonResponse
      */
-    public function login(LoginAPIRequest $request): JsonResponse
+    public function login(Request $request)
     {
-        if($request->get()){
-            return "Hello";
+        if($request->isMethod('get')){
+            return view('session/login-session');
         }
         $input = $request->all();
         /** @var User $user */

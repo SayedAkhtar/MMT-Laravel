@@ -48,6 +48,6 @@ class DoctorRepository extends BaseRepository
      */
     public function getAvailableRelations(): array
     {
-       return ['addedByUser','updatedByUser','doctorPatientTestimonials','doctorTags','doctorSpecializations','doctorHospitals','doctorTreatments','user','qualification'];
+       return ['addedByUser','updatedByUser','doctorPatientTestimonials','doctorTags','doctorSpecializations','doctorHospitals','doctorTreatments','user','qualification', 'designation'];
     }
 }

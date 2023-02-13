@@ -49,7 +49,7 @@ class RouteServiceProvider extends ServiceProvider
 
             $this->deviceRoutes();
 
-//            $this->clientRoutes();
+            $this->clientRoutes();
 
         });
     }
@@ -59,16 +59,17 @@ class RouteServiceProvider extends ServiceProvider
         Route::prefix('admin')
         ->middleware('web')
         ->namespace($this->namespace)
-        ->group(base_path('routes/device.php'));
+        ->group(base_path('routes/admin.php'));
     }
 
-//    public function clientRoutes()
-//    {
-//        Route::prefix('api/client')
-//        ->middleware('api')
-//        ->namespace($this->namespace)
-//        ->group(base_path('routes/client.php'));
-//    }
+    public function clientRoutes()
+    {
+        Route::prefix('api/client')
+        ->middleware('api')
+        ->namespace($this->namespace)
+        ->name('client.')
+        ->group(base_path('routes/client.php'));
+    }
 
     /**
      * Configure the rate limiters for the application.

@@ -170,7 +170,7 @@ class User extends Authenticatable implements HasMedia
 
     public function patientDetails()
     {
-        return $this->hasMany(PatientDetails::class, 'user_id', 'id');
+        return $this->hasOne(PatientDetails::class, 'user_id', 'id');
     }
 
     public function patientFamilyDetails()
