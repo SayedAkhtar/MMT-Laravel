@@ -48,9 +48,9 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href="{{ route('designations.index') }}" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Accreditation</p>
+                <p>Designation</p>
               </a>
             </li>
             <li class="nav-item">
@@ -64,12 +64,8 @@
 
         <li class="nav-header">Settings</li>
         <li class="nav-item">
-          <a href="pages/calendar.html" class="nav-link">
+          <a href="{{ route('profile.index') }}" class="nav-link">
             <i class="nav-icon fas fa-calendar-alt"></i>
-            <p>
-              Profile
-              <span class="badge badge-info right">2</span>
-            </p>
           </a>
         </li>
 

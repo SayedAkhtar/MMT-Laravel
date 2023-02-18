@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | Dashboard 3</title>
+    <title>My Medical Trip | @yield('title', 'Dashboard') </title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -16,6 +16,7 @@
     @stack('plugin-styles')
     <link rel="stylesheet" href="{{ asset("/css/style.css") }}">
     @stack('page-styles')
+    @livewireStyles
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -67,5 +68,6 @@
 <!-- OPTIONAL SCRIPTS -->
 <script src="{{ asset("plugins/chart.js/Chart.min.js") }}"></script>
 @stack('scripts')
+@livewireScripts
 </body>
 </html>

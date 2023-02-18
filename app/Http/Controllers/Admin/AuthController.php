@@ -174,13 +174,13 @@ class AuthController extends AppBaseController
     /**
      * Logout auth user.
      *
-     * @return JsonResponse
+     * @return Redirect
      */
-    public function logout(): JsonResponse
+    public function logout()
     {
         Auth::user()->currentAccessToken()->delete();
-
-        return $this->successResponse('Logout successfully.');
+        Auth::guard('web')->logout();;
+        return redirect('login');
     }
 
     /**

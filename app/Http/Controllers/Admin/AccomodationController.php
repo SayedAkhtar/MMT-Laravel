@@ -31,7 +31,7 @@ class AccomodationController extends AppBaseController
     }
 
     /**
-     * Accomodation's Listing API.
+     * Accommodation's Listing API.
      * Limit Param: limit
      * Skip Param: skip.
      *
@@ -47,7 +47,7 @@ class AccomodationController extends AppBaseController
     }
 
     /**
-     * Create Accomodation with given payload.
+     * Create Accommodation with given payload.
      *
      * @param CreateAccomodationAPIRequest $request
      *
@@ -64,7 +64,7 @@ class AccomodationController extends AppBaseController
     }
 
     /**
-     * Get single Accomodation record.
+     * Get single Accommodation record.
      *
      * @param int $id
      *
@@ -78,7 +78,7 @@ class AccomodationController extends AppBaseController
     }
 
     /**
-     * Update Accomodation with given payload.
+     * Update Accommodation with given payload.
      *
      * @param UpdateAccomodationAPIRequest $request
      * @param int                          $id
@@ -96,7 +96,7 @@ class AccomodationController extends AppBaseController
     }
 
     /**
-     * Delete given Accomodation.
+     * Delete given Accommodation.
      *
      * @param int $id
      *
@@ -108,11 +108,11 @@ class AccomodationController extends AppBaseController
     {
         $this->accomodationRepository->delete($id);
 
-        return $this->successResponse('Accomodation deleted successfully.');
+        return $this->successResponse('Accommodation deleted successfully.');
     }
 
     /**
-     * Bulk create Accomodation's.
+     * Bulk create Accommodation's.
      *
      * @param BulkCreateAccomodationAPIRequest $request
      *
@@ -133,7 +133,7 @@ class AccomodationController extends AppBaseController
     }
 
     /**
-     * Bulk update Accomodation's data.
+     * Bulk update Accommodation's data.
      *
      * @param BulkUpdateAccomodationAPIRequest $request
      *

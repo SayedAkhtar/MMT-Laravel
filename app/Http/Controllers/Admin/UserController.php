@@ -14,10 +14,12 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class UserController extends AppBaseController
 {
+    protected $module;
     /**
      * @var UserRepository
      */
@@ -29,6 +31,7 @@ class UserController extends AppBaseController
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
+        $this->module = "module/user";
     }
 
     /**
@@ -38,13 +41,12 @@ class UserController extends AppBaseController
      *
      * @param Request $request
      *
-     * @return UserCollection
+     * @return View
      */
-    public function index(Request $request): UserCollection
+    public function index(Request $request): View
     {
         $users = $this->userRepository->fetch($request);
-
-        return new UserCollection($users);
+        return view($this->module.'/index', compact('users'));
     }
 
     /**

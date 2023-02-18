@@ -125,7 +125,7 @@ class AssignPermissionsToRoleSeeder extends Seeder
         /** @var  Role $moderatorRole */
         $moderatorRole = Role::where('name', 'Moderator')->first();
         $moderatorRole->givePermissionTo($moderatorPermission);
- 
+
         $adminPermission = Permission::whereIn('name', [
                 'create_accomodation',
                 'read_accomodation',
@@ -256,16 +256,62 @@ class AssignPermissionsToRoleSeeder extends Seeder
         /** @var  Role $adminRole */
         $adminRole = Role::where('name', 'Admin')->first();
         $adminRole->givePermissionTo($adminPermission);
- 
+
         $userPermission = Permission::whereIn('name', [
-                'create_query',
-                'read_query',
-                'update_query',
-                'read_user',
-                'update_user',
-                'create_user',
-                'delete_user',
-                ])->get();
+            'read_accomodation',
+            'read_accomodationfacitity',
+            'read_accomodationtype',
+            'read_accreditation',
+            'read_accreditationhospital',
+            'create_activequery',
+            'read_activequery',
+            'update_activequery',
+            'create_confirmedquery',
+            'read_confirmedquery',
+            'update_confirmedquery',
+            'read_designation',
+            'read_detoxificationcategory',
+            'read_detoxificationwellness',
+            'read_doctor',
+            'read_doctorhospital',
+            'read_doctorpatienttestimonial',
+            'read_doctorspecialization',
+            'read_doctortag',
+            'read_doctortreatment',
+            'read_facility',
+            'read_hospital',
+            'read_hospitaltags',
+            'read_hospitaltreatment',
+            'create_pastquery',
+            'read_pastquery',
+            'update_pastquery',
+            'create_patientdetails',
+            'read_patientdetails',
+            'update_patientdetails',
+            'create_patientfamily',
+            'read_patientfamily',
+            'update_patientfamily',
+            'create_patientfamilydetails',
+            'read_patientfamilydetails',
+            'update_patientfamilydetails',
+            'create_patienttestimony',
+            'read_patienttestimony',
+            'update_patienttestimony',
+            'read_patienttestimonytag',
+            'read_qualification',
+            'create_query',
+            'read_query',
+            'update_query',
+            'read_specialization',
+            'read_specializationtreatment',
+            'create_tags',
+            'read_tags',
+            'read_test',
+            'read_treatment',
+            'read_user',
+            'update_user',
+            'read_wellnesscenter',
+        ])->get();
 
         /** @var  Role $userRole */
         $userRole = Role::where('name', 'User')->first();

@@ -41,6 +41,10 @@ use App\Http\Controllers\Admin\WellnessCenterController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth']], function () {
+
+    Route::get('dashboard', [\App\Http\Controllers\Admin\HomeController::class, 'dashboard'])->name('dashboard');
+    Route::get('profile', [\App\Http\Controllers\Admin\HomeController::class, 'profile'])->name('profile.index');
+
     Route::post('queries', [QueryController::class, 'store'])
         ->name('query.store')
         ->middleware(['permission:create_query']);
@@ -784,7 +788,7 @@ Route::any('register', [AuthController::class, 'register'])
     ->name('register');
 Route::any('login', [AuthController::class, 'login'])
     ->name('login');
-Route::post('logout', [AuthController::class, 'logout'])
+Route::get('logout', [AuthController::class, 'logout'])
     ->name('logout')
     ->middleware('auth:sanctum');
 Route::put('change-password', [AuthController::class, 'changePassword'])
@@ -797,5 +801,5 @@ Route::post('validate-otp', [AuthController::class, 'validateResetPasswordOtp'])
 Route::put('reset-password', [AuthController::class, 'resetPassword'])
     ->name('reset.password');
 
-Route::get('dashboard', [\App\Http\Controllers\Admin\HomeController::class, 'dashboard'])->name('dashboard');
+
 Route::get('/', [\App\Http\Controllers\Admin\HomeController::class, 'index'])->name('home');

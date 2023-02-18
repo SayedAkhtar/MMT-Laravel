@@ -20,6 +20,7 @@ class UpdateDesignationAPIRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id' => ['required'],
             'name' => ['nullable', 'string'],
             'is_active' => ['boolean'],
         ];

@@ -37,6 +37,7 @@ use App\Http\Controllers\API\Client\TestController;
 use App\Http\Controllers\API\Client\TreatmentController;
 use App\Http\Controllers\API\Client\UserController;
 use App\Http\Controllers\API\Client\WellnessCenterController;
+use \App\Http\Controllers\API\Client\FileUploadController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth:sanctum', 'validate.user']], function () {
@@ -776,6 +777,10 @@ Route::post('push-notifications/add-device-id', [PushNotificationController::cla
     ->name('pushNotification.add-device');
 Route::post('push-notifications/remove-device-id', [PushNotificationController::class, 'removeDeviceId'])
     ->name('pushNotification.remove-device');
+
+Route::post('file-upload', [FileUploadController::class, 'upload'])
+    ->name('file.upload')
+    ->middleware(['auth:sanctum', 'validate.user']);
 
 Route::post('register', [AuthController::class, 'register'])
     ->name('register');

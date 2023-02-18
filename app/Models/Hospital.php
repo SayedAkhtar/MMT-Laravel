@@ -4,10 +4,12 @@ namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
 use Illuminate\Database\Eloquent\Model as Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Hospital extends Model
+class Hospital extends Model implements HasMedia
 {
-    use HasRecordOwnerProperties;
+    use HasRecordOwnerProperties, InteractsWithMedia;
 
     /**
      * @var string

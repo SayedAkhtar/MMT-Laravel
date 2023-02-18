@@ -11,6 +11,7 @@ use App\Http\Requests\Device\UpdateDoctorAPIRequest;
 use App\Http\Resources\Device\DoctorCollection;
 use App\Http\Resources\Device\DoctorResource;
 use App\Repositories\DoctorRepository;
+use App\Traits\isViewModule;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,6 +20,8 @@ use Prettus\Validator\Exceptions\ValidatorException;
 
 class DoctorController extends AppBaseController
 {
+    use isViewModule;
+    protected $module;
     /**
      * @var DoctorRepository
      */
@@ -30,6 +33,7 @@ class DoctorController extends AppBaseController
     public function __construct(DoctorRepository $doctorRepository)
     {
         $this->doctorRepository = $doctorRepository;
+        $this->module = 'module/doctor';
     }
 
     /**
@@ -48,7 +52,7 @@ class DoctorController extends AppBaseController
             $data = new DoctorCollection($doctors);
             return $data;
         }
-        return view('module.doctor.list', compact('doctors'));
+        return $this->module_view('module.doctor.list', compact('doctors'));
     }
 
     /**
@@ -80,11 +84,10 @@ class DoctorController extends AppBaseController
      *
      * @return DoctorResource
      */
-    public function show(int $id): DoctorResource
+    public function show(int $id)
     {
         $doctor = $this->doctorRepository->findOrFail($id);
-
-        return new DoctorResource($doctor);
+        return view($this->module.'/edit', compact('doctor'));
     }
 
     /**

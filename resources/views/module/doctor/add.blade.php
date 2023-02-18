@@ -40,7 +40,8 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Phone Number</label>
-                            <input type="email" class="form-control" placeholder="Enter phone with country code" name="phone">
+                            <input type="email" class="form-control" placeholder="Enter phone with country code"
+                                   name="phone">
                         </div>
                     </div>
                 </div>
@@ -88,7 +89,8 @@
                                     <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                 </div>
                                 <input type="text" class="form-control" data-inputmask-alias="datetime"
-                                       data-inputmask-inputformat="mm/dd/yyyy" data-mask="" inputmode="numeric" name="dob">
+                                       data-inputmask-inputformat="mm/dd/yyyy" data-mask="" inputmode="numeric"
+                                       name="dob">
                             </div>
                             <!-- /.input group -->
                         </div>
@@ -141,7 +143,8 @@
                                     <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                 </div>
                                 <input type="text" class="form-control" data-inputmask-alias="datetime"
-                                       data-inputmask-inputformat="mm/dd/yyyy" data-mask="" inputmode="numeric" name="start_of_service">
+                                       data-inputmask-inputformat="mm/dd/yyyy" data-mask="" inputmode="numeric"
+                                       name="start_of_service">
                             </div>
                             <!-- /.input group -->
                         </div>
@@ -151,13 +154,7 @@
                     <div class="col-sm-12">
                         <!-- text input -->
                         <div class="form-group">
-                            <label>Date and time:</label>
-                            <div class="input-group date" id="reservationdatetime" data-target-input="nearest">
-                                <input type="text" name="time_slots" class="form-control datetimepicker-input" data-target="#reservationdatetime"/>
-                                <div class="input-group-append" data-target="#reservationdatetime" data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
-                            </div>
+                            <livewire:time-slots-component/>
                         </div>
                     </div>
                 </div>
@@ -166,7 +163,8 @@
                         <!-- text input -->
                         <div class="form-group">
                             <label>Description</label>
-                            <textarea class="form-control" rows="3" placeholder="Enter ..." name="description"></textarea>
+                            <textarea class="form-control" rows="3" placeholder="Enter ..."
+                                      name="description"></textarea>
                         </div>
                     </div>
                 </div>
@@ -194,10 +192,10 @@
         $(function () {
             bsCustomFileInput.init();
             $('[data-mask]').inputmask();
-            $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
         });
         $('.select2bs4').select2({
             theme: 'bootstrap4'
-        })
+        });
+
     </script>
 @endpush

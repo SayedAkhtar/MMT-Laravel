@@ -114,13 +114,18 @@ class User extends Authenticatable implements HasMedia
     ];
 
     public const LOGIN_ACCESS = [
-        'User' => [self::PLATFORM['DEVICE']],
-        'Admin' => [self::PLATFORM['CLIENT']],
+        'User' => [self::PLATFORM['CLIENT']],
+        'Admin' => [self::PLATFORM['DEVICE']],
     ];
 
     public function routeNotificationForTwilio()
     {
         return $this->phone_number; // e.g "+91909945XXXX"
+    }
+
+    public function role()
+    {
+        return $this->hasManyThrough(Role::class, 'model_has_roles', 'model_id', 'role_id');
     }
 
     public function pastQuery()

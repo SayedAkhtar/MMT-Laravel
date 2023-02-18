@@ -10,13 +10,17 @@ use App\Http\Requests\Device\UpdateDesignationAPIRequest;
 use App\Http\Resources\Device\DesignationCollection;
 use App\Http\Resources\Device\DesignationResource;
 use App\Repositories\DesignationRepository;
+use App\Traits\isViewModule;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class DesignationController extends AppBaseController
 {
+    use isViewModule;
+    protected $module ="";
     /**
      * @var DesignationRepository
      */
@@ -28,6 +32,7 @@ class DesignationController extends AppBaseController
     public function __construct(DesignationRepository $designationRepository)
     {
         $this->designationRepository = $designationRepository;
+        $this->module = "module/doctor/designation";
     }
 
     /**
@@ -39,11 +44,10 @@ class DesignationController extends AppBaseController
      *
      * @return DesignationCollection
      */
-    public function index(Request $request): DesignationCollection
+    public function index(Request $request)
     {
         $designations = $this->designationRepository->fetch($request);
-
-        return new DesignationCollection($designations);
+        return $this->module_view('list', compact('designations'));
     }
 
     /**
@@ -53,14 +57,16 @@ class DesignationController extends AppBaseController
      *
      * @throws ValidatorException
      *
-     * @return DesignationResource
+     * @return Redirect
      */
-    public function store(CreateDesignationAPIRequest $request): DesignationResource
+    public function store(CreateDesignationAPIRequest $request)
     {
         $input = $request->all();
         $designation = $this->designationRepository->create($input);
-
-        return new DesignationResource($designation);
+        if(empty($designation)){
+            return $this->errorResponse("Could not created designation", 404);
+        }
+        return back();
     }
 
     /**
@@ -87,9 +93,10 @@ class DesignationController extends AppBaseController
      *
      * @return DesignationResource
      */
-    public function update(UpdateDesignationAPIRequest $request, int $id): DesignationResource
+    public function update(UpdateDesignationAPIRequest $request): DesignationResource
     {
-        $input = $request->all();
+        $input = $request->validated();
+        $id = $input->id;
         $designation = $this->designationRepository->update($input, $id);
 
         return new DesignationResource($designation);
