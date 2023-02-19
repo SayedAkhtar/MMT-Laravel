@@ -150,7 +150,7 @@ class AuthController extends AppBaseController
                 throw new LoginFailedException('You have not assigned any user type.');
             }
             //dd(User::PLATFORM['DEVICE'], User::LOGIN_ACCESS[User::USER_TYPE[$user->user_type]]);
-            if (!in_array(User::PLATFORM['CLIENT'], User::LOGIN_ACCESS[User::USER_TYPE[$user->user_type]])) {
+            if (!in_array(User::PLATFORM['DEVICE'], User::LOGIN_ACCESS[User::USER_TYPE[$user->user_type]])) {
                 throw new LoginFailedException('you are unable to access this platform.');
             }
         }
@@ -167,7 +167,7 @@ class AuthController extends AppBaseController
             'password' => $user->getAuthPassword()
         ];
         Auth::loginUsingId($user->id);
-//        $request->session()->regenerate();
+        $request->session()->regenerate();
         return \redirect(route('dashboard'));
     }
 

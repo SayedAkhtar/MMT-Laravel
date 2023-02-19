@@ -15,12 +15,13 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Livewire\Livewire;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class DesignationController extends AppBaseController
 {
     use isViewModule;
-    protected $module ="";
+    protected $module;
     /**
      * @var DesignationRepository
      */
@@ -91,15 +92,13 @@ class DesignationController extends AppBaseController
      *
      * @throws ValidatorException
      *
-     * @return DesignationResource
+     * @return
      */
-    public function update(UpdateDesignationAPIRequest $request): DesignationResource
+    public function update(UpdateDesignationAPIRequest $request, int $id)
     {
         $input = $request->validated();
-        $id = $input->id;
         $designation = $this->designationRepository->update($input, $id);
-
-        return new DesignationResource($designation);
+        return redirect()->back()->with('success', "Updated designation with ID $id");
     }
 
     /**

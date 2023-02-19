@@ -16,6 +16,7 @@
     @stack('plugin-styles')
     <link rel="stylesheet" href="{{ asset("/css/style.css") }}">
     @stack('page-styles')
+
     @livewireStyles
 </head>
 <body class="hold-transition sidebar-mini">
@@ -57,6 +58,7 @@
         </div>
     </footer>
 </div>
+@stack('modals')
 <!-- jQuery -->
 <script src="{{ asset("plugins/jquery/jquery.min.js") }}"></script>
 <!-- Bootstrap -->
@@ -67,6 +69,7 @@
 <script src="{{ asset("js/adminlte.js") }}"></script>
 <!-- OPTIONAL SCRIPTS -->
 <script src="{{ asset("plugins/chart.js/Chart.min.js") }}"></script>
+@routes
 @stack('scripts')
 @livewireScripts
 </body>

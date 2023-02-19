@@ -585,7 +585,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('designations/{designation}', [DesignationController::class, 'show'])
         ->name('designation.show')
         ->middleware(['permission:read_designation']);
-    Route::put('designations/{designation}', [DesignationController::class, 'update'])
+    Route::post('designations/{designation}', [DesignationController::class, 'update'])
         ->name('designation.update')
         ->middleware(['permission:update_designation']);
     Route::post('designations/bulk-update', [DesignationController::class, 'bulkUpdate'])

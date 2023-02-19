@@ -52,7 +52,7 @@ class DoctorController extends AppBaseController
             $data = new DoctorCollection($doctors);
             return $data;
         }
-        return $this->module_view('module.doctor.list', compact('doctors'));
+        return $this->module_view('list', compact('doctors'));
     }
 
     /**

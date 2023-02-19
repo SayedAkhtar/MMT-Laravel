@@ -21,7 +21,7 @@ class CreateDesignationAPIRequest extends FormRequest
     {
         return [
             'name' => ['nullable', 'string'],
-            'is_active' => ['boolean'],
+            'is_active' => ['sometimes'],
         ];
     }
 }

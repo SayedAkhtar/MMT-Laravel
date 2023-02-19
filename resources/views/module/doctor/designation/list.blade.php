@@ -8,9 +8,9 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h3 class="card-title">Doctors List</h3>
-            <a href="javascript:void(0)" class="btn btn-success btn-sm" data-toggle="modal" data-target="#add_designation">
+            <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#add_designation">
                 <i class="fa fa-plus"></i> Add Designation
-            </a>
+            </button>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
@@ -19,6 +19,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -27,8 +28,10 @@
                     <tr>
                         <td>{{ $data->id }}</td>
                         <td>{{ $data->name }}</td>
+                        <td @class(["text-success" => $data->is_active,"text-danger" => !$data->is_active ])>{{ $data->is_active ? 'Active' : 'Not Active' }}</td>
                         <td class="text-right">
-                            <a href="#" class="btn btn-info btn-sm" data-toggle="modal" data-target="#edit_designation"><i class="fa fa-edit"></i></a>
+                            <a href="javascript:void(0)" class="btn btn-info btn-sm"
+                               onclick="edit({{ $data->id }})"><i class="fa fa-edit"></i></a>
                             <a href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i></a>
                         </td>
                     </tr>
@@ -38,6 +41,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
                 </tfoot>
@@ -47,18 +51,68 @@
     </div>
 @endsection
 
-@extends('components.modal', ['title' => "Add Designation", 'form_id' => 'add_designation'])
-@section('modal-body')
-    <form action="{{ route('designation.store') }}" method="post" id="add_designation">
-        @csrf
-        <div class="form-group">
-            <label for="designation_name">Designation name</label>
-            <input type="text" class="form-control" id="designation_name" name="name" placeholder="Enter designation">
+@push('modals')
+    <div class="modal fade" id="add_designation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Designation</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('designation.store') }}" method="post" id="add_designation">
+                        @csrf
+                        <div class="form-group">
+                            <label for="designation_name">Designation name</label>
+                            <input type="text" class="form-control" id="designation_name" name="name"
+                                   placeholder="Enter designation">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" form="add_designation" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
         </div>
-    </form>
-@endsection
+    </div>
 
-@extends('components.modal', ['title' => "Add Designation", 'form_id' => 'edit_designation'])
+    {{-----------    EDIT MODAL -------------}}
+    <div class="modal fade" id="edit_designation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Designation</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="#" method="post" id="edit_designation-form">
+                        @csrf
+                        <div class="form-group">
+                            <label for="designation_name">Designation name</label>
+                            <input type="text" class="form-control" id="designation_name" name="name" placeholder="Enter designation">
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="is_active">
+                                <label class="form-check-label">Active</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" form="edit_designation-form" class="btn btn-primary" >Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endpush
+
 
 @push('plugin-scripts')
     <script src="{{ asset("plugins/datatables/jquery.dataTables.min.js")}}"></script>
@@ -89,8 +143,24 @@
     </script>
 
     <script>
-        $(document).on('ready', function (){
-
-        });
+        async function edit(id) {
+            let res = await fetch(route('designation.show', {'designation': id}));
+            let data = await res.json();
+            $form = $("#edit_designation-form input");
+            $("#edit_designation-form").attr('action', route('designation.update', {'designation': id} ));
+            console.log($form.action);
+            $form.each((index, ele) => {
+                if(data.data[ele.name] == undefined){
+                    return;
+                }
+                if( typeof data.data[ele.name] ==  'boolean'){
+                    ele.checked = data.data[ele.name]
+                }else{
+                    ele.value = data.data[ele.name];
+                }
+                $("#edit_designation").modal().show();
+            });
+            console.log(data);
+        }
     </script>
 @endpush
