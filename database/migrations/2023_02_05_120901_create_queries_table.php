@@ -16,7 +16,7 @@ class CreateQueriesTable extends Migration
         Schema::create('queries', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('patient_id');
-            $table->unsignedBigInteger('patient_family_id');
+            $table->unsignedBigInteger('patient_family_id')->nullable();
             $table->string('name');
             $table->unsignedBigInteger('specialization_id');
             $table->unsignedBigInteger('hospital_id');
@@ -26,7 +26,7 @@ class CreateQueriesTable extends Migration
             $table->text('medical_report')->nullable();
             $table->string('passport')->nullable();
             $table->string('passport_image')->nullable();
-            $table->string('status')->unique();
+            $table->string('status');
             $table->string('model')->nullable();
             $table->unsignedBigInteger('model_id')->nullable();
             $table->boolean('is_active')->default(true);

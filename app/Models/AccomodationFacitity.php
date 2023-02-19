@@ -43,7 +43,7 @@ class AccomodationFacitity extends Model
      */
     public function accomodation()
     {
-        return $this->belongsTo(Accomodation::class, 'accomodation_id', 'id');
+        return $this->belongsTo(Accommodation::class, 'accomodation_id', 'id');
     }
 
     /**

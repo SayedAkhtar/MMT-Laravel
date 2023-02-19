@@ -24,4 +24,11 @@ class UpdateDesignationAPIRequest extends FormRequest
             'is_active' => ['boolean'],
         ];
     }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'is_active' => (bool)$this->input('is_active')
+        ]);
+    }
 }

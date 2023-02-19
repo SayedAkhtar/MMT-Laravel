@@ -20,7 +20,6 @@ class DesignationResource extends BaseAPIResource
         }
 
         return [
-            'id' => $this->id,
             'name' => $this->name,
             'is_active' => $this->is_active,
             'created_at' => $this->created_at,

@@ -105,4 +105,12 @@ class Doctor extends Model
     {
         return $this->hasOne(Qualification::class, 'id', 'qualification_id');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\hasOne
+     */
+    public function designation()
+    {
+        return $this->hasOne(Designation::class, 'id', 'designation_id');
+    }
 }

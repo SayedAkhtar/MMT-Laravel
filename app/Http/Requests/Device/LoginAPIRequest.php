@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class LoginAPIRequest extends FormRequest
 {
+//    protected $redirect = '/admin/login';
     /**
      * @return bool
      */
@@ -20,7 +21,7 @@ class LoginAPIRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => ['required'],
+            'email' => ['required'],
             'password' => ['required'],
         ];
     }

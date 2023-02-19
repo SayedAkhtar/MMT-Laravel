@@ -21,12 +21,12 @@ class DoctorResource extends BaseAPIResource
 
         return [
             'id' => $this->id,
-            'user_id' => $this->user_id,
+            'name' => $this->user->name,
             'start_of_service' => $this->start_of_service,
             'awards' => $this->awards,
             'description' => $this->description,
-            'designation_id' => $this->designation_id,
-            'qualification_id' => $this->qualification_id,
+            'designation' => $this->designation->name,
+            'qualification' => $this->qualification->name,
             'faq' => $this->faq,
             'time_slots' => $this->time_slots,
             'is_active' => $this->is_active,

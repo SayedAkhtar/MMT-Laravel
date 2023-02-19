@@ -41,6 +41,6 @@ class AccomodationType extends Model
      */
     public function accomodation()
     {
-        return $this->belongsTo(Accomodation::class, 'type', 'id');
+        return $this->belongsTo(Accommodation::class, 'type', 'id');
     }
 }

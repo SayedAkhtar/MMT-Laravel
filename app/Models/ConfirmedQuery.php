@@ -55,7 +55,7 @@ class ConfirmedQuery extends Model
      */
     public function accomodation()
     {
-        return $this->hasOne(Accomodation::class, 'id', 'accomodation_id');
+        return $this->hasOne(Accommodation::class, 'id', 'accomodation_id');
     }
 
     /**
