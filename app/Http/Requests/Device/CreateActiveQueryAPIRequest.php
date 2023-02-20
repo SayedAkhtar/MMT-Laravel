@@ -20,17 +20,8 @@ class CreateActiveQueryAPIRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'query_id' => ['nullable'],
-            'doctor_response' => ['nullable'],
-            'patient_response' => ['nullable'],
-            'attendant_passport' => ['nullable', 'string'],
-            'tickets' => ['nullable', 'string'],
-            'medical_visa' => ['nullable', 'string'],
-            'is_payment_required' => ['boolean'],
-            'is_payment_done' => ['boolean'],
-            'country' => ['nullable', 'string'],
-            'state' => ['nullable', 'string'],
-            'is_active' => ['boolean'],
+            'query_id' => ['required', 'exists:queries,id'],
+            'doctor_response' => ['nullable']
         ];
     }
 }

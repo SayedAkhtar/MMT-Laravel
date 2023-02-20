@@ -19,7 +19,7 @@ class ConfirmedQuery extends Model
      */
     protected $fillable = [
         'query_id',
-        'accomodation_id',
+        'accommodation_id',
         'cab_detail',
         'coordinator_id',
         'is_active',
@@ -34,7 +34,7 @@ class ConfirmedQuery extends Model
      */
     protected $casts = [
         'query_id' => 'integer',
-        'accomodation_id' => 'integer',
+        'accommodation_id' => 'integer',
         'cab_detail' => 'string',
         'coordinator_id' => 'integer',
         'is_active' => 'boolean',
@@ -53,7 +53,7 @@ class ConfirmedQuery extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
-    public function accomodation()
+    public function accommodation()
     {
         return $this->hasOne(Accommodation::class, 'id', 'accomodation_id');
     }
@@ -61,7 +61,7 @@ class ConfirmedQuery extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
-    public function user()
+    public function coordinator(): \Illuminate\Database\Eloquent\Relations\hasOne
     {
         return $this->hasOne(User::class, 'id', 'coordinator_id');
     }

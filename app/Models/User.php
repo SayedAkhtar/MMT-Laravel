@@ -165,7 +165,7 @@ class User extends Authenticatable implements HasMedia
 
     public function doctor()
     {
-        return $this->belongsTo(Doctor::class, 'user_id', 'id');
+        return $this->belongsTo(Doctor::class, 'id', 'user_id');
     }
 
     public function patientFamilies()

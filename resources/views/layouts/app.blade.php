@@ -15,6 +15,7 @@
     <!-- Theme style -->
     @stack('plugin-styles')
     <link rel="stylesheet" href="{{ asset("/css/style.css") }}">
+    <link rel="stylesheet" href="{{ asset("/css/app.css") }}">
     @stack('page-styles')
 
     @livewireStyles

@@ -71,7 +71,7 @@ class Doctor extends Model
      */
     public function doctorSpecializations()
     {
-        return $this->hasMany(DoctorSpecialization::class, 'doctor_id', 'id');
+        return $this->hasManyThrough(Specialization::class, DoctorSpecialization::class, 'doctor_id', 'id', 'id');
     }
 
     /**

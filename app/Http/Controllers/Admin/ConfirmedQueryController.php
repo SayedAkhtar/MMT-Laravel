@@ -14,6 +14,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Prettus\Validator\Exceptions\ValidatorException;
+use Twilio\TwiML\Voice\Redirect;
 
 class ConfirmedQueryController extends AppBaseController
 {
@@ -53,14 +54,18 @@ class ConfirmedQueryController extends AppBaseController
      *
      * @throws ValidatorException
      *
-     * @return ConfirmedQueryResource
      */
-    public function store(CreateConfirmedQueryAPIRequest $request): ConfirmedQueryResource
+    public function store(CreateConfirmedQueryAPIRequest $request)
     {
         $input = $request->all();
-        $confirmedQuery = $this->confirmedQueryRepository->create($input);
-
-        return new ConfirmedQueryResource($confirmedQuery);
+        $query = $this->confirmedQueryRepository->findWhere(['query_id' => $request->query_id])->first();
+        if(empty($query)){
+            $this->confirmedQueryRepository->create($input);
+        }else{
+            $input = array_filter($input, fn($value) => !is_null($value) && $value !== '');
+            $result = $this->confirmedQueryRepository->update($input, $query->id);
+        }
+        return redirect()->back()->with('success', 'Details Updated');
     }
 
     /**

@@ -69,7 +69,7 @@ class Hospital extends Model implements HasMedia
      */
     public function hospitalTreatments()
     {
-        return $this->hasMany(HospitalTreatment::class, 'hospital_id', 'id');
+        return $this->hasManyThrough(Treatment::class, HospitalTreatment::class, 'hospital_id', 'id', 'id');
     }
 
     /**
@@ -77,7 +77,7 @@ class Hospital extends Model implements HasMedia
      */
     public function accreditationHospitals()
     {
-        return $this->hasMany(AccreditationHospital::class, 'hospital_id', 'id');
+        return $this->hasManyThrough(Accreditation::class, AccreditationHospital::class, 'hospital_id', 'id', 'id');
     }
 
     /**

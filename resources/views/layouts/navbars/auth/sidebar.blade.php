@@ -207,7 +207,7 @@
 
         <li class="nav-header">Queries</li>
         <li class="nav-item">
-          <a href="{{ route('profile.index') }}" class="nav-link">
+          <a href="{{ route('queries.index') }}" class="nav-link">
             <i class="nav-icon fas fa-calendar-alt"></i> Open Queries
           </a>
         </li>
