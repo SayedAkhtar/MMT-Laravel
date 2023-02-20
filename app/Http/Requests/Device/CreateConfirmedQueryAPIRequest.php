@@ -20,7 +20,7 @@ class CreateConfirmedQueryAPIRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'query_id' => ['nullable', 'exists:queries,id'],
+            'query_id' => ['required', 'exists:queries,id'],
             'accomodation_id' => ['nullable', 'exists:accomodations,id'],
             'cab_detail' => ['nullable'],
             'coordinator_id' => ['nullable', 'exists:users,id'],

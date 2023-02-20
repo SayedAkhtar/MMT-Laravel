@@ -53,14 +53,13 @@ class ActiveQueryController extends AppBaseController
      *
      * @throws ValidatorException
      *
-     * @return ActiveQueryResource
+     *
      */
-    public function store(CreateActiveQueryAPIRequest $request): ActiveQueryResource
+    public function store(CreateActiveQueryAPIRequest $request)
     {
-        $input = $request->all();
+        $input = $request->validated();
         $activeQuery = $this->activeQueryRepository->create($input);
-
-        return new ActiveQueryResource($activeQuery);
+        return redirect()->route('query.show', ['query' => $input['query_id'], 'tab' => 'upload-medical-visa']);
     }
 
     /**

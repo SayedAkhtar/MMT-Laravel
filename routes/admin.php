@@ -45,6 +45,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('dashboard', [\App\Http\Controllers\Admin\HomeController::class, 'dashboard'])->name('dashboard');
     Route::get('profile', [\App\Http\Controllers\Admin\HomeController::class, 'profile'])->name('profile.index');
 
+//    ------------- Queries Route ----------- //
+
     Route::post('queries', [QueryController::class, 'store'])
         ->name('query.store')
         ->middleware(['permission:create_query']);
@@ -66,6 +68,28 @@ Route::group(['middleware' => ['auth']], function () {
     Route::delete('queries/{query}', [QueryController::class, 'delete'])
         ->name('query.delete')
         ->middleware(['permission:delete_query']);
+
+    Route::get('confirmed-queries', [ConfirmedQueryController::class, 'index'])
+        ->name('confirmed-queries.index');
+    Route::get('confirmed-queries/{confirmedQuery}', [ConfirmedQueryController::class, 'show'])
+        ->name('confirmedQuery.show');
+    Route::post('confirmed-queries', [ConfirmedQueryController::class, 'store'])
+        ->name('confirmedQuery.store');
+    Route::put('confirmed-queries/{confirmedQuery}', [ConfirmedQueryController::class, 'update'])
+        ->name('confirmedQuery.update');
+    Route::delete('confirmed-queries/{confirmedQuery}', [ConfirmedQueryController::class, 'delete'])
+        ->name('confirmedQuery.delete');
+
+    Route::post('active-queries', [ActiveQueryController::class, 'store'])
+        ->name('activeQuery.store');
+    Route::put('active-queries/{activeQuery}', [ActiveQueryController::class, 'update'])
+        ->name('activeQuery.update');
+    Route::delete('active-queries/{activeQuery}', [ActiveQueryController::class, 'delete'])
+        ->name('activeQuery.delete');
+
+//    ------------ End Query Routes ----------------//
+
+
 
     Route::post('hospital-treatments', [HospitalTreatmentController::class, 'store'])
         ->name('hospitalTreatment.store')
@@ -719,34 +743,7 @@ Route::post('past-queries/bulk-create', [PastQueryController::class, 'bulkStore'
     ->name('pastQuery.store.bulk');
 Route::post('past-queries/bulk-update', [PastQueryController::class, 'bulkUpdate'])
     ->name('pastQuery.update.bulk');
-Route::get('active-queries', [ActiveQueryController::class, 'index'])
-    ->name('active-queries.index');
-Route::get('active-queries/{activeQuery}', [ActiveQueryController::class, 'show'])
-    ->name('activeQuery.show');
-Route::post('active-queries', [ActiveQueryController::class, 'store'])
-    ->name('activeQuery.store');
-Route::put('active-queries/{activeQuery}', [ActiveQueryController::class, 'update'])
-    ->name('activeQuery.update');
-Route::delete('active-queries/{activeQuery}', [ActiveQueryController::class, 'delete'])
-    ->name('activeQuery.delete');
-Route::post('active-queries/bulk-create', [ActiveQueryController::class, 'bulkStore'])
-    ->name('activeQuery.store.bulk');
-Route::post('active-queries/bulk-update', [ActiveQueryController::class, 'bulkUpdate'])
-    ->name('activeQuery.update.bulk');
-Route::get('confirmed-queries', [ConfirmedQueryController::class, 'index'])
-    ->name('confirmed-queries.index');
-Route::get('confirmed-queries/{confirmedQuery}', [ConfirmedQueryController::class, 'show'])
-    ->name('confirmedQuery.show');
-Route::post('confirmed-queries', [ConfirmedQueryController::class, 'store'])
-    ->name('confirmedQuery.store');
-Route::put('confirmed-queries/{confirmedQuery}', [ConfirmedQueryController::class, 'update'])
-    ->name('confirmedQuery.update');
-Route::delete('confirmed-queries/{confirmedQuery}', [ConfirmedQueryController::class, 'delete'])
-    ->name('confirmedQuery.delete');
-Route::post('confirmed-queries/bulk-create', [ConfirmedQueryController::class, 'bulkStore'])
-    ->name('confirmedQuery.store.bulk');
-Route::post('confirmed-queries/bulk-update', [ConfirmedQueryController::class, 'bulkUpdate'])
-    ->name('confirmedQuery.update.bulk');
+
 Route::get('patient-families', [PatientFamilyController::class, 'index'])
     ->name('patient-families.index');
 Route::get('patient-families/{patientFamily}', [PatientFamilyController::class, 'show'])

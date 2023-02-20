@@ -40,6 +40,13 @@ class Query extends Model
         'is_completed',
         'completed_at',
     ];
+    protected static $tabs = [
+        'details',
+        'doctor-review',
+        'upload-medical-visa',
+        'upload-ticket',
+        'coordinator',
+    ];
 
     /**
      * @var string[]
@@ -65,6 +72,11 @@ class Query extends Model
         'is_completed' => 'boolean',
     ];
 
+    public static function getTabs()
+    {
+        return self::$tabs;
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
@@ -74,17 +86,25 @@ class Query extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function confirmedQuery()
     {
-        return $this->belongsTo(ConfirmedQuery::class, 'query_id', 'id');
+        return $this->hasOne(ConfirmedQuery::class, 'query_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function activeQuery()
+    {
+        return $this->hasOne(ActiveQuery::class, 'query_id', 'id');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
-    public function user()
+    public function patient()
     {
         return $this->hasOne(User::class, 'id', 'patient_id');
     }

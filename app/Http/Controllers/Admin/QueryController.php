@@ -9,14 +9,19 @@ use App\Http\Requests\Device\CreateQueryAPIRequest;
 use App\Http\Requests\Device\UpdateQueryAPIRequest;
 use App\Http\Resources\Device\QueryCollection;
 use App\Http\Resources\Device\QueryResource;
+use App\Models\Query;
 use App\Repositories\QueryRepository;
+use App\Traits\isViewModule;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class QueryController extends AppBaseController
 {
+    use isViewModule;
+    protected $module;
     /**
      * @var QueryRepository
      */
@@ -28,6 +33,7 @@ class QueryController extends AppBaseController
     public function __construct(QueryRepository $queryRepository)
     {
         $this->queryRepository = $queryRepository;
+        $this->module = 'module/queries';
     }
 
     /**
@@ -37,13 +43,12 @@ class QueryController extends AppBaseController
      *
      * @param Request $request
      *
-     * @return QueryCollection
+     * @return View
      */
-    public function index(Request $request): QueryCollection
+    public function index(Request $request): View
     {
         $queries = $this->queryRepository->fetch($request);
-
-        return new QueryCollection($queries);
+        return $this->module_view('/list', compact('queries'));
     }
 
     /**
@@ -68,13 +73,16 @@ class QueryController extends AppBaseController
      *
      * @param int $id
      *
-     * @return QueryResource
      */
-    public function show(int $id): QueryResource
+    public function show(Request $request, int $id)
     {
         $query = $this->queryRepository->findOrFail($id);
-
-        return new QueryResource($query);
+        $tab = $request->get('tab') ?? 'details';
+        $afterOpenQuery = ['upload-medical-visa','upload-ticket', 'coordinator'];
+        if(in_array($tab, $afterOpenQuery) && (empty($query->activeQuery) && empty($query->activeQuery->doctor_response))){
+            return back()->with('error', "Please upload doctor's review before proceeding");
+        }
+        return $this->module_view('queries-layout', compact('query', 'tab'));
     }
 
     /**
