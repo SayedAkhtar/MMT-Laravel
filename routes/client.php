@@ -41,6 +41,7 @@ use \App\Http\Controllers\API\Client\FileUploadController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth:sanctum', 'validate.user']], function () {
+    Route::get('home', [\App\Http\Controllers\API\Client\HomeController::class, 'modules']);
     Route::post('queries', [QueryController::class, 'store'])
         ->name('query.store')
         ->middleware(['permission:create_query']);
