@@ -21,7 +21,7 @@ class CreateAccreditationAPIRequest extends FormRequest
     {
         return [
             'name' => ['nullable', 'string'],
-            'logo' => ['nullable', 'string'],
+            'logo' => ['nullable', 'file'],
             'is_active' => ['boolean'],
         ];
     }

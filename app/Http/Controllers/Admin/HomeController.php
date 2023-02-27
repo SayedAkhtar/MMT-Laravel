@@ -12,7 +12,7 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        if(!auth()){
+        if(!Auth::check()){
             return redirect(route('login'));
         }else {
             return redirect(route('dashboard'));

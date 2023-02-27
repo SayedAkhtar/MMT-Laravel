@@ -10,13 +10,17 @@ use App\Http\Requests\Device\UpdateAccreditationAPIRequest;
 use App\Http\Resources\Device\AccreditationCollection;
 use App\Http\Resources\Device\AccreditationResource;
 use App\Repositories\AccreditationRepository;
+use App\Traits\isViewModule;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class AccreditationController extends AppBaseController
 {
+    use isViewModule;
+    protected $module;
     /**
      * @var AccreditationRepository
      */
@@ -28,6 +32,7 @@ class AccreditationController extends AppBaseController
     public function __construct(AccreditationRepository $accreditationRepository)
     {
         $this->accreditationRepository = $accreditationRepository;
+        $this->module = 'module/hospital/accreditation';
     }
 
     /**
@@ -39,11 +44,15 @@ class AccreditationController extends AppBaseController
      *
      * @return AccreditationCollection
      */
-    public function index(Request $request): AccreditationCollection
+    public function index(Request $request)
     {
         $accreditations = $this->accreditationRepository->fetch($request);
+        return $this->module_view('list', compact('accreditations'));
+    }
 
-        return new AccreditationCollection($accreditations);
+    public function create()
+    {
+        return $this->module_view('add');
     }
 
     /**
@@ -55,12 +64,22 @@ class AccreditationController extends AppBaseController
      *
      * @return AccreditationResource
      */
-    public function store(CreateAccreditationAPIRequest $request): AccreditationResource
+    public function store(CreateAccreditationAPIRequest $request)
     {
         $input = $request->all();
+        if($request->hasFile('logo') ){
+            $fileName = time().'_'.Str::slug(($request->get('name'))).'.'.$request->file('logo')->getClientOriginalExtension();
+            $filePath= $request->file('logo')->store('uploads');
+            if($filePath){
+                $input['logo'] = $filePath;
+            }
+        }
         $accreditation = $this->accreditationRepository->create($input);
-
-        return new AccreditationResource($accreditation);
+        if($accreditation){
+            return back()->with('success', "Data added successfully");
+        }else{
+            return back()->with('error', "Cannot add data");
+        }
     }
 
     /**

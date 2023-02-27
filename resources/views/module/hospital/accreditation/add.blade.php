@@ -12,7 +12,7 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            <form action="{{ route('hospital.store') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('accreditation.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-sm-6">
@@ -23,29 +23,12 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Address</label>
-                            <input type="input" class="form-control" placeholder="Enter full address" name="address">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <!-- text input -->
-                        <div class="form-group">
-                            <label>Description</label>
-                            <textarea class="form-control" name="description" id="" cols="30" rows="10"></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
                             <label for="exampleInputFile">Logo</label>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="exampleInputFile" name="image">
+                                    <input type="file" class="custom-file-input" id="exampleInputFile" name="logo">
                                     <label class="custom-file-label" for="exampleInputFile">Choose file</label>
                                 </div>
                                 <div class="input-group-append">
@@ -54,39 +37,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Accreditation</label>
-                            <select class="form-control select2bs4" name="accreditation[]" multiple="true">
-                                <option>Select Option</option>
-                            </select>
-                        </div>
-                    </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-12">
                         <div class="form-group">
-                            <label>Treatments</label>
-                            <select class="form-control select2bs4" name="treatments[]" multiple="true">
-                                <option>Select Option</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Doctors</label>
-                                <select class="form-control select2bs4" name="doctors[]" multiple="true">
-                                    <option>Select Option</option>
-                                </select>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                                <label class="custom-control-label" for="customSwitch1">Accreditation Active Status</label>
                             </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <!-- text input -->
-                        <div class="form-group">
-                            <label>Placement Order</label>
-                            <input type="number" class="form-control" placeholder="Sponsorship order" name="order">
                         </div>
                     </div>
                 </div>
