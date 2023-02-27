@@ -10,6 +10,7 @@ use App\Http\Requests\Device\UpdateHospitalAPIRequest;
 use App\Http\Resources\Device\HospitalCollection;
 use App\Http\Resources\Device\HospitalResource;
 use App\Repositories\HospitalRepository;
+use App\Traits\isViewModule;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,6 +19,9 @@ use Prettus\Validator\Exceptions\ValidatorException;
 
 class HospitalController extends AppBaseController
 {
+    use isViewModule;
+
+    protected $module;
     /**
      * @var HospitalRepository
      */
@@ -29,6 +33,7 @@ class HospitalController extends AppBaseController
     public function __construct(HospitalRepository $hospitalRepository)
     {
         $this->hospitalRepository = $hospitalRepository;
+        $this->module = 'module/hospital';
     }
 
     /**
@@ -43,8 +48,12 @@ class HospitalController extends AppBaseController
     public function index(Request $request) : View
     {
         $hospitals = $this->hospitalRepository->fetch($request);
-        return view('hospital.list');
-        return new HospitalCollection($hospitals);
+        return $this->module_view('list', compact('hospitals'));
+    }
+
+    public function create()
+    {
+        return $this->module_view('add');
     }
 
     /**

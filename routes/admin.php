@@ -113,27 +113,6 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('hospitalTreatment.delete')
         ->middleware(['permission:delete_hospitaltreatment']);
 
-    Route::post('accreditation-hospitals', [AccreditationHospitalController::class, 'store'])
-        ->name('accreditationHospital.store')
-        ->middleware(['permission:create_accreditationhospital']);
-    Route::post('accreditation-hospitals/bulk-create', [AccreditationHospitalController::class, 'bulkStore'])
-        ->name('accreditationHospital.store.bulk')
-        ->middleware(['permission:create_accreditationhospital']);
-    Route::get('accreditation-hospitals', [AccreditationHospitalController::class, 'index'])
-        ->name('accreditation-hospitals.index')
-        ->middleware(['permission:read_accreditationhospital']);
-    Route::get('accreditation-hospitals/{accreditationHospital}', [AccreditationHospitalController::class, 'show'])
-        ->name('accreditationHospital.show')
-        ->middleware(['permission:read_accreditationhospital']);
-    Route::put('accreditation-hospitals/{accreditationHospital}', [AccreditationHospitalController::class, 'update'])
-        ->name('accreditationHospital.update')
-        ->middleware(['permission:update_accreditationhospital']);
-    Route::post('accreditation-hospitals/bulk-update', [AccreditationHospitalController::class, 'bulkUpdate'])
-        ->name('accreditationHospital.update.bulk')
-        ->middleware(['permission:update_accreditationhospital']);
-    Route::delete('accreditation-hospitals/{accreditationHospital}', [AccreditationHospitalController::class, 'delete'])
-        ->name('accreditationHospital.delete')
-        ->middleware(['permission:delete_accreditationhospital']);
 
     Route::post('doctor-patient-testimonials', [DoctorPatientTestimonialController::class, 'store'])
         ->name('doctorPatientTestimonial.store')
@@ -562,6 +541,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('accreditations', [AccreditationController::class, 'index'])
         ->name('accreditations.index')
         ->middleware(['permission:read_accreditation']);
+    Route::get('accreditations/create', [AccreditationController::class, 'create'])
+        ->name('accreditations.create');
     Route::get('accreditations/{accreditation}', [AccreditationController::class, 'show'])
         ->name('accreditation.show')
         ->middleware(['permission:read_accreditation']);
@@ -627,14 +608,13 @@ Route::group(['middleware' => ['auth']], function () {
         ->middleware(['permission:create_hospital']);
     Route::get('hospitals', [HospitalController::class, 'index'])
         ->name('hospitals.index');
+    Route::get('hospitals/create', [HospitalController::class, 'create'])
+        ->name('hospital.create');
     Route::get('hospitals/{hospital}', [HospitalController::class, 'show'])
         ->name('hospital.show')
         ->middleware(['permission:read_hospital']);
     Route::put('hospitals/{hospital}', [HospitalController::class, 'update'])
         ->name('hospital.update')
-        ->middleware(['permission:update_hospital']);
-    Route::post('hospitals/bulk-update', [HospitalController::class, 'bulkUpdate'])
-        ->name('hospital.update.bulk')
         ->middleware(['permission:update_hospital']);
     Route::delete('hospitals/{hospital}', [HospitalController::class, 'delete'])
         ->name('hospital.delete')

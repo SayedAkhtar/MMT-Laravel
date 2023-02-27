@@ -10,7 +10,7 @@ use Illuminate\View\View;
 trait isViewModule {
     protected $module;
 
-    public function module_view($lastPath, $dependencies) : View
+    public function module_view($lastPath, $dependencies = []) : View
     {
         if($lastPath[0] == '/'){
             $lastPath = substr($lastPath, 1);

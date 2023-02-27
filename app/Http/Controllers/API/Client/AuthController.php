@@ -65,7 +65,6 @@ class AuthController extends AppBaseController
 
         $userRole = Role::find($input['role']);
         $user->assignRole($userRole);
-
         Mail::to($user->email)
             ->send(new MailService('emails.verify_email',
             'Verify Email Address',
