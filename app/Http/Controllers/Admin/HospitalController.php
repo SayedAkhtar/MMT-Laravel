@@ -9,7 +9,10 @@ use App\Http\Requests\Device\CreateHospitalAPIRequest;
 use App\Http\Requests\Device\UpdateHospitalAPIRequest;
 use App\Http\Resources\Device\HospitalCollection;
 use App\Http\Resources\Device\HospitalResource;
+use App\Models\User;
+use App\Repositories\AccreditationRepository;
 use App\Repositories\HospitalRepository;
+use App\Repositories\TreatmentRepository;
 use App\Traits\isViewModule;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -51,9 +54,12 @@ class HospitalController extends AppBaseController
         return $this->module_view('list', compact('hospitals'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        return $this->module_view('add');
+        $accreditations = app(AccreditationRepository::class)->fetch($request);
+        $doctors = User::query()->whereHas('doctor')->get();
+        $treatments = app(TreatmentRepository::class)->fetch($request);
+        return $this->module_view('add', compact('accreditations', 'doctors', 'treatments'));
     }
 
     /**

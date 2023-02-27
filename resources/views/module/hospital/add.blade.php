@@ -59,6 +59,10 @@
                             <label>Accreditation</label>
                             <select class="form-control select2bs4" name="accreditation[]" multiple="true">
                                 <option>Select Option</option>
+                                @forelse($accreditations  as $data)
+                                    <option value="{{ $data->id }}"> {{ $data->name }}</option>
+                                @empty
+                                @endforelse
                             </select>
                         </div>
                     </div>
@@ -69,6 +73,10 @@
                             <label>Treatments</label>
                             <select class="form-control select2bs4" name="treatments[]" multiple="true">
                                 <option>Select Option</option>
+                                @forelse($treatments  as $data)
+                                    <option value="{{ $data->id }}"> {{ $data->name }}</option>
+                                @empty
+                                @endforelse
                             </select>
                         </div>
                     </div>
@@ -77,6 +85,10 @@
                                 <label>Doctors</label>
                                 <select class="form-control select2bs4" name="doctors[]" multiple="true">
                                     <option>Select Option</option>
+                                    @forelse($doctors  as $data)
+                                        <option value="{{ $data->id }}"> {{ $data->name }}</option>
+                                    @empty
+                                    @endforelse
                                 </select>
                             </div>
                     </div>
