@@ -20,16 +20,14 @@ class CreatePatientFamilyDetailsAPIRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'patient_id' => ['nullable', 'exists:users,id'],
-            'name' => ['nullable', 'string'],
-            'phone' => ['nullable', 'string'],
-            'relationship' => ['nullable', 'string'],
+            'patient_id' => ['required', 'exists:users,id'],
+            'name' => ['required', 'string'],
+            'phone' => ['required', 'unique:patient_family_details,phone', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
+            'speciality' => ['nullable'],
+            'relationship' => ['required', 'string'],
             'dob' => ['nullable'],
-            'gender' => ['nullable', 'string', 'unique:patient_family_details,gender'],
-            'geo_location' => ['nullable'],
+            'gender' => ['nullable', 'string'],
             'treatment_country' => ['nullable', 'string'],
-            'medical_info' => ['nullable'],
-            'is_active' => ['boolean'],
         ];
     }
 }

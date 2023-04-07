@@ -4,6 +4,7 @@ namespace App\Http\Resources\Client;
 
 use App\Http\Resources\BaseAPIResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class ActiveQueryResource extends BaseAPIResource
 {
@@ -18,24 +19,19 @@ class ActiveQueryResource extends BaseAPIResource
         if (!empty($fieldsFilter) || $request->get('include')) {
             return $this->resource->toArray();
         }
+        $data = [];
+        if ($this->activeQuery != null && $this->activeQuery->doctor_response != null) {
+            $data = [
+                'id' => $this->id,
+                'name' => $this->name,
+                'specialization' => $this->specialization->name,
+                'doctor_response' => $this->activeQuery->doctor_response,
+                'is_payment_required' => (bool)$this->activeQuery->is_payment_required,
+                'is_payment_done' => (bool)$this->activeQuery->is_payment_done,
+                'created_at' => Carbon::make($this->created_at)->format('M d, Y | h:m a'),
+            ];
+        }
+        return $data;
 
-        return [
-            'id' => $this->id,
-            'query_id' => $this->query_id,
-            'doctor_response' => $this->doctor_response,
-            'patient_response' => $this->patient_response,
-            'attendant_passport' => $this->attendant_passport,
-            'tickets' => $this->tickets,
-            'medical_visa' => $this->medical_visa,
-            'is_payment_required' => $this->is_payment_required,
-            'is_payment_done' => $this->is_payment_done,
-            'country' => $this->country,
-            'state' => $this->state,
-            'is_active' => $this->is_active,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'added_by' => $this->added_by,
-            'updated_by' => $this->updated_by,
-        ];
     }
 }

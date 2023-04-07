@@ -53,9 +53,9 @@ class ConfirmedQuery extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
-    public function accommodation()
+    public function accommodation(): \Illuminate\Database\Eloquent\Relations\hasOne
     {
-        return $this->hasOne(Accommodation::class, 'id', 'accomodation_id');
+        return $this->hasOne(Accommodation::class, 'id', 'accommodation_id');
     }
 
     /**

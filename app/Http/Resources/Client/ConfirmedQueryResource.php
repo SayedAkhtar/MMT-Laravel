@@ -19,17 +19,23 @@ class ConfirmedQueryResource extends BaseAPIResource
             return $this->resource->toArray();
         }
 
+        $accomodation = [
+            "name" => $this->accommodation->name,
+            "address" => $this->accommodation->address,
+            "geo_location" => $this->accommodation->geo_location,
+        ];
+
+        $coordinator = [
+            "name" => $this->coordinator->name,
+            "phone" => $this->coordinator->phone,
+            "email" => $this->coordinator->email,
+            "image" => $this->coordinator->image,
+        ];
+
         return [
-            'id' => $this->id,
-            'query_id' => $this->query_id,
-            'accomodation_id' => $this->accomodation_id,
-            'cab_detail' => $this->cab_detail,
-            'coordinator_id' => $this->coordinator_id,
-            'is_active' => $this->is_active,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'added_by' => $this->added_by,
-            'updated_by' => $this->updated_by,
+            'accommodation' => $accomodation,
+            'cab' => ["name" => $this->cab_name, "number" => $this->cab_number, "type" => $this->cab_type],
+            'coordinator' => $this->when($this->coordinator != null, $coordinator),
         ];
     }
 }

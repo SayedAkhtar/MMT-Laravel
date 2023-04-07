@@ -10,6 +10,7 @@ use App\Http\Requests\Device\UpdatePatientTestimonyAPIRequest;
 use App\Http\Resources\Device\PatientTestimonyCollection;
 use App\Http\Resources\Device\PatientTestimonyResource;
 use App\Repositories\PatientTestimonyRepository;
+use App\Traits\IsViewModule;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,6 +18,8 @@ use Prettus\Validator\Exceptions\ValidatorException;
 
 class PatientTestimonyController extends AppBaseController
 {
+    use IsViewModule;
+
     /**
      * @var PatientTestimonyRepository
      */
@@ -28,6 +31,7 @@ class PatientTestimonyController extends AppBaseController
     public function __construct(PatientTestimonyRepository $patientTestimonyRepository)
     {
         $this->patientTestimonyRepository = $patientTestimonyRepository;
+        $this->module = "module/patient-testimonials";
     }
 
     /**
@@ -36,14 +40,12 @@ class PatientTestimonyController extends AppBaseController
      * Skip Param: skip.
      *
      * @param Request $request
-     *
-     * @return PatientTestimonyCollection
      */
-    public function index(Request $request): PatientTestimonyCollection
+    public function index(Request $request)
     {
-        $patientTestimonies = $this->patientTestimonyRepository->fetch($request);
+        $testimonials = $this->patientTestimonyRepository->fetch($request);
 
-        return new PatientTestimonyCollection($patientTestimonies);
+        return $this->module_view('list', compact('testimonials'));
     }
 
     /**
@@ -51,9 +53,9 @@ class PatientTestimonyController extends AppBaseController
      *
      * @param CreatePatientTestimonyAPIRequest $request
      *
+     * @return PatientTestimonyResource
      * @throws ValidatorException
      *
-     * @return PatientTestimonyResource
      */
     public function store(CreatePatientTestimonyAPIRequest $request): PatientTestimonyResource
     {
@@ -81,11 +83,11 @@ class PatientTestimonyController extends AppBaseController
      * Update PatientTestimony with given payload.
      *
      * @param UpdatePatientTestimonyAPIRequest $request
-     * @param int                              $id
-     *
-     * @throws ValidatorException
+     * @param int $id
      *
      * @return PatientTestimonyResource
+     * @throws ValidatorException
+     *
      */
     public function update(UpdatePatientTestimonyAPIRequest $request, int $id): PatientTestimonyResource
     {
@@ -100,9 +102,9 @@ class PatientTestimonyController extends AppBaseController
      *
      * @param int $id
      *
+     * @return JsonResponse
      * @throws Exception
      *
-     * @return JsonResponse
      */
     public function delete(int $id): JsonResponse
     {
@@ -116,9 +118,9 @@ class PatientTestimonyController extends AppBaseController
      *
      * @param BulkCreatePatientTestimonyAPIRequest $request
      *
+     * @return PatientTestimonyCollection
      * @throws ValidatorException
      *
-     * @return PatientTestimonyCollection
      */
     public function bulkStore(BulkCreatePatientTestimonyAPIRequest $request): PatientTestimonyCollection
     {
@@ -137,9 +139,9 @@ class PatientTestimonyController extends AppBaseController
      *
      * @param BulkUpdatePatientTestimonyAPIRequest $request
      *
+     * @return PatientTestimonyCollection
      * @throws ValidatorException
      *
-     * @return PatientTestimonyCollection
      */
     public function bulkUpdate(BulkUpdatePatientTestimonyAPIRequest $request): PatientTestimonyCollection
     {

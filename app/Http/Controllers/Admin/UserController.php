@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\Device\BulkCreateUserAPIRequest;
-use App\Http\Requests\Device\BulkUpdateUserAPIRequest;
 use App\Http\Requests\Device\CreateUserAPIRequest;
 use App\Http\Requests\Device\UpdateUserAPIRequest;
-use App\Http\Resources\Device\UserCollection;
 use App\Http\Resources\Device\UserResource;
+use App\Models\PatientDetails;
+use App\Models\User;
 use App\Repositories\UserRepository;
-use Exception;
+use App\Traits\IsViewModule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -19,7 +18,10 @@ use Prettus\Validator\Exceptions\ValidatorException;
 
 class UserController extends AppBaseController
 {
+    use IsViewModule;
+
     protected $module;
+    protected $userModel;
     /**
      * @var UserRepository
      */
@@ -28,10 +30,11 @@ class UserController extends AppBaseController
     /**
      * @param UserRepository $userRepository
      */
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, User $userModel)
     {
         $this->userRepository = $userRepository;
         $this->module = "module/user";
+        $this->userModel = $userModel;
     }
 
     /**
@@ -46,7 +49,7 @@ class UserController extends AppBaseController
     public function index(Request $request): View
     {
         $users = $this->userRepository->fetch($request);
-        return view($this->module.'/index', compact('users'));
+        return view($this->module . '/index', compact('users'));
     }
 
     /**
@@ -54,9 +57,9 @@ class UserController extends AppBaseController
      *
      * @param CreateUserAPIRequest $request
      *
+     * @return UserResource
      * @throws ValidatorException
      *
-     * @return UserResource
      */
     public function store(CreateUserAPIRequest $request): UserResource
     {
@@ -87,11 +90,11 @@ class UserController extends AppBaseController
      * Update User with given payload.
      *
      * @param UpdateUserAPIRequest $request
-     * @param int                  $id
-     *
-     * @throws ValidatorException
+     * @param int $id
      *
      * @return UserResource
+     * @throws ValidatorException
+     *
      */
     public function update(UpdateUserAPIRequest $request, int $id): UserResource
     {
@@ -104,15 +107,6 @@ class UserController extends AppBaseController
         return new UserResource($user);
     }
 
-    /**
-     * Delete given User.
-     *
-     * @param int $id
-     *
-     * @throws Exception
-     *
-     * @return JsonResponse
-     */
     public function delete(int $id): JsonResponse
     {
         $this->userRepository->delete($id);
@@ -120,45 +114,20 @@ class UserController extends AppBaseController
         return $this->successResponse('User deleted successfully.');
     }
 
-    /**
-     * Bulk create User's.
-     *
-     * @param BulkCreateUserAPIRequest $request
-     *
-     * @throws ValidatorException
-     *
-     * @return UserCollection
-     */
-    public function bulkStore(BulkCreateUserAPIRequest $request): UserCollection
+    public function listPatients(Request $request)
     {
-        $users = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $userInput) {
-            $users[$key] = $this->userRepository->create($userInput);
-        }
-
-        return new UserCollection($users);
+        $patients = PatientDetails::with('user', 'specialization')->get();
+        return $this->module_view('patient-list', compact('patients'));
     }
 
-    /**
-     * Bulk update User's data.
-     *
-     * @param BulkUpdateUserAPIRequest $request
-     *
-     * @throws ValidatorException
-     *
-     * @return UserCollection
-     */
-    public function bulkUpdate(BulkUpdateUserAPIRequest $request): UserCollection
+    public function listModerators()
     {
-        $users = collect();
+        $moderators = [];
+        return $this->module_view('moderator-list', compact('moderators'));
+    }
 
-        $input = $request->get('data');
-        foreach ($input as $key => $userInput) {
-            $users[$key] = $this->userRepository->update($userInput, $userInput['id']);
-        }
-
-        return new UserCollection($users);
+    public function createModerators()
+    {
+        return $this->module_view('moderator-add');
     }
 }

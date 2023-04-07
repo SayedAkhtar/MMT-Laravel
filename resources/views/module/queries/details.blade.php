@@ -12,7 +12,8 @@
             <div class="card-body">
                 <div class="form-group">
                     <label for="inputName">Specialization</label>
-                    <input type="text" id="inputName" class="form-control" value="{{ $query->specialization->name }}" readonly>
+                    <input type="text" id="inputName" class="form-control" value="{{ $query->specialization->name }}"
+                           readonly>
                 </div>
                 <div class="form-group">
                     <label for="inputDescription">Name</label>
@@ -20,23 +21,28 @@
                 </div>
                 <div class="form-group">
                     <label for="inputDescription">Email</label>
-                    <input type="text" id="inputName" class="form-control" value="{{ $query->patient->email }}" readonly>
+                    <input type="text" id="inputName" class="form-control" value="{{ $query->patient->email }}"
+                           readonly>
                 </div>
                 <div class="form-group">
                     <label for="inputDescription">Phone Number</label>
-                    <input type="text" id="inputName" class="form-control" value="{{ $query->patient->phone }}" readonly>
+                    <input type="text" id="inputName" class="form-control" value="{{ $query->patient->phone }}"
+                           readonly>
                 </div>
                 <div class="form-group">
                     <label for="inputDescription">Gender</label>
-                    <input type="text" id="inputName" class="form-control" value="{{ $query->patient->gender }}" readonly>
+                    <input type="text" id="inputName" class="form-control" value="{{ $query->patient->gender }}"
+                           readonly>
                 </div>
                 <div class="form-group">
                     <label for="inputDescription">Country</label>
-                    <input type="text" id="inputName" class="form-control" value="{{ $query->patient->country }}" readonly>
+                    <input type="text" id="inputName" class="form-control" value="{{ $query->patient->country }}"
+                           readonly>
                 </div>
                 <div class="form-group">
                     <label for="inputDescription">Date Of Birth</label>
-                    <input type="text" id="inputName" class="form-control" value="{{ date('d-m-Y', strtotime($query->patient->dob)) }}" readonly>
+                    <input type="text" id="inputName" class="form-control"
+                           value="{{ date('d-m-Y', strtotime($query->patient->dob)) }}" readonly>
                 </div>
             </div>
             <!-- /.card-body -->
@@ -90,26 +96,32 @@
             </div>
             <div class="card-body">
                 @if(!empty($query->doctor_id))
-                <div class="form-group">
-                    <label for="inputEstimatedBudget">Name</label>
-                    <input type="text" class="form-control" value="{{ $query->doctor->name }}" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="inputEstimatedBudget">Designation</label>
-                    <input type="text" class="form-control" value="{{ $query->doctor->doctor->designation->name }}" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="inputEstimatedBudget">Qualification</label>
-                    <input type="text" class="form-control" value="{{ $query->doctor->doctor->qualification->name }}" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="inputEstimatedBudget">Specialization</label>
-                    <input type="text" class="form-control" value="{{ $query->doctor->doctor->doctorSpecializations->pluck('name')->join(',') }}" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="inputEstimatedBudget">Treatment</label>
-                    <input type="text" class="form-control" value="{{ $query->doctor->doctor->doctorTreatments->pluck('name')->join(',') }}" readonly>
-                </div>
+                    <div class="form-group">
+                        <label for="inputEstimatedBudget">Name</label>
+                        <input type="text" class="form-control" value="{{ $query->doctor->name }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEstimatedBudget">Designation</label>
+                        <input type="text" class="form-control" value="{{ $query->doctor->doctor->designation->name }}"
+                               readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEstimatedBudget">Qualification</label>
+                        <input type="text" class="form-control"
+                               value="{{ $query->doctor->doctor->qualification->name }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEstimatedBudget">Specialization</label>
+                        <input type="text" class="form-control"
+                               value="{{ $query->doctor->doctor->doctorSpecializations->pluck('name')->join(',') }}"
+                               readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEstimatedBudget">Treatment</label>
+                        <input type="text" class="form-control"
+                               value="{{ $query->doctor->doctor->doctorTreatments->pluck('name')->join(',') }}"
+                               readonly>
+                    </div>
                 @else
                     <p>No doctor preference</p>
                 @endif
@@ -128,22 +140,25 @@
             </div>
             <div class="card-body">
                 @if(!empty($query->hospital_id))
-                <div class="form-group">
-                    <label for="inputEstimatedBudget">Name</label>
-                    <input type="text" class="form-control" value="{{ $query->hospital->name }}" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="inputEstimatedBudget">Address</label>
-                    <input type="text" class="form-control" value="{!! $query->hospital->address !!}" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="inputEstimatedBudget">Treatments</label>
-                    <input type="text" class="form-control" value="{{ $query->hospital->hospitalTreatments->pluck('name')->join(',') }}" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="inputEstimatedBudget">Accreditations</label>
-                    <input type="text" class="form-control" value="{{ $query->hospital->accreditationHospitals->pluck('name')->join(',') }}" readonly>
-                </div>
+                    <div class="form-group">
+                        <label for="inputEstimatedBudget">Name</label>
+                        <input type="text" class="form-control" value="{{ $query->hospital->name }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEstimatedBudget">Address</label>
+                        <input type="text" class="form-control" value="{!! $query->hospital->address !!}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEstimatedBudget">Treatments</label>
+                        <input type="text" class="form-control"
+                               value="{{ $query->hospital->treatments->pluck('name')->join(',') }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEstimatedBudget">Accreditations</label>
+                        {{--                        <input type="text" class="form-control"--}}
+                        {{--                               value="{{ $query->hospital?->hospital->pluck('name')->join(',') }}"--}}
+                        {{--                               readonly>--}}
+                    </div>
                 @else
                     <p>No Hospital preference</p>
                 @endif

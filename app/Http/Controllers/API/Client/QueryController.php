@@ -3,16 +3,17 @@
 namespace App\Http\Controllers\API\Client;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\Client\BulkCreateQueryAPIRequest;
-use App\Http\Requests\Client\BulkUpdateQueryAPIRequest;
 use App\Http\Requests\Client\CreateQueryAPIRequest;
 use App\Http\Requests\Client\UpdateQueryAPIRequest;
+use App\Http\Resources\Client\ActiveQueryResource;
+use App\Http\Resources\Client\ConfirmedQueryResource;
 use App\Http\Resources\Client\QueryCollection;
 use App\Http\Resources\Client\QueryResource;
+use App\Models\ConfirmedQuery;
 use App\Repositories\QueryRepository;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class QueryController extends AppBaseController
@@ -39,11 +40,16 @@ class QueryController extends AppBaseController
      *
      * @return QueryCollection
      */
-    public function index(Request $request): QueryCollection
+    public function index(Request $request): JsonResponse
     {
         $queries = $this->queryRepository->fetch($request);
-
-        return new QueryCollection($queries);
+        $activeQueries = ActiveQueryResource::collection($queries)->resolve();
+        $activeQueries = array_values(array_filter($activeQueries, function ($el) {
+            if (count($el) > 0) return $el;
+        }));
+        $data['active_query'] = $activeQueries;
+        $data['all_query'] = QueryResource::collection($queries)->resolve();
+        return $this->successResponse($data);
     }
 
     /**
@@ -51,9 +57,9 @@ class QueryController extends AppBaseController
      *
      * @param CreateQueryAPIRequest $request
      *
+     * @return QueryResource
      * @throws ValidatorException
      *
-     * @return QueryResource
      */
     public function store(CreateQueryAPIRequest $request): QueryResource
     {
@@ -81,11 +87,11 @@ class QueryController extends AppBaseController
      * Update Query with given payload.
      *
      * @param UpdateQueryAPIRequest $request
-     * @param int                   $id
-     *
-     * @throws ValidatorException
+     * @param int $id
      *
      * @return QueryResource
+     * @throws ValidatorException
+     *
      */
     public function update(UpdateQueryAPIRequest $request, int $id): QueryResource
     {
@@ -95,61 +101,16 @@ class QueryController extends AppBaseController
         return new QueryResource($query);
     }
 
-    /**
-     * Delete given Query.
-     *
-     * @param int $id
-     *
-     * @throws Exception
-     *
-     * @return JsonResponse
-     */
-    public function delete(int $id): JsonResponse
+    public function confirmedQueryDetail()
     {
-        $this->queryRepository->delete($id);
+        $confirmedQuery = ConfirmedQuery::query()->with([
+            'queries' => function ($q) {
+                return $q->where('patient_id', '=', Auth::id());
+            },
+            'accommodation',
+            'coordinator'
+        ])->orderByDesc('updated_at')->first();
 
-        return $this->successResponse('Query deleted successfully.');
-    }
-
-    /**
-     * Bulk create Query's.
-     *
-     * @param BulkCreateQueryAPIRequest $request
-     *
-     * @throws ValidatorException
-     *
-     * @return QueryCollection
-     */
-    public function bulkStore(BulkCreateQueryAPIRequest $request): QueryCollection
-    {
-        $queries = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $queryInput) {
-            $queries[$key] = $this->queryRepository->create($queryInput);
-        }
-
-        return new QueryCollection($queries);
-    }
-
-    /**
-     * Bulk update Query's data.
-     *
-     * @param BulkUpdateQueryAPIRequest $request
-     *
-     * @throws ValidatorException
-     *
-     * @return QueryCollection
-     */
-    public function bulkUpdate(BulkUpdateQueryAPIRequest $request): QueryCollection
-    {
-        $queries = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $queryInput) {
-            $queries[$key] = $this->queryRepository->update($queryInput, $queryInput['id']);
-        }
-
-        return new QueryCollection($queries);
+        return $this->successResponse(ConfirmedQueryResource::make($confirmedQuery));
     }
 }

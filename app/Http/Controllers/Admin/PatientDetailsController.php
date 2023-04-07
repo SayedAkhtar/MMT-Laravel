@@ -10,6 +10,7 @@ use App\Http\Requests\Device\UpdatePatientDetailsAPIRequest;
 use App\Http\Resources\Device\PatientDetailsCollection;
 use App\Http\Resources\Device\PatientDetailsResource;
 use App\Repositories\PatientDetailsRepository;
+use App\Traits\IsViewModule;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,6 +18,8 @@ use Prettus\Validator\Exceptions\ValidatorException;
 
 class PatientDetailsController extends AppBaseController
 {
+    use IsViewModule;
+
     /**
      * @var PatientDetailsRepository
      */
@@ -28,6 +31,7 @@ class PatientDetailsController extends AppBaseController
     public function __construct(PatientDetailsRepository $patientDetailsRepository)
     {
         $this->patientDetailsRepository = $patientDetailsRepository;
+        $this->module = "module/patient-details";
     }
 
     /**
@@ -37,13 +41,10 @@ class PatientDetailsController extends AppBaseController
      *
      * @param Request $request
      *
-     * @return PatientDetailsCollection
      */
-    public function index(Request $request): PatientDetailsCollection
+    public function index(Request $request)
     {
         $patientDetails = $this->patientDetailsRepository->fetch($request);
-
-        return new PatientDetailsCollection($patientDetails);
     }
 
     /**
@@ -51,9 +52,9 @@ class PatientDetailsController extends AppBaseController
      *
      * @param CreatePatientDetailsAPIRequest $request
      *
+     * @return PatientDetailsResource
      * @throws ValidatorException
      *
-     * @return PatientDetailsResource
      */
     public function store(CreatePatientDetailsAPIRequest $request): PatientDetailsResource
     {
@@ -81,11 +82,11 @@ class PatientDetailsController extends AppBaseController
      * Update PatientDetails with given payload.
      *
      * @param UpdatePatientDetailsAPIRequest $request
-     * @param int                            $id
-     *
-     * @throws ValidatorException
+     * @param int $id
      *
      * @return PatientDetailsResource
+     * @throws ValidatorException
+     *
      */
     public function update(UpdatePatientDetailsAPIRequest $request, int $id): PatientDetailsResource
     {
@@ -100,9 +101,9 @@ class PatientDetailsController extends AppBaseController
      *
      * @param int $id
      *
+     * @return JsonResponse
      * @throws Exception
      *
-     * @return JsonResponse
      */
     public function delete(int $id): JsonResponse
     {
@@ -116,9 +117,9 @@ class PatientDetailsController extends AppBaseController
      *
      * @param BulkCreatePatientDetailsAPIRequest $request
      *
+     * @return PatientDetailsCollection
      * @throws ValidatorException
      *
-     * @return PatientDetailsCollection
      */
     public function bulkStore(BulkCreatePatientDetailsAPIRequest $request): PatientDetailsCollection
     {
@@ -137,9 +138,9 @@ class PatientDetailsController extends AppBaseController
      *
      * @param BulkUpdatePatientDetailsAPIRequest $request
      *
+     * @return PatientDetailsCollection
      * @throws ValidatorException
      *
-     * @return PatientDetailsCollection
      */
     public function bulkUpdate(BulkUpdatePatientDetailsAPIRequest $request): PatientDetailsCollection
     {

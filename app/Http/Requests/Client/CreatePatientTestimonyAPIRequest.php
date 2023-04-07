@@ -20,9 +20,9 @@ class CreatePatientTestimonyAPIRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'patient_id' => ['nullable', 'exists:users,id'],
+            'patient_id' => ['nullable', 'exists:patient_details,id'],
             'hospital_id' => ['nullable', 'exists:hospitals,id'],
-            'doctor_id' => ['nullable', 'exists:users,id'],
+            'doctor_id' => ['nullable', 'exists:doctors,id'],
             'description' => ['nullable'],
             'images' => ['nullable'],
             'videos' => ['nullable'],

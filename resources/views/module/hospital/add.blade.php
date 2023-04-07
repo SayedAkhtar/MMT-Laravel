@@ -12,7 +12,7 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            <form action="{{ route('hospital.store') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('hospitals.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-sm-6">
@@ -42,55 +42,28 @@
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
-                            <label for="exampleInputFile">Logo</label>
-                            <div class="input-group">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="exampleInputFile" name="image">
-                                    <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                                </div>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">Upload</span>
-                                </div>
-                            </div>
+                            <x-form-image-input label="Logo" name="image" :multiple="false"/>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label>Accreditation</label>
-                            <select class="form-control select2bs4" name="accreditation[]" multiple="true">
-                                <option>Select Option</option>
-                                @forelse($accreditations  as $data)
-                                    <option value="{{ $data->id }}"> {{ $data->name }}</option>
-                                @empty
-                                @endforelse
-                            </select>
+                            <x-multi-select-search label="Accreditation" name="accreditation" table="accreditations"
+                                                   multiple="true"/>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label>Treatments</label>
-                            <select class="form-control select2bs4" name="treatments[]" multiple="true">
-                                <option>Select Option</option>
-                                @forelse($treatments  as $data)
-                                    <option value="{{ $data->id }}"> {{ $data->name }}</option>
-                                @empty
-                                @endforelse
-                            </select>
+                            <x-multi-select-search label="Treatments" name="treatment" table="treatments"
+                                                   multiple="true"/>
                         </div>
                     </div>
                     <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Doctors</label>
-                                <select class="form-control select2bs4" name="doctors[]" multiple="true">
-                                    <option>Select Option</option>
-                                    @forelse($doctors  as $data)
-                                        <option value="{{ $data->id }}"> {{ $data->name }}</option>
-                                    @empty
-                                    @endforelse
-                                </select>
-                            </div>
+                        <div class="form-group">
+                            <x-multi-select-search label="Doctors" name="doctors" table="doctors"
+                                                   multiple="true"/>
+                        </div>
                     </div>
                 </div>
                 <div class="row">

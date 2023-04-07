@@ -113,4 +113,9 @@ class Doctor extends Model
     {
         return $this->hasOne(Designation::class, 'id', 'designation_id');
     }
+
+    public function hospitals()
+    {
+        return $this->belongsToMany(Hospital::class, 'doctor_hospitals');
+    }
 }

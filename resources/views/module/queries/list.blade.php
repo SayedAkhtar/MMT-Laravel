@@ -35,7 +35,8 @@
                         <td>{{ $data->preferred_country?? "No Preference"}}</td>
                         <td>{{ $data->status }}</td>
                         <td class="text-right">
-                            <a href="{{ route('query.show', ['query' => $data->id]) }}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                            <a href="{{ route('query.show', ['query' => $data->id]) }}" class="btn btn-info btn-sm"><i
+                                    class="fa fa-edit"></i></a>
                         </td>
                     </tr>
                 @endforeach
@@ -69,7 +70,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('designation.store') }}" method="post" id="add_designation">
+                    <form action="{{ route('designations.store') }}" method="post" id="add_designation">
                         @csrf
                         <div class="form-group">
                             <label for="designation_name">Designation name</label>
@@ -101,7 +102,8 @@
                         @csrf
                         <div class="form-group">
                             <label for="designation_name">Designation name</label>
-                            <input type="text" class="form-control" id="designation_name" name="name" placeholder="Enter designation">
+                            <input type="text" class="form-control" id="designation_name" name="name"
+                                   placeholder="Enter designation">
                         </div>
                         <div class="form-group">
                             <div class="form-check">
@@ -113,7 +115,7 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" form="edit_designation-form" class="btn btn-primary" >Save changes</button>
+                    <button type="submit" form="edit_designation-form" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
@@ -154,15 +156,15 @@
             let res = await fetch(route('designation.show', {'designation': id}));
             let data = await res.json();
             $form = $("#edit_designation-form input");
-            $("#edit_designation-form").attr('action', route('designation.update', {'designation': id} ));
+            $("#edit_designation-form").attr('action', route('designation.update', {'designation': id}));
             console.log($form.action);
             $form.each((index, ele) => {
-                if(data.data[ele.name] == undefined){
+                if (data.data[ele.name] == undefined) {
                     return;
                 }
-                if( typeof data.data[ele.name] ==  'boolean'){
+                if (typeof data.data[ele.name] == 'boolean') {
                     ele.checked = data.data[ele.name]
-                }else{
+                } else {
                     ele.value = data.data[ele.name];
                 }
                 $("#edit_designation").modal().show();

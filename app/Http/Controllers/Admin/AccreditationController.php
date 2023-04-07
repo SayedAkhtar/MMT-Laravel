@@ -10,16 +10,17 @@ use App\Http\Requests\Device\UpdateAccreditationAPIRequest;
 use App\Http\Resources\Device\AccreditationCollection;
 use App\Http\Resources\Device\AccreditationResource;
 use App\Repositories\AccreditationRepository;
-use App\Traits\isViewModule;
+use App\Traits\IsViewModule;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\View\View;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class AccreditationController extends AppBaseController
 {
-    use isViewModule;
+    use IsViewModule;
+
     protected $module;
     /**
      * @var AccreditationRepository
@@ -60,24 +61,20 @@ class AccreditationController extends AppBaseController
      *
      * @param CreateAccreditationAPIRequest $request
      *
+     * @return AccreditationResource
      * @throws ValidatorException
      *
-     * @return AccreditationResource
      */
     public function store(CreateAccreditationAPIRequest $request)
     {
         $input = $request->all();
-        if($request->hasFile('logo') ){
-            $fileName = time().'_'.Str::slug(($request->get('name'))).'.'.$request->file('logo')->getClientOriginalExtension();
-            $filePath= $request->file('logo')->store('uploads');
-            if($filePath){
-                $input['logo'] = $filePath;
-            }
-        }
         $accreditation = $this->accreditationRepository->create($input);
-        if($accreditation){
+        if ($request->hasFile('logo')) {
+            $accreditation->attachImage('logo', 'logo', false);
+        }
+        if ($accreditation) {
             return back()->with('success', "Data added successfully");
-        }else{
+        } else {
             return back()->with('error', "Cannot add data");
         }
     }
@@ -89,22 +86,21 @@ class AccreditationController extends AppBaseController
      *
      * @return AccreditationResource
      */
-    public function show(int $id): AccreditationResource
+    public function show(int $id): View
     {
         $accreditation = $this->accreditationRepository->findOrFail($id);
-
-        return new AccreditationResource($accreditation);
+        return $this->module_view('edit', compact('accreditation'));
     }
 
     /**
      * Update Accreditation with given payload.
      *
      * @param UpdateAccreditationAPIRequest $request
-     * @param int                           $id
-     *
-     * @throws ValidatorException
+     * @param int $id
      *
      * @return AccreditationResource
+     * @throws ValidatorException
+     *
      */
     public function update(UpdateAccreditationAPIRequest $request, int $id): AccreditationResource
     {
@@ -119,9 +115,9 @@ class AccreditationController extends AppBaseController
      *
      * @param int $id
      *
+     * @return JsonResponse
      * @throws Exception
      *
-     * @return JsonResponse
      */
     public function delete(int $id): JsonResponse
     {
@@ -135,9 +131,9 @@ class AccreditationController extends AppBaseController
      *
      * @param BulkCreateAccreditationAPIRequest $request
      *
+     * @return AccreditationCollection
      * @throws ValidatorException
      *
-     * @return AccreditationCollection
      */
     public function bulkStore(BulkCreateAccreditationAPIRequest $request): AccreditationCollection
     {
@@ -156,9 +152,9 @@ class AccreditationController extends AppBaseController
      *
      * @param BulkUpdateAccreditationAPIRequest $request
      *
+     * @return AccreditationCollection
      * @throws ValidatorException
      *
-     * @return AccreditationCollection
      */
     public function bulkUpdate(BulkUpdateAccreditationAPIRequest $request): AccreditationCollection
     {

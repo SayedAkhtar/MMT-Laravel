@@ -8,7 +8,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Add a Hospital</h3>
+            <h3 class="card-title">Add a Accreditation</h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
@@ -25,16 +25,7 @@
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
-                            <label for="exampleInputFile">Logo</label>
-                            <div class="input-group">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="exampleInputFile" name="logo">
-                                    <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                                </div>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">Upload</span>
-                                </div>
-                            </div>
+                            <x-form-image-input label="Logo" name="logo"/>
                         </div>
                     </div>
                 </div>
@@ -42,8 +33,9 @@
                     <div class="col-sm-12">
                         <div class="form-group">
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="customSwitch1">
-                                <label class="custom-control-label" for="customSwitch1">Accreditation Active Status</label>
+                                <input type="checkbox" class="custom-control-input" id="customSwitch1" name="is_active">
+                                <label class="custom-control-label" for="customSwitch1">Accreditation Active
+                                    Status</label>
                             </div>
                         </div>
                     </div>

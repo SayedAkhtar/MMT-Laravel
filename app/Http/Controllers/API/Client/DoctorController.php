@@ -9,6 +9,7 @@ use App\Http\Requests\Client\CreateDoctorAPIRequest;
 use App\Http\Requests\Client\UpdateDoctorAPIRequest;
 use App\Http\Resources\Client\DoctorCollection;
 use App\Http\Resources\Client\DoctorResource;
+use App\Models\Doctor;
 use App\Repositories\DoctorRepository;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -41,8 +42,11 @@ class DoctorController extends AppBaseController
      */
     public function index(Request $request): DoctorCollection
     {
-        $doctors = $this->doctorRepository->fetch($request);
-
+        if ($request->has('hospital_id')) {
+            $doctors = Doctor::whereHas('hospitals')->get();
+        } else {
+            $doctors = $this->doctorRepository->fetch($request);
+        }
         return new DoctorCollection($doctors);
     }
 
@@ -51,9 +55,9 @@ class DoctorController extends AppBaseController
      *
      * @param CreateDoctorAPIRequest $request
      *
+     * @return DoctorResource
      * @throws ValidatorException
      *
-     * @return DoctorResource
      */
     public function store(CreateDoctorAPIRequest $request): DoctorResource
     {
@@ -81,11 +85,11 @@ class DoctorController extends AppBaseController
      * Update Doctor with given payload.
      *
      * @param UpdateDoctorAPIRequest $request
-     * @param int                    $id
-     *
-     * @throws ValidatorException
+     * @param int $id
      *
      * @return DoctorResource
+     * @throws ValidatorException
+     *
      */
     public function update(UpdateDoctorAPIRequest $request, int $id): DoctorResource
     {
@@ -100,9 +104,9 @@ class DoctorController extends AppBaseController
      *
      * @param int $id
      *
+     * @return JsonResponse
      * @throws Exception
      *
-     * @return JsonResponse
      */
     public function delete(int $id): JsonResponse
     {
@@ -116,9 +120,9 @@ class DoctorController extends AppBaseController
      *
      * @param BulkCreateDoctorAPIRequest $request
      *
+     * @return DoctorCollection
      * @throws ValidatorException
      *
-     * @return DoctorCollection
      */
     public function bulkStore(BulkCreateDoctorAPIRequest $request): DoctorCollection
     {
@@ -137,9 +141,9 @@ class DoctorController extends AppBaseController
      *
      * @param BulkUpdateDoctorAPIRequest $request
      *
+     * @return DoctorCollection
      * @throws ValidatorException
      *
-     * @return DoctorCollection
      */
     public function bulkUpdate(BulkUpdateDoctorAPIRequest $request): DoctorCollection
     {

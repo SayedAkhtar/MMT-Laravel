@@ -24,14 +24,8 @@ class HospitalResource extends BaseAPIResource
             'name' => $this->name,
             'address' => $this->address,
             'description' => $this->description,
-            'geo_location' => $this->geo_location,
             'logo' => $this->logo,
-            'images' => $this->images,
             'is_active' => $this->is_active,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'added_by' => $this->added_by,
-            'updated_by' => $this->updated_by,
         ];
     }
 }

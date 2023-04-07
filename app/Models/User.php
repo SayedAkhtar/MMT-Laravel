@@ -87,9 +87,12 @@ class User extends Authenticatable implements HasMedia
     public const TYPE_USER = 1;
     public const TYPE_ADMIN = 2;
 
+    public const TYPE_HCF = 3;
+
     public const USER_TYPE = [
         self::TYPE_USER => 'User',
         self::TYPE_ADMIN => 'Admin',
+        self::TYPE_HCF => 'HCF',
     ];
 
     public const PLATFORM = [
@@ -100,6 +103,7 @@ class User extends Authenticatable implements HasMedia
     public const USER_ROLE = [
         'USER' => 1,
         'ADMIN' => 2,
+        'HCF' => 3,
     ];
 
     public const MAX_LOGIN_RETRY_LIMIT = 3;
@@ -181,5 +185,10 @@ class User extends Authenticatable implements HasMedia
     public function patientFamilyDetails()
     {
         return $this->hasMany(PatientFamilyDetails::class, 'patient_id', 'id');
+    }
+
+    public function patient()
+    {
+        return $this->hasOneThrough(User::class, PatientDetails::class, 'user_id', 'id', '', 'user_id');
     }
 }

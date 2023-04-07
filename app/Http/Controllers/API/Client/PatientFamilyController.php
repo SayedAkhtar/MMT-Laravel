@@ -53,14 +53,13 @@ class PatientFamilyController extends AppBaseController
      *
      * @throws ValidatorException
      *
-     * @return PatientFamilyResource
      */
-    public function store(CreatePatientFamilyAPIRequest $request): PatientFamilyResource
+    public function store(CreatePatientFamilyAPIRequest $request)
     {
         $input = $request->all();
         $patientFamily = $this->patientFamilyRepository->create($input);
-
-        return new PatientFamilyResource($patientFamily);
+//
+//        return new PatientFamilyResource($patientFamily);
     }
 
     /**
@@ -81,11 +80,11 @@ class PatientFamilyController extends AppBaseController
      * Update PatientFamily with given payload.
      *
      * @param UpdatePatientFamilyAPIRequest $request
-     * @param int                           $id
-     *
-     * @throws ValidatorException
+     * @param int $id
      *
      * @return PatientFamilyResource
+     * @throws ValidatorException
+     *
      */
     public function update(UpdatePatientFamilyAPIRequest $request, int $id): PatientFamilyResource
     {
@@ -100,9 +99,9 @@ class PatientFamilyController extends AppBaseController
      *
      * @param int $id
      *
+     * @return JsonResponse
      * @throws Exception
      *
-     * @return JsonResponse
      */
     public function delete(int $id): JsonResponse
     {
@@ -116,9 +115,9 @@ class PatientFamilyController extends AppBaseController
      *
      * @param BulkCreatePatientFamilyAPIRequest $request
      *
+     * @return PatientFamilyCollection
      * @throws ValidatorException
      *
-     * @return PatientFamilyCollection
      */
     public function bulkStore(BulkCreatePatientFamilyAPIRequest $request): PatientFamilyCollection
     {
@@ -137,9 +136,9 @@ class PatientFamilyController extends AppBaseController
      *
      * @param BulkUpdatePatientFamilyAPIRequest $request
      *
+     * @return PatientFamilyCollection
      * @throws ValidatorException
      *
-     * @return PatientFamilyCollection
      */
     public function bulkUpdate(BulkUpdatePatientFamilyAPIRequest $request): PatientFamilyCollection
     {

@@ -7,8 +7,8 @@ use App\Models\Hospital;
 class HospitalRepository extends BaseRepository
 {
     /**
-    * @var  string[]
-    */
+     * @var  string[]
+     */
     protected $fieldSearchable = [
         'id',
         'name',
@@ -25,16 +25,16 @@ class HospitalRepository extends BaseRepository
     ];
 
     /**
-    * @return  string[]
-    */
+     * @return  string[]
+     */
     public function getFieldsSearchable(): array
     {
         return $this->fieldSearchable;
     }
 
     /**
-    * @return  string
-    */
+     * @return  string
+     */
     public function model(): string
     {
         return Hospital::class;
@@ -46,6 +46,6 @@ class HospitalRepository extends BaseRepository
      */
     public function getAvailableRelations(): array
     {
-       return ['addedByUser','updatedByUser','query','patientTestimony','hospitalTreatments','accreditationHospitals','doctorHospitals','hospitalTags'];
+        return ['addedByUser', 'updatedByUser', 'queries', 'testimony', 'treatments', 'accreditation', 'doctors', 'tags'];
     }
 }

@@ -52,9 +52,9 @@ class UserController extends AppBaseController
      *
      * @param CreateUserAPIRequest $request
      *
+     * @return UserResource
      * @throws ValidatorException
      *
-     * @return UserResource
      */
     public function store(CreateUserAPIRequest $request): UserResource
     {
@@ -85,21 +85,24 @@ class UserController extends AppBaseController
      * Update User with given payload.
      *
      * @param UpdateUserAPIRequest $request
-     * @param int                  $id
+     * @param int $id
      *
      * @throws ValidatorException
      *
-     * @return UserResource
+     *
      */
-    public function update(UpdateUserAPIRequest $request, int $id): UserResource
+    public function update(UpdateUserAPIRequest $request, int $id)
     {
         $input = $request->all();
         if (isset($input['password'])) {
             $input['password'] = Hash::make($input['password']);
         }
         $user = $this->userRepository->update($input, $id);
-
-        return new UserResource($user);
+        if ($user) {
+            return response()->json(["data" => $user], 200);
+        } else {
+            return response()->json(["STATUS" => "Opps!", "MESSAGE" => "Counld not update user. Please try again"], 400);
+        }
     }
 
     /**
@@ -107,9 +110,9 @@ class UserController extends AppBaseController
      *
      * @param int $id
      *
+     * @return JsonResponse
      * @throws Exception
      *
-     * @return JsonResponse
      */
     public function delete(int $id): JsonResponse
     {
@@ -123,9 +126,9 @@ class UserController extends AppBaseController
      *
      * @param BulkCreateUserAPIRequest $request
      *
+     * @return UserCollection
      * @throws ValidatorException
      *
-     * @return UserCollection
      */
     public function bulkStore(BulkCreateUserAPIRequest $request): UserCollection
     {
@@ -144,9 +147,9 @@ class UserController extends AppBaseController
      *
      * @param BulkUpdateUserAPIRequest $request
      *
+     * @return UserCollection
      * @throws ValidatorException
      *
-     * @return UserCollection
      */
     public function bulkUpdate(BulkUpdateUserAPIRequest $request): UserCollection
     {

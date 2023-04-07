@@ -3,11 +3,15 @@
 namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
-use Illuminate\Database\Eloquent\Model as Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\Image\Exceptions\InvalidManipulation;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Treatment extends Model
+class Treatment extends BaseModel implements HasMedia
 {
-    use HasRecordOwnerProperties;
+    use HasRecordOwnerProperties, InteractsWithMedia;
 
     /**
      * @var string
@@ -51,26 +55,38 @@ class Treatment extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     * @throws InvalidManipulation
      */
-    public function hospitalTreatments()
+    public function registerMediaConversions(Media $media = null): void
     {
-        return $this->hasMany(HospitalTreatment::class, 'treatment_id', 'id');
+        $this->addMediaConversion('thumbnail')
+            ->width(150)
+            ->height(150)
+            ->optimize()
+            ->sharpen(10);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     * @return BelongsToMany
      */
-    public function doctorTreatments()
+    public function hospitals()
     {
-        return $this->hasMany(DoctorTreatment::class, 'treatment_id', 'id');
+        return $this->belongsToMany(Hospital::class, 'hospital_treatments');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     * @return BelongsToMany
      */
-    public function specializationTreatments()
+    public function doctors()
     {
-        return $this->hasMany(SpecializationTreatment::class, 'treatment_id', 'id');
+        return $this->belongsToMany(Doctor::class, 'doctor_treatments');
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function specializations()
+    {
+        return $this->belongsToMany(Specialization::class, 'specialization_treatments');
     }
 }

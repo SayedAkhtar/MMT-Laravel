@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
-use Illuminate\Database\Eloquent\Model as Model;
 
-class WellnessCenter extends Model
+class WellnessCenter extends BaseModel
 {
     use HasRecordOwnerProperties;
 
@@ -19,7 +18,7 @@ class WellnessCenter extends Model
      */
     protected $fillable = [
         'name',
-        'adress',
+        'address',
         'description',
         'logo',
         'image',
@@ -36,10 +35,10 @@ class WellnessCenter extends Model
      */
     protected $casts = [
         'name' => 'string',
-        'adress' => 'string',
+        'address' => 'string',
         'description' => 'string',
         'logo' => 'string',
-        'image' => 'json',
+        'image' => 'Array',
         'geo_location' => 'json',
         'is_active' => 'boolean',
         'added_by' => 'integer',
@@ -49,8 +48,8 @@ class WellnessCenter extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
-    public function detoxificationWellnesses()
+    public function detoxification()
     {
-        return $this->hasMany(DetoxificationWellness::class, 'wellness_center_id', 'id');
+        return $this->belongsToMany(DetoxificationCategory::class, 'detoxification_wellness');
     }
 }

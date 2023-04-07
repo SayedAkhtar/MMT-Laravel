@@ -7,7 +7,7 @@ use App\Observers\RecordOwnerObserver;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\View\View;
 
-trait isViewModule {
+trait IsViewModule {
     protected $module;
 
     public function module_view($lastPath, $dependencies = []) : View

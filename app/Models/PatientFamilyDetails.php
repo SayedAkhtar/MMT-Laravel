@@ -26,7 +26,7 @@ class PatientFamilyDetails extends Model
         'gender',
         'geo_location',
         'treatment_country',
-        'medical_info',
+        'speciality',
         'is_active',
         'created_at',
         'updated_at',
@@ -66,5 +66,10 @@ class PatientFamilyDetails extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'patient_id', 'id');
+    }
+
+    public function specialization()
+    {
+        return $this->hasOne(Specialization::class, 'id', 'speciality');
     }
 }

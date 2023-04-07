@@ -3,13 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\Device\BulkCreateTreatmentAPIRequest;
-use App\Http\Requests\Device\BulkUpdateTreatmentAPIRequest;
 use App\Http\Requests\Device\CreateTreatmentAPIRequest;
 use App\Http\Requests\Device\UpdateTreatmentAPIRequest;
-use App\Http\Resources\Device\TreatmentCollection;
-use App\Http\Resources\Device\TreatmentResource;
 use App\Repositories\TreatmentRepository;
+use App\Traits\IsViewModule;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,6 +14,9 @@ use Prettus\Validator\Exceptions\ValidatorException;
 
 class TreatmentController extends AppBaseController
 {
+    use IsViewModule;
+
+    protected $module;
     /**
      * @var TreatmentRepository
      */
@@ -28,22 +28,18 @@ class TreatmentController extends AppBaseController
     public function __construct(TreatmentRepository $treatmentRepository)
     {
         $this->treatmentRepository = $treatmentRepository;
+        $this->module = 'module/treatment';
     }
 
-    /**
-     * Treatment's Listing API.
-     * Limit Param: limit
-     * Skip Param: skip.
-     *
-     * @param Request $request
-     *
-     * @return TreatmentCollection
-     */
-    public function index(Request $request): TreatmentCollection
+    public function index(Request $request)
     {
         $treatments = $this->treatmentRepository->fetch($request);
+        return $this->module_view('list', compact('treatments'));
+    }
 
-        return new TreatmentCollection($treatments);
+    public function create()
+    {
+        return $this->module_view('add');
     }
 
     /**
@@ -53,14 +49,24 @@ class TreatmentController extends AppBaseController
      *
      * @throws ValidatorException
      *
-     * @return TreatmentResource
      */
-    public function store(CreateTreatmentAPIRequest $request): TreatmentResource
+    public function store(CreateTreatmentAPIRequest $request)
     {
         $input = $request->all();
         $treatment = $this->treatmentRepository->create($input);
-
-        return new TreatmentResource($treatment);
+        if ($request->hasFile('images')) {
+            $treatment->addMultipleMediaFromRequest(['images'])->each(fn($fileAdder) => $fileAdder->toMediaCollection('treatment'));
+        }
+        if ($request->has('hospitals')) {
+            $treatment->hospitals()->attach($request->get('hospitals'));
+        }
+        if ($request->has('doctors')) {
+            $treatment->doctors()->attach($request->get('doctors'));
+        }
+        if ($request->has('specializations')) {
+            $treatment->doctors()->attach($request->get('specializations'));
+        }
+        return back()->with('success', "Treatment added successfully");
     }
 
     /**
@@ -68,31 +74,45 @@ class TreatmentController extends AppBaseController
      *
      * @param int $id
      *
-     * @return TreatmentResource
      */
-    public function show(int $id): TreatmentResource
+    public function show(int $id)
     {
         $treatment = $this->treatmentRepository->findOrFail($id);
-
-        return new TreatmentResource($treatment);
+        foreach ($treatment->doctors as &$data) {
+            $data->name = $data->user->name;
+        }
+        $treatment->images = $treatment->getFirstMediaUrl('treatment-logo');
+        return $this->module_view('edit', compact('treatment'));
     }
 
     /**
      * Update Treatment with given payload.
      *
      * @param UpdateTreatmentAPIRequest $request
-     * @param int                       $id
+     * @param int $id
      *
+     * @return \Illuminate\Http\RedirectResponse
      * @throws ValidatorException
      *
-     * @return TreatmentResource
      */
-    public function update(UpdateTreatmentAPIRequest $request, int $id): TreatmentResource
+    public function update(UpdateTreatmentAPIRequest $request, int $id)
     {
         $input = $request->all();
         $treatment = $this->treatmentRepository->update($input, $id);
+        if ($request->hasFile('images')) {
+            $result = $treatment->updateImage('images', 'treatment-logo', false);
+        }
 
-        return new TreatmentResource($treatment);
+        if ($request->has('hospitals')) {
+            $treatment->hospitals()->sync($request->get('hospitals'));
+        }
+        if ($request->has('doctors')) {
+            $treatment->doctors()->sync($request->get('doctors'));
+        }
+        if ($request->has('specializations')) {
+            $treatment->doctors()->sync($request->get('specializations'));
+        }
+        return back()->with('success', "Updated successfully");
     }
 
     /**
@@ -100,9 +120,9 @@ class TreatmentController extends AppBaseController
      *
      * @param int $id
      *
+     * @return JsonResponse
      * @throws Exception
      *
-     * @return JsonResponse
      */
     public function delete(int $id): JsonResponse
     {
@@ -111,45 +131,4 @@ class TreatmentController extends AppBaseController
         return $this->successResponse('Treatment deleted successfully.');
     }
 
-    /**
-     * Bulk create Treatment's.
-     *
-     * @param BulkCreateTreatmentAPIRequest $request
-     *
-     * @throws ValidatorException
-     *
-     * @return TreatmentCollection
-     */
-    public function bulkStore(BulkCreateTreatmentAPIRequest $request): TreatmentCollection
-    {
-        $treatments = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $treatmentInput) {
-            $treatments[$key] = $this->treatmentRepository->create($treatmentInput);
-        }
-
-        return new TreatmentCollection($treatments);
-    }
-
-    /**
-     * Bulk update Treatment's data.
-     *
-     * @param BulkUpdateTreatmentAPIRequest $request
-     *
-     * @throws ValidatorException
-     *
-     * @return TreatmentCollection
-     */
-    public function bulkUpdate(BulkUpdateTreatmentAPIRequest $request): TreatmentCollection
-    {
-        $treatments = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $treatmentInput) {
-            $treatments[$key] = $this->treatmentRepository->update($treatmentInput, $treatmentInput['id']);
-        }
-
-        return new TreatmentCollection($treatments);
-    }
 }

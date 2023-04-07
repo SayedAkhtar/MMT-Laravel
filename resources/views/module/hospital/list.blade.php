@@ -8,7 +8,7 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h3 class="card-title">Hospitals List</h3>
-            <a href="{{ route('hospital.create') }}" class="btn btn-success btn-sm">
+            <a href="{{ route('hospitals.create') }}" class="btn btn-success btn-sm">
                 <i class="fa fa-plus"></i> Add Hospital
             </a>
         </div>
@@ -20,7 +20,7 @@
                     <th>Id</th>
                     <th>Name</th>
                     <th>Address</th>
-                    <th>Engine version</th>
+                    <th>Accreditation</th>
                     <th>Treatments</th>
                     <th>Specializations</th>
                     <th>Actions</th>
@@ -29,13 +29,17 @@
                 <tbody>
                 @forelse($hospitals as $data)
                     <tr>
-                        <td>{{ $loop->index() + 1 }}</td>
-                        <td>Internet
-                            Explorer 4.0
+                        <td>{{ $loop->index + 1 }}</td>
+                        <td>{{ $data->name }}</td>
+                        <td>{{ $data->address }}</td>
+                        <td> {{ !empty($data->accreditation)? $data->accreditation->pluck('name')->join(',') : "No accreditation yet" }}</td>
+                        <td> {{ !empty($data->treatments)? $data->treatments->pluck('name')->join(',') : "No treatments yet" }}</td>
+                        <td> {{ !empty($data->specialization)? $data->specialization->pluck('name')->join(','): "No Specializations yet" }}</td>
+                        <td class="text-right">
+                            <a href="javascript:void(0)" class="btn btn-info btn-sm"
+                               onclick="edit({{ $data->id }})"><i class="fa fa-edit"></i></a>
+                            <a href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i></a>
                         </td>
-                        <td>Win 95+</td>
-                        <td> 4</td>
-                        <td>X</td>
                     </tr>
                 @empty
                 @endforelse
@@ -46,7 +50,7 @@
                     <th>Id</th>
                     <th>Name</th>
                     <th>Address</th>
-                    <th>Engine version</th>
+                    <th>Accreditation</th>
                     <th>Treatments</th>
                     <th>Specializations</th>
                     <th>Actions</th>

@@ -19,6 +19,7 @@ use App\Notifications\SendSMSNotification;
 use App\Repositories\UserRepository;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
@@ -46,9 +47,9 @@ class AuthController extends AppBaseController
     /**
      * @param RegisterAPIRequest $request
      *
+     * @return JsonResponse
      * @throws ValidatorException
      *
-     * @return JsonResponse
      */
     public function register(RegisterAPIRequest $request): JsonResponse
     {
@@ -61,14 +62,14 @@ class AuthController extends AppBaseController
         /** @var User $user */
         $user = $this->userRepository->create($input);
         $data['username'] = $user->username;
-        $data['link'] = URL::to('email/verify/'.Crypt::encrypt($user->email));
+        $data['link'] = URL::to('email/verify/' . Crypt::encrypt($user->email));
 
         $userRole = Role::find($input['role']);
         $user->assignRole($userRole);
         Mail::to($user->email)
             ->send(new MailService('emails.verify_email',
-            'Verify Email Address',
-            $data));
+                'Verify Email Address',
+                $data));
 
         return $this->successResponse($user);
     }
@@ -76,19 +77,16 @@ class AuthController extends AppBaseController
     /**
      * @param LoginAPIRequest $request
      *
-     * @throws LoginFailedException
+     * @return JsonResponse
      * @throws LoginUnAuthorizeException
      *
-     * @return JsonResponse
+     * @throws LoginFailedException
      */
     public function login(LoginAPIRequest $request): JsonResponse
     {
         $input = $request->all();
         /** @var User $user */
-        $user = User::where('username', $input['username'])->first();
-        if (empty($user)) {
-            $user = User::where('email', $input['username'])->first();
-        }
+        $user = User::where('phone', $input['phone'])->first();
 
         if (empty($user)) {
             throw new LoginFailedException('User not exists.');
@@ -110,7 +108,7 @@ class AuthController extends AppBaseController
                     'login_reactive_time' => $expireTime,
                     'login_retry_limit' => $user->login_retry_limit + 1,
                 ]);
-                throw new LoginFailedException('you have exceed the number of limit.you can login after '.User::LOGIN_REACTIVE_TIME.' minutes.');
+                throw new LoginFailedException('you have exceed the number of limit.you can login after ' . User::LOGIN_REACTIVE_TIME . ' minutes.');
             }
 
             $limitTime = Carbon::parse($user->login_reactive_time);
@@ -121,7 +119,7 @@ class AuthController extends AppBaseController
                     'login_retry_limit' => $user->login_retry_limit + 1,
                 ]);
 
-                throw new LoginFailedException('you have exceed the number of limit.you can login after '.User::LOGIN_REACTIVE_TIME.' minutes.');
+                throw new LoginFailedException('you have exceed the number of limit.you can login after ' . User::LOGIN_REACTIVE_TIME . ' minutes.');
             }
         }
 
@@ -174,9 +172,9 @@ class AuthController extends AppBaseController
      *
      * @param ForgotPasswordAPIRequest $request
      *
+     * @return JsonResponse
      * @throws FailureResponseException
      *
-     * @return JsonResponse
      */
     public function forgotPassword(ForgotPasswordAPIRequest $request): JsonResponse
     {
@@ -316,9 +314,9 @@ class AuthController extends AppBaseController
      *
      * @param ChangePasswordApiRequest $request
      *
+     * @return JsonResponse
      * @throws ChangePasswordFailureException
      *
-     * @return JsonResponse
      */
     public function changePassword(ChangePasswordApiRequest $request): JsonResponse
     {
@@ -352,5 +350,13 @@ class AuthController extends AppBaseController
         }
 
         return $code;
+    }
+
+    public function validateToken(Request $request)
+    {
+        $user = User::find(Auth::id());
+        $user->getRoleNames();
+        $data = $user->toArray();
+        return $this->loginSuccess($data);
     }
 }

@@ -28,7 +28,7 @@ return [
 
     'env' => env('APP_ENV', 'production'),
 
-    
+
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
@@ -71,6 +71,8 @@ return [
     */
 
     'timezone' => 'UTC',
+
+    'time_format' => 'M d, Y | h:m a',
 
     /*
     |--------------------------------------------------------------------------
@@ -181,7 +183,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ModelObserverServiceProvider::class,
 
-        
+
     ],
 
     /*

@@ -43,6 +43,6 @@ class ConfirmedQueryRepository extends BaseRepository
      */
     public function getAvailableRelations(): array
     {
-        return ['addedByUser', 'updatedByUser', 'query', 'accomodation', 'user'];
+        return ['addedByUser', 'updatedByUser', 'query', 'accommodation', 'user'];
     }
 }

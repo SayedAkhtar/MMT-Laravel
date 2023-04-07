@@ -9,10 +9,13 @@ use App\Http\Requests\Client\CreatePatientTestimonyAPIRequest;
 use App\Http\Requests\Client\UpdatePatientTestimonyAPIRequest;
 use App\Http\Resources\Client\PatientTestimonyCollection;
 use App\Http\Resources\Client\PatientTestimonyResource;
+use App\Models\PatientDetails;
+use App\Models\User;
 use App\Repositories\PatientTestimonyRepository;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use \Illuminate\Support\Facades\Auth;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class PatientTestimonyController extends AppBaseController
@@ -58,6 +61,7 @@ class PatientTestimonyController extends AppBaseController
     public function store(CreatePatientTestimonyAPIRequest $request): PatientTestimonyResource
     {
         $input = $request->all();
+        $input['patient_id'] = PatientDetails::where('user_id', Auth::id())->first()->id;
         $patientTestimony = $this->patientTestimonyRepository->create($input);
 
         return new PatientTestimonyResource($patientTestimony);

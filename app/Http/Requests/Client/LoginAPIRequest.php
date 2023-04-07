@@ -20,7 +20,7 @@ class LoginAPIRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => ['required'],
+            'phone' => ['required'],
             'password' => ['required'],
         ];
     }

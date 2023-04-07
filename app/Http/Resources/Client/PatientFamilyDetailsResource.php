@@ -18,23 +18,26 @@ class PatientFamilyDetailsResource extends BaseAPIResource
         if (!empty($fieldsFilter) || $request->get('include')) {
             return $this->resource->toArray();
         }
+        $male = ['avatar.png', 'avatar5.png', 'avatar4.png'];
+        $female = ['avatar2.png', 'avatar3.png'];
+        $avatar = "";
+        if ($this->gender == 'male') {
+            $avatar = $male[rand(0, 2)];
+        } else {
+            $avatar = $female[rand(0, 1)];
+        }
 
         return [
             'id' => $this->id,
             'patient_id' => $this->patient_id,
+            'image' => asset('img/' . $avatar),
             'name' => $this->name,
             'phone' => $this->phone,
             'relationship' => $this->relationship,
             'dob' => $this->dob,
             'gender' => $this->gender,
-            'geo_location' => $this->geo_location,
             'treatment_country' => $this->treatment_country,
-            'medical_info' => $this->medical_info,
-            'is_active' => $this->is_active,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'added_by' => $this->added_by,
-            'updated_by' => $this->updated_by,
+            'speciality' => $this->specialization->name
         ];
     }
 }

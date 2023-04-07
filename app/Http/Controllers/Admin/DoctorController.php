@@ -11,16 +11,16 @@ use App\Http\Requests\Device\UpdateDoctorAPIRequest;
 use App\Http\Resources\Device\DoctorCollection;
 use App\Http\Resources\Device\DoctorResource;
 use App\Repositories\DoctorRepository;
-use App\Traits\isViewModule;
+use App\Traits\IsViewModule;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class DoctorController extends AppBaseController
 {
-    use isViewModule;
+    use IsViewModule;
+
     protected $module;
     /**
      * @var DoctorRepository
@@ -36,19 +36,10 @@ class DoctorController extends AppBaseController
         $this->module = 'module/doctor';
     }
 
-    /**
-     * Doctor's Listing API.
-     * Limit Param: limit
-     * Skip Param: skip.
-     *
-     * @param Request $request
-     *
-     * @return DoctorCollection
-     */
     public function index(Request $request)
     {
         $doctors = $this->doctorRepository->fetch($request);
-        if($request->isXmlHttpRequest()){
+        if ($request->isXmlHttpRequest()) {
             $data = new DoctorCollection($doctors);
             return $data;
         }
@@ -60,14 +51,14 @@ class DoctorController extends AppBaseController
      *
      * @param CreateDoctorAPIRequest $request
      *
+     * @return DoctorResource
      * @throws ValidatorException
      *
-     * @return DoctorResource
      */
     public function store(Request $request)
     {
-        if($request->isMethod('get')){
-            return  view('module.doctor.add');
+        if ($request->isMethod('get')) {
+            return view('module.doctor.add');
         }
         $rules = array_merge((new CreateUserAPIRequest)->rules(), (new CreateDoctorAPIRequest)->rules());
         $request->validate($rules);
@@ -87,18 +78,18 @@ class DoctorController extends AppBaseController
     public function show(int $id)
     {
         $doctor = $this->doctorRepository->findOrFail($id);
-        return view($this->module.'/edit', compact('doctor'));
+        return view($this->module . '/edit', compact('doctor'));
     }
 
     /**
      * Update Doctor with given payload.
      *
      * @param UpdateDoctorAPIRequest $request
-     * @param int                    $id
-     *
-     * @throws ValidatorException
+     * @param int $id
      *
      * @return DoctorResource
+     * @throws ValidatorException
+     *
      */
     public function update(UpdateDoctorAPIRequest $request, int $id): DoctorResource
     {
@@ -113,9 +104,9 @@ class DoctorController extends AppBaseController
      *
      * @param int $id
      *
+     * @return JsonResponse
      * @throws Exception
      *
-     * @return JsonResponse
      */
     public function delete(int $id): JsonResponse
     {
@@ -129,9 +120,9 @@ class DoctorController extends AppBaseController
      *
      * @param BulkCreateDoctorAPIRequest $request
      *
+     * @return DoctorCollection
      * @throws ValidatorException
      *
-     * @return DoctorCollection
      */
     public function bulkStore(BulkCreateDoctorAPIRequest $request): DoctorCollection
     {
@@ -150,9 +141,9 @@ class DoctorController extends AppBaseController
      *
      * @param BulkUpdateDoctorAPIRequest $request
      *
+     * @return DoctorCollection
      * @throws ValidatorException
      *
-     * @return DoctorCollection
      */
     public function bulkUpdate(BulkUpdateDoctorAPIRequest $request): DoctorCollection
     {

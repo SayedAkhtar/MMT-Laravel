@@ -17,7 +17,6 @@ class CreateQueriesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('patient_family_id')->nullable();
-            $table->string('name');
             $table->unsignedBigInteger('specialization_id');
             $table->unsignedBigInteger('hospital_id');
             $table->unsignedBigInteger('doctor_id')->nullable();

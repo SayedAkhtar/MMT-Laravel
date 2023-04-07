@@ -14,6 +14,13 @@ class CreateAccomodationAPIRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'is_active' => $this->request->has('is_active'),
+        ]);
+    }
+
     /**
      * @return array
      */
@@ -22,10 +29,9 @@ class CreateAccomodationAPIRequest extends FormRequest
         return [
             'name' => ['nullable', 'string'],
             'address' => ['nullable', 'string'],
-            'images' => ['nullable', 'string'],
-            'type' => ['nullable', 'exists:accomodation_types,id'],
-            'geo_location' => ['nullable', 'string'],
-            'is_active' => ['boolean'],
+            'images.*' => ['nullable', 'file'],
+            'type' => ['nullable', 'exists:accommodation_types,id'],
+            'geo_location' => ['nullable', 'string']
         ];
     }
 }

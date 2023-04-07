@@ -9,9 +9,8 @@ use App\Http\Requests\Device\CreateQueryAPIRequest;
 use App\Http\Requests\Device\UpdateQueryAPIRequest;
 use App\Http\Resources\Device\QueryCollection;
 use App\Http\Resources\Device\QueryResource;
-use App\Models\Query;
 use App\Repositories\QueryRepository;
-use App\Traits\isViewModule;
+use App\Traits\IsViewModule;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,7 +19,8 @@ use Prettus\Validator\Exceptions\ValidatorException;
 
 class QueryController extends AppBaseController
 {
-    use isViewModule;
+    use IsViewModule;
+
     protected $module;
     /**
      * @var QueryRepository
@@ -56,9 +56,9 @@ class QueryController extends AppBaseController
      *
      * @param CreateQueryAPIRequest $request
      *
+     * @return QueryResource
      * @throws ValidatorException
      *
-     * @return QueryResource
      */
     public function store(CreateQueryAPIRequest $request): QueryResource
     {
@@ -78,8 +78,8 @@ class QueryController extends AppBaseController
     {
         $query = $this->queryRepository->findOrFail($id);
         $tab = $request->get('tab') ?? 'details';
-        $afterOpenQuery = ['upload-medical-visa','upload-ticket', 'coordinator'];
-        if(in_array($tab, $afterOpenQuery) && (empty($query->activeQuery) && empty($query->activeQuery->doctor_response))){
+        $afterOpenQuery = ['upload-medical-visa', 'upload-ticket', 'coordinator'];
+        if (in_array($tab, $afterOpenQuery) && (empty($query->activeQuery) && empty($query->activeQuery->doctor_response))) {
             return back()->with('error', "Please upload doctor's review before proceeding");
         }
         return $this->module_view('queries-layout', compact('query', 'tab'));
@@ -89,11 +89,11 @@ class QueryController extends AppBaseController
      * Update Query with given payload.
      *
      * @param UpdateQueryAPIRequest $request
-     * @param int                   $id
-     *
-     * @throws ValidatorException
+     * @param int $id
      *
      * @return QueryResource
+     * @throws ValidatorException
+     *
      */
     public function update(UpdateQueryAPIRequest $request, int $id): QueryResource
     {
@@ -108,9 +108,9 @@ class QueryController extends AppBaseController
      *
      * @param int $id
      *
+     * @return JsonResponse
      * @throws Exception
      *
-     * @return JsonResponse
      */
     public function delete(int $id): JsonResponse
     {
@@ -124,9 +124,9 @@ class QueryController extends AppBaseController
      *
      * @param BulkCreateQueryAPIRequest $request
      *
+     * @return QueryCollection
      * @throws ValidatorException
      *
-     * @return QueryCollection
      */
     public function bulkStore(BulkCreateQueryAPIRequest $request): QueryCollection
     {
@@ -145,9 +145,9 @@ class QueryController extends AppBaseController
      *
      * @param BulkUpdateQueryAPIRequest $request
      *
+     * @return QueryCollection
      * @throws ValidatorException
      *
-     * @return QueryCollection
      */
     public function bulkUpdate(BulkUpdateQueryAPIRequest $request): QueryCollection
     {

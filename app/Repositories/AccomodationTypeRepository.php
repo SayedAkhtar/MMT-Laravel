@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\AccomodationType;
+use App\Models\AccommodationType;
 
 class AccomodationTypeRepository extends BaseRepository
 {
@@ -32,7 +32,7 @@ class AccomodationTypeRepository extends BaseRepository
      */
     public function model(): string
     {
-        return AccomodationType::class;
+        return AccommodationType::class;
     }
 
     /**

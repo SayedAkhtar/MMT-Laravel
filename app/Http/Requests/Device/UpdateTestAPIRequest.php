@@ -14,13 +14,20 @@ class UpdateTestAPIRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'is_active' => $this->request->has('is_active'),
+        ]);
+    }
+
     /**
      * @return array
      */
     public function rules(): array
     {
         return [
-            'name' => ['string', 'required', 'unique:tests,name,'.$this->route('test')],
+            'name' => ['string', 'required'],
             'is_active' => ['boolean'],
         ];
     }

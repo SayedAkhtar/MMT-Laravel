@@ -9,10 +9,12 @@ use App\Http\Requests\Client\CreatePatientFamilyDetailsAPIRequest;
 use App\Http\Requests\Client\UpdatePatientFamilyDetailsAPIRequest;
 use App\Http\Resources\Client\PatientFamilyDetailsCollection;
 use App\Http\Resources\Client\PatientFamilyDetailsResource;
+use App\Models\User;
 use App\Repositories\PatientFamilyDetailsRepository;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class PatientFamilyDetailsController extends AppBaseController
@@ -41,7 +43,7 @@ class PatientFamilyDetailsController extends AppBaseController
      */
     public function index(Request $request): PatientFamilyDetailsCollection
     {
-        $patientFamilyDetails = $this->patientFamilyDetailsRepository->fetch($request);
+        $patientFamilyDetails = User::find(Auth::id())->patientFamilyDetails;
 
         return new PatientFamilyDetailsCollection($patientFamilyDetails);
     }
@@ -51,9 +53,9 @@ class PatientFamilyDetailsController extends AppBaseController
      *
      * @param CreatePatientFamilyDetailsAPIRequest $request
      *
+     * @return PatientFamilyDetailsResource
      * @throws ValidatorException
      *
-     * @return PatientFamilyDetailsResource
      */
     public function store(CreatePatientFamilyDetailsAPIRequest $request): PatientFamilyDetailsResource
     {
@@ -81,11 +83,11 @@ class PatientFamilyDetailsController extends AppBaseController
      * Update PatientFamilyDetails with given payload.
      *
      * @param UpdatePatientFamilyDetailsAPIRequest $request
-     * @param int                                  $id
-     *
-     * @throws ValidatorException
+     * @param int $id
      *
      * @return PatientFamilyDetailsResource
+     * @throws ValidatorException
+     *
      */
     public function update(UpdatePatientFamilyDetailsAPIRequest $request, int $id): PatientFamilyDetailsResource
     {
@@ -100,9 +102,9 @@ class PatientFamilyDetailsController extends AppBaseController
      *
      * @param int $id
      *
+     * @return JsonResponse
      * @throws Exception
      *
-     * @return JsonResponse
      */
     public function delete(int $id): JsonResponse
     {
@@ -116,9 +118,9 @@ class PatientFamilyDetailsController extends AppBaseController
      *
      * @param BulkCreatePatientFamilyDetailsAPIRequest $request
      *
+     * @return PatientFamilyDetailsCollection
      * @throws ValidatorException
      *
-     * @return PatientFamilyDetailsCollection
      */
     public function bulkStore(BulkCreatePatientFamilyDetailsAPIRequest $request): PatientFamilyDetailsCollection
     {
@@ -137,9 +139,9 @@ class PatientFamilyDetailsController extends AppBaseController
      *
      * @param BulkUpdatePatientFamilyDetailsAPIRequest $request
      *
+     * @return PatientFamilyDetailsCollection
      * @throws ValidatorException
      *
-     * @return PatientFamilyDetailsCollection
      */
     public function bulkUpdate(BulkUpdatePatientFamilyDetailsAPIRequest $request): PatientFamilyDetailsCollection
     {

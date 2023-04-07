@@ -22,7 +22,7 @@ class CreateQueryAPIRequest extends FormRequest
         return [
             'patient_id' => ['required', 'exists:users,id'],
             'patient_family_id' => ['nullable', 'exists:users,id'],
-            'name' => ['string', 'required'],
+            'name' => ['string', 'nullable'],
             'specialization_id' => ['required', 'exists:specializations,id'],
             'hospital_id' => ['required', 'exists:hospitals,id'],
             'doctor_id' => ['nullable', 'exists:users,id'],

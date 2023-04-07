@@ -39,11 +39,11 @@ class SpecializationController extends AppBaseController
      *
      * @return SpecializationCollection
      */
-    public function index(Request $request): SpecializationCollection
+    public function index(Request $request): JsonResponse
     {
         $specializations = $this->specializationRepository->fetch($request);
 
-        return new SpecializationCollection($specializations);
+        return $this->successResponse(SpecializationResource::collection($specializations)->resolve());
     }
 
     /**

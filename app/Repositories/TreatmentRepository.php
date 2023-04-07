@@ -47,6 +47,6 @@ class TreatmentRepository extends BaseRepository
      */
     public function getAvailableRelations(): array
     {
-        return ['addedByUser', 'updatedByUser', 'hospitalTreatments', 'doctorTreatments', 'specializationTreatments'];
+        return ['addedByUser', 'updatedByUser', 'hospitals', 'doctors', 'specializations'];
     }
 }

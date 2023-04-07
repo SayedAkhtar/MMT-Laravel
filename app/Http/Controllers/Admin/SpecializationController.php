@@ -8,15 +8,19 @@ use App\Http\Requests\Device\BulkUpdateSpecializationAPIRequest;
 use App\Http\Requests\Device\CreateSpecializationAPIRequest;
 use App\Http\Requests\Device\UpdateSpecializationAPIRequest;
 use App\Http\Resources\Device\SpecializationCollection;
-use App\Http\Resources\Device\SpecializationResource;
 use App\Repositories\SpecializationRepository;
+use App\Traits\IsViewModule;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class SpecializationController extends AppBaseController
 {
+    use IsViewModule;
+
     /**
      * @var SpecializationRepository
      */
@@ -28,6 +32,7 @@ class SpecializationController extends AppBaseController
     public function __construct(SpecializationRepository $specializationRepository)
     {
         $this->specializationRepository = $specializationRepository;
+        $this->module = 'module/specialization';
     }
 
     /**
@@ -37,13 +42,16 @@ class SpecializationController extends AppBaseController
      *
      * @param Request $request
      *
-     * @return SpecializationCollection
      */
-    public function index(Request $request): SpecializationCollection
+    public function index(Request $request)
     {
         $specializations = $this->specializationRepository->fetch($request);
+        return $this->module_view('list', compact('specializations'));
+    }
 
-        return new SpecializationCollection($specializations);
+    public function create()
+    {
+        return $this->module_view('add');
     }
 
     /**
@@ -51,16 +59,18 @@ class SpecializationController extends AppBaseController
      *
      * @param CreateSpecializationAPIRequest $request
      *
+     * @return RedirectResponse
      * @throws ValidatorException
      *
-     * @return SpecializationResource
      */
-    public function store(CreateSpecializationAPIRequest $request): SpecializationResource
+    public function store(CreateSpecializationAPIRequest $request): RedirectResponse
     {
         $input = $request->all();
         $specialization = $this->specializationRepository->create($input);
-
-        return new SpecializationResource($specialization);
+        if ($request->hasFile('logo')) {
+            $specialization->attachImage('logo', 'logo', false);
+        }
+        return back()->with('success', 'Specialization Added');
     }
 
     /**
@@ -68,31 +78,33 @@ class SpecializationController extends AppBaseController
      *
      * @param int $id
      *
-     * @return SpecializationResource
+     * @return View
      */
-    public function show(int $id): SpecializationResource
+    public function show(int $id): View
     {
         $specialization = $this->specializationRepository->findOrFail($id);
-
-        return new SpecializationResource($specialization);
+        return $this->module_view('edit', compact('specialization'));
     }
 
     /**
      * Update Specialization with given payload.
      *
      * @param UpdateSpecializationAPIRequest $request
-     * @param int                            $id
+     * @param int $id
      *
+     * @return RedirectResponse
      * @throws ValidatorException
      *
-     * @return SpecializationResource
      */
-    public function update(UpdateSpecializationAPIRequest $request, int $id): SpecializationResource
+    public function update(UpdateSpecializationAPIRequest $request, int $id): RedirectResponse
     {
         $input = $request->all();
         $specialization = $this->specializationRepository->update($input, $id);
+        if ($request->hasFile('logo')) {
+            $specialization->updateImage('logo', 'logo', false);
+        }
 
-        return new SpecializationResource($specialization);
+        return back()->with('success', 'Specialization updated successfully');
     }
 
     /**
@@ -100,9 +112,9 @@ class SpecializationController extends AppBaseController
      *
      * @param int $id
      *
+     * @return JsonResponse
      * @throws Exception
      *
-     * @return JsonResponse
      */
     public function delete(int $id): JsonResponse
     {
@@ -116,9 +128,9 @@ class SpecializationController extends AppBaseController
      *
      * @param BulkCreateSpecializationAPIRequest $request
      *
+     * @return SpecializationCollection
      * @throws ValidatorException
      *
-     * @return SpecializationCollection
      */
     public function bulkStore(BulkCreateSpecializationAPIRequest $request): SpecializationCollection
     {
@@ -137,9 +149,9 @@ class SpecializationController extends AppBaseController
      *
      * @param BulkUpdateSpecializationAPIRequest $request
      *
+     * @return SpecializationCollection
      * @throws ValidatorException
      *
-     * @return SpecializationCollection
      */
     public function bulkUpdate(BulkUpdateSpecializationAPIRequest $request): SpecializationCollection
     {

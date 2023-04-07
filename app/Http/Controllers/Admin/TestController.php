@@ -5,22 +5,27 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Device\BulkCreateTestAPIRequest;
 use App\Http\Requests\Device\BulkUpdateTestAPIRequest;
-use App\Http\Requests\Device\CreateTestAPIRequest;
 use App\Http\Requests\Device\UpdateTestAPIRequest;
 use App\Http\Resources\Device\TestCollection;
-use App\Http\Resources\Device\TestResource;
+use App\Models\Test;
 use App\Repositories\TestRepository;
+use App\Traits\IsViewModule;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class TestController extends AppBaseController
 {
+    use IsViewModule;
+
     /**
      * @var TestRepository
      */
     private TestRepository $testRepository;
+    protected $module;
 
     /**
      * @param TestRepository $testRepository
@@ -28,6 +33,7 @@ class TestController extends AppBaseController
     public function __construct(TestRepository $testRepository)
     {
         $this->testRepository = $testRepository;
+        $this->module = "module/tests";
     }
 
     /**
@@ -37,62 +43,55 @@ class TestController extends AppBaseController
      *
      * @param Request $request
      *
-     * @return TestCollection
+     * @return View
      */
-    public function index(Request $request): TestCollection
+    public function index(Request $request)
     {
         $tests = $this->testRepository->fetch($request);
 
-        return new TestCollection($tests);
+        return $this->module_view('list', compact('tests'));
     }
 
-    /**
-     * Create Test with given payload.
-     *
-     * @param CreateTestAPIRequest $request
-     *
-     * @throws ValidatorException
-     *
-     * @return TestResource
-     */
-    public function store(CreateTestAPIRequest $request): TestResource
+    public function create()
     {
-        $input = $request->all();
-        $test = $this->testRepository->create($input);
-
-        return new TestResource($test);
+        return $this->module_view('add');
     }
 
-    /**
-     * Get single Test record.
-     *
-     * @param int $id
-     *
-     * @return TestResource
-     */
-    public function show(int $id): TestResource
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required | string | unique:tests,name'
+        ]);
+        try {
+            $test = Test::create($data);
+            return redirect(route('tests.index'))->with('success', "Test added successfully");
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function show(int $id)
     {
         $test = $this->testRepository->findOrFail($id);
-
-        return new TestResource($test);
+        return $this->module_view('edit', compact('test'));
     }
 
     /**
      * Update Test with given payload.
      *
      * @param UpdateTestAPIRequest $request
-     * @param int                  $id
+     * @param int $id
      *
+     * @return \Illuminate\Http\RedirectResponse
      * @throws ValidatorException
      *
-     * @return TestResource
      */
-    public function update(UpdateTestAPIRequest $request, int $id): TestResource
+    public function update(UpdateTestAPIRequest $request, int $id): \Illuminate\Http\RedirectResponse
     {
         $input = $request->all();
         $test = $this->testRepository->update($input, $id);
-
-        return new TestResource($test);
+        return back()->with('success', 'Updated successfully');
     }
 
     /**
@@ -100,9 +99,9 @@ class TestController extends AppBaseController
      *
      * @param int $id
      *
+     * @return JsonResponse
      * @throws Exception
      *
-     * @return JsonResponse
      */
     public function delete(int $id): JsonResponse
     {
@@ -116,9 +115,9 @@ class TestController extends AppBaseController
      *
      * @param BulkCreateTestAPIRequest $request
      *
+     * @return TestCollection
      * @throws ValidatorException
      *
-     * @return TestCollection
      */
     public function bulkStore(BulkCreateTestAPIRequest $request): TestCollection
     {
@@ -137,9 +136,9 @@ class TestController extends AppBaseController
      *
      * @param BulkUpdateTestAPIRequest $request
      *
+     * @return TestCollection
      * @throws ValidatorException
      *
-     * @return TestCollection
      */
     public function bulkUpdate(BulkUpdateTestAPIRequest $request): TestCollection
     {

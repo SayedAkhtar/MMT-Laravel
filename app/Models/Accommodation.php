@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
-use Illuminate\Database\Eloquent\Model as Model;
 
-class Accommodation extends Model
+class Accommodation extends BaseModel
 {
     use HasRecordOwnerProperties;
 
@@ -36,7 +35,7 @@ class Accommodation extends Model
     protected $casts = [
         'name' => 'string',
         'address' => 'string',
-        'images' => 'string',
+        'images' => 'array',
         'type' => 'integer',
         'geo_location' => 'string',
         'is_active' => 'boolean',
@@ -49,22 +48,22 @@ class Accommodation extends Model
      */
     public function confirmedQuery()
     {
-        return $this->belongsTo(ConfirmedQuery::class, 'accomodation_id', 'id');
+        return $this->belongsTo(ConfirmedQuery::class, 'accommodation_id', 'id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function accomodationFacitities()
+    public function facilities()
     {
-        return $this->hasMany(AccomodationFacitity::class, 'accomodation_id', 'id');
+        return $this->belongsToMany(Facility::class, 'accommodation_facilities');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
-    public function accomodationType()
+    public function category()
     {
-        return $this->hasOne(AccomodationType::class, 'id', 'type');
+        return $this->hasOne(AccommodationType::class, 'id', 'type');
     }
 }

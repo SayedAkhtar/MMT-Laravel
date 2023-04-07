@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\API\Client;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\Client\BulkCreateHospitalAPIRequest;
-use App\Http\Requests\Client\BulkUpdateHospitalAPIRequest;
 use App\Http\Requests\Client\CreateHospitalAPIRequest;
 use App\Http\Requests\Client\UpdateHospitalAPIRequest;
+use App\Http\Resources\Client\DoctorResource;
 use App\Http\Resources\Client\HospitalCollection;
 use App\Http\Resources\Client\HospitalResource;
+use App\Models\Hospital;
 use App\Repositories\HospitalRepository;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -51,9 +51,9 @@ class HospitalController extends AppBaseController
      *
      * @param CreateHospitalAPIRequest $request
      *
+     * @return HospitalResource
      * @throws ValidatorException
      *
-     * @return HospitalResource
      */
     public function store(CreateHospitalAPIRequest $request): HospitalResource
     {
@@ -70,22 +70,22 @@ class HospitalController extends AppBaseController
      *
      * @return HospitalResource
      */
-    public function show(int $id): HospitalResource
+    public function show(int $id): JsonResponse
     {
         $hospital = $this->hospitalRepository->findOrFail($id);
 
-        return new HospitalResource($hospital);
+        return $this->successResponse(new HospitalResource($hospital));
     }
 
     /**
      * Update Hospital with given payload.
      *
      * @param UpdateHospitalAPIRequest $request
-     * @param int                      $id
-     *
-     * @throws ValidatorException
+     * @param int $id
      *
      * @return HospitalResource
+     * @throws ValidatorException
+     *
      */
     public function update(UpdateHospitalAPIRequest $request, int $id): HospitalResource
     {
@@ -100,9 +100,9 @@ class HospitalController extends AppBaseController
      *
      * @param int $id
      *
+     * @return JsonResponse
      * @throws Exception
      *
-     * @return JsonResponse
      */
     public function delete(int $id): JsonResponse
     {
@@ -111,45 +111,9 @@ class HospitalController extends AppBaseController
         return $this->successResponse('Hospital deleted successfully.');
     }
 
-    /**
-     * Bulk create Hospital's.
-     *
-     * @param BulkCreateHospitalAPIRequest $request
-     *
-     * @throws ValidatorException
-     *
-     * @return HospitalCollection
-     */
-    public function bulkStore(BulkCreateHospitalAPIRequest $request): HospitalCollection
+    public function doctors($id)
     {
-        $hospitals = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $hospitalInput) {
-            $hospitals[$key] = $this->hospitalRepository->create($hospitalInput);
-        }
-
-        return new HospitalCollection($hospitals);
-    }
-
-    /**
-     * Bulk update Hospital's data.
-     *
-     * @param BulkUpdateHospitalAPIRequest $request
-     *
-     * @throws ValidatorException
-     *
-     * @return HospitalCollection
-     */
-    public function bulkUpdate(BulkUpdateHospitalAPIRequest $request): HospitalCollection
-    {
-        $hospitals = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $hospitalInput) {
-            $hospitals[$key] = $this->hospitalRepository->update($hospitalInput, $hospitalInput['id']);
-        }
-
-        return new HospitalCollection($hospitals);
+        $doctors = Hospital::find($id)->doctors;
+        return $this->successResponse(DoctorResource::collection($doctors)->resolve());
     }
 }

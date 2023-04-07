@@ -18,24 +18,26 @@ class DoctorResource extends BaseAPIResource
         if (!empty($fieldsFilter) || $request->get('include')) {
             return $this->resource->toArray();
         }
-
+        $hospital = [];
+        foreach ($this->hospitals as $e) {
+            $hospital[] = ['id' => $e->id, 'name' => $e->name];
+        }
         return [
             'id' => $this->id,
             'name' => $this->user->name,
             'phone' => $this->user->phone,
             'email' => $this->user->email,
+            'image' => $this->user->image ? asset($this->user->image) : asset('img/avatar.png'),
             'start_of_service' => $this->start_of_service,
+            'experience' => \Carbon\Carbon::make($this->start_of_service)->diffInYears(),
             'awards' => $this->awards,
             'description' => $this->description,
             'designation' => $this->designation->name,
             'qualification' => $this->qualification->name,
             'faq' => $this->faq,
             'time_slots' => $this->time_slots,
-            'is_active' => $this->is_active,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'added_by' => $this->added_by,
-            'updated_by' => $this->updated_by,
+            'specialization' => $this->doctorSpecializations->pluck('name')->join(', '),
+            'hospitals' => $hospital
         ];
     }
 }

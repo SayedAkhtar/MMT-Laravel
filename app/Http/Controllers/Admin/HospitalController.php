@@ -13,7 +13,7 @@ use App\Models\User;
 use App\Repositories\AccreditationRepository;
 use App\Repositories\HospitalRepository;
 use App\Repositories\TreatmentRepository;
-use App\Traits\isViewModule;
+use App\Traits\IsViewModule;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -22,7 +22,7 @@ use Prettus\Validator\Exceptions\ValidatorException;
 
 class HospitalController extends AppBaseController
 {
-    use isViewModule;
+    use IsViewModule;
 
     protected $module;
     /**
@@ -48,7 +48,7 @@ class HospitalController extends AppBaseController
      *
      * @return HospitalCollection
      */
-    public function index(Request $request) : View
+    public function index(Request $request): View
     {
         $hospitals = $this->hospitalRepository->fetch($request);
         return $this->module_view('list', compact('hospitals'));
@@ -67,9 +67,9 @@ class HospitalController extends AppBaseController
      *
      * @param CreateHospitalAPIRequest $request
      *
+     * @return HospitalResource
      * @throws ValidatorException
      *
-     * @return HospitalResource
      */
     public function store(CreateHospitalAPIRequest $request): HospitalResource
     {
@@ -97,11 +97,11 @@ class HospitalController extends AppBaseController
      * Update Hospital with given payload.
      *
      * @param UpdateHospitalAPIRequest $request
-     * @param int                      $id
-     *
-     * @throws ValidatorException
+     * @param int $id
      *
      * @return HospitalResource
+     * @throws ValidatorException
+     *
      */
     public function update(UpdateHospitalAPIRequest $request, int $id): HospitalResource
     {
@@ -116,9 +116,9 @@ class HospitalController extends AppBaseController
      *
      * @param int $id
      *
+     * @return JsonResponse
      * @throws Exception
      *
-     * @return JsonResponse
      */
     public function delete(int $id): JsonResponse
     {
@@ -132,9 +132,9 @@ class HospitalController extends AppBaseController
      *
      * @param BulkCreateHospitalAPIRequest $request
      *
+     * @return HospitalCollection
      * @throws ValidatorException
      *
-     * @return HospitalCollection
      */
     public function bulkStore(BulkCreateHospitalAPIRequest $request): HospitalCollection
     {
@@ -153,9 +153,9 @@ class HospitalController extends AppBaseController
      *
      * @param BulkUpdateHospitalAPIRequest $request
      *
+     * @return HospitalCollection
      * @throws ValidatorException
      *
-     * @return HospitalCollection
      */
     public function bulkUpdate(BulkUpdateHospitalAPIRequest $request): HospitalCollection
     {

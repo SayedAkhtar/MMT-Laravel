@@ -14,17 +14,25 @@ class CreateWellnessCenterAPIRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'is_active' => $this->request->has('is_active'),
+        ]);
+    }
+
+
     /**
      * @return array
      */
     public function rules(): array
     {
         return [
-            'name' => ['string', 'required', 'unique:wellness_centers,name'],
-            'adress' => ['required', 'unique:wellness_centers,adress'],
+            'name' => ['string', 'required'],
+            'address' => ['required'],
             'description' => ['nullable'],
-            'logo' => ['nullable', 'string'],
-            'image' => ['nullable'],
+            'logo' => ['nullable', 'file'],
+            'images.*' => ['nullable', 'file'],
             'geo_location' => ['nullable'],
             'is_active' => ['boolean'],
         ];

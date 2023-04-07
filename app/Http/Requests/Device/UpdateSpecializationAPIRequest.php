@@ -14,15 +14,22 @@ class UpdateSpecializationAPIRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'is_active' => $this->request->has('is_active'),
+        ]);
+    }
+
     /**
      * @return array
      */
     public function rules(): array
     {
         return [
-            'name' => ['string', 'required', 'unique:specializations,name,'.$this->route('specialization')],
-            'logo' => ['nullable', 'string'],
-            'is_active' => ['boolean'],
+            'name' => ['string', 'required', 'unique:specializations,name,' . $this->route('specialization')],
+            'logo' => ['nullable', 'file'],
+            'is_active' => ['sometimes'],
         ];
     }
 }

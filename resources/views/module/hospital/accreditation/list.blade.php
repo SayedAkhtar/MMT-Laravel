@@ -4,6 +4,15 @@
     <link rel="stylesheet" href="{{ asset("plugins/datatables-responsive/css/responsive.bootstrap4.min.css")}}">
     <link rel="stylesheet" href="{{ asset("plugins/datatables-buttons/css/buttons.bootstrap4.min.css")}}">
 @endpush
+@push('page-styles')
+    <style>
+        .accreditation-img{
+            height: 50px;
+            margin: 0 auto;
+            display: block;
+        }
+    </style>
+@endpush
 @section('content')
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
@@ -29,9 +38,12 @@
                     <tr>
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $data->name }}</td>
-                        <td><img src="{{ $data->logo }}" alt=""></td>
+                        <td><img src="{{ asset($data->logo) }}" alt="" class="accreditation-img"></td>
                         <td><span>{{ $data->is_active?'Active' : 'False'  }}</span></td>
-                        <td>X</td>
+                        <td class="text-right">
+                            <a href="{{ route('accreditation.show', ['accreditation' => $data->id]) }}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                            <a href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i></a>
+                        </td>
                     </tr>
                 @empty
                 @endforelse

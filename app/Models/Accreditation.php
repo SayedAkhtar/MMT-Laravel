@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
-use Illuminate\Database\Eloquent\Model as Model;
 
-class Accreditation extends Model
+class Accreditation extends BaseModel
 {
     use HasRecordOwnerProperties;
 

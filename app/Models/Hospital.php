@@ -59,7 +59,7 @@ class Hospital extends Model implements HasMedia
     /**
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo
      */
-    public function patientTestimony()
+    public function testimony()
     {
         return $this->belongsTo(PatientTestimony::class, 'hospital_id', 'id');
     }
@@ -67,7 +67,7 @@ class Hospital extends Model implements HasMedia
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
-    public function hospitalTreatments()
+    public function treatments()
     {
         return $this->hasManyThrough(Treatment::class, HospitalTreatment::class, 'hospital_id', 'id', 'id');
     }
@@ -75,7 +75,7 @@ class Hospital extends Model implements HasMedia
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
-    public function accreditationHospitals()
+    public function accreditation()
     {
         return $this->hasManyThrough(Accreditation::class, AccreditationHospital::class, 'hospital_id', 'id', 'id');
     }
@@ -83,16 +83,16 @@ class Hospital extends Model implements HasMedia
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
-    public function doctorHospitals()
+    public function doctors()
     {
-        return $this->hasMany(DoctorHospital::class, 'hospital_id', 'id');
+        return $this->hasManyThrough(Doctor::class, DoctorHospital::class, 'hospital_id', 'id');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
-    public function hospitalTags()
+    public function tags()
     {
-        return $this->hasMany(HospitalTags::class, 'hospital_id', 'id');
+        return $this->belongsToMany(Tags::class, 'hospital_id', 'id');
     }
 }
