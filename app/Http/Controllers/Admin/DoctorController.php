@@ -62,6 +62,7 @@ class DoctorController extends AppBaseController
         $rules = (new CreateDoctorAPIRequest)->rules();
         $request->validate($rules);
         $input = $request->all();
+        $input['user_type'] = 5;
         $doctor = $this->doctorRepository->create($input);
 //        CreateDoctorAPIRequest
         return new DoctorResource($doctor);
