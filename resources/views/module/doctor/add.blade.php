@@ -40,7 +40,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Phone Number</label>
-                            <input type="email" class="form-control" placeholder="Enter phone with country code"
+                            <input type="text" class="form-control" placeholder="Enter phone with country code"
                                    name="phone">
                         </div>
                     </div>
