@@ -15,3 +15,6 @@ yarn-error.log
 /.vscode
 .git.zip
 .git
+.zip
+.sql
+public/uploads
