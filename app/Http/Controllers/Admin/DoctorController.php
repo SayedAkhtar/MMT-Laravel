@@ -6,7 +6,6 @@ use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Device\BulkCreateDoctorAPIRequest;
 use App\Http\Requests\Device\BulkUpdateDoctorAPIRequest;
 use App\Http\Requests\Device\CreateDoctorAPIRequest;
-use App\Http\Requests\Device\CreateUserAPIRequest;
 use App\Http\Requests\Device\UpdateDoctorAPIRequest;
 use App\Http\Resources\Device\DoctorCollection;
 use App\Http\Resources\Device\DoctorResource;
@@ -60,7 +59,7 @@ class DoctorController extends AppBaseController
         if ($request->isMethod('get')) {
             return view('module.doctor.add');
         }
-        $rules = array_merge((new CreateUserAPIRequest)->rules(), (new CreateDoctorAPIRequest)->rules());
+        $rules = (new CreateDoctorAPIRequest)->rules();
         $request->validate($rules);
         $input = $request->all();
         $doctor = $this->doctorRepository->create($input);
