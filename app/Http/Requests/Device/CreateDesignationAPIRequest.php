@@ -14,13 +14,20 @@ class CreateDesignationAPIRequest extends FormRequest
         return true;
     }
 
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'is_active' => (bool)$this->request->get('is_active')
+        ]);
+    }
+
     /**
      * @return array
      */
     public function rules(): array
     {
         return [
-            'name' => ['nullable', 'string'],
+            'name' => ['required', 'string'],
             'is_active' => ['sometimes'],
         ];
     }

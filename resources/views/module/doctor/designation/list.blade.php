@@ -8,9 +8,9 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h3 class="card-title">Doctors List</h3>
-            <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#add_designation">
+            <a class="btn btn-success btn-sm" href="{{ route('designations.create') }}">
                 <i class="fa fa-plus"></i> Add Designation
-            </button>
+            </a>
         </div>
         <!-- /.card-header -->
         <div class="card-body">

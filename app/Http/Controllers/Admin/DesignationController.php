@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Device\BulkCreateDesignationAPIRequest;
-use App\Http\Requests\Device\BulkUpdateDesignationAPIRequest;
 use App\Http\Requests\Device\CreateDesignationAPIRequest;
 use App\Http\Requests\Device\UpdateDesignationAPIRequest;
 use App\Http\Resources\Device\DesignationCollection;
@@ -60,14 +59,20 @@ class DesignationController extends AppBaseController
      * @throws ValidatorException
      *
      */
+
+    public function create(Request $request)
+    {
+        return $this->module_view('add');
+    }
+
     public function store(CreateDesignationAPIRequest $request)
     {
         $input = $request->all();
         $designation = $this->designationRepository->create($input);
         if (empty($designation)) {
-            return $this->errorResponse("Could not created designation", 404);
+            return back()->with('error', "Something went wrong. Please try again");
         }
-        return back();
+        return back()->with('success', "Designation successfully added");
     }
 
     /**
@@ -126,36 +131,4 @@ class DesignationController extends AppBaseController
      * @throws ValidatorException
      *
      */
-    public function bulkStore(BulkCreateDesignationAPIRequest $request): DesignationCollection
-    {
-        $designations = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $designationInput) {
-            $designations[$key] = $this->designationRepository->create($designationInput);
-        }
-
-        return new DesignationCollection($designations);
-    }
-
-    /**
-     * Bulk update Designation's data.
-     *
-     * @param BulkUpdateDesignationAPIRequest $request
-     *
-     * @return DesignationCollection
-     * @throws ValidatorException
-     *
-     */
-    public function bulkUpdate(BulkUpdateDesignationAPIRequest $request): DesignationCollection
-    {
-        $designations = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $designationInput) {
-            $designations[$key] = $this->designationRepository->update($designationInput, $designationInput['id']);
-        }
-
-        return new DesignationCollection($designations);
-    }
 }
