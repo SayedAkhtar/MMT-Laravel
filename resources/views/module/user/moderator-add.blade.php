@@ -8,11 +8,11 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Add a Moderator</h3>
+            <h3 class="card-title">{{ isset($user)? 'Edit' : 'Add' }} a Moderator</h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            <form action="{{ route('specializations.store') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('moderators.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-sm-6">
@@ -27,14 +27,27 @@
                         <!-- text input -->
                         <div class="form-group">
                             <label>Name</label>
-                            <input type="text" class="form-control" placeholder="Enter name" name="name">
+                            <input type="text" class="form-control" placeholder="Enter name" name="name"
+                                   value="{{ $user->name }}">
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
                             <label>Phone Number</label>
-                            <input type="text" class="form-control" placeholder="Enter mobile number" name="phone">
+                            <input type="text" class="form-control" placeholder="Enter mobile number" name="phone"
+                                   value="{{ $user->phone }}">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <!-- text input -->
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select name="gender" id="" class="form-control">
+                                <option value="male" {{ $user->gender == 'male'?'selected':'' }}>Male</option>
+                                <option value="female" {{ $user->gender == 'female'?'selected':'' }}>Female</option>
+                            </select>
                         </div>
                     </div>
 
@@ -43,8 +56,9 @@
                     <div class="col-sm-12">
                         <div class="form-group">
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="customSwitch1" name="is_active">
-                                <label class="custom-control-label" for="customSwitch1">Specializations Active
+                                <input type="checkbox" class="custom-control-input" id="customSwitch1"
+                                       name="is_active" {{ $user->is_active?'checked':'' }}>
+                                <label class="custom-control-label" for="customSwitch1">Moderator Active
                                     Status</label>
                             </div>
                         </div>

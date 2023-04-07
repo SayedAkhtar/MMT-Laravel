@@ -23,7 +23,48 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            
+            <div class="row">
+                @forelse($moderators as $data)
+                    <div class="col-md-4">
+                        <div class="card card-widget widget-user-2 shadow-sm">
+                            <div class="widget-user-header bg-warning">
+                                <div class="widget-user-image">
+                                    <img class="img-circle elevation-2" src="{{ image_path($data->image) }}"
+                                         alt="User Avatar">
+                                </div>
+                                <a href="{{ route('moderators.edit', ['user' => $data->id]) }}"><h3
+                                        class="widget-user-username">{{ $data->name }}</h3></a>
+                                <h5 class="widget-user-desc">{{ $data->phone }}</h5>
+                            </div>
+                            <div class="card-footer p-0">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            Total Queries <span
+                                                class="float-right badge bg-primary">{{ $data->confirmedQuery->count() }}</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            Active Queries <span
+                                                class="float-right badge bg-info">{{ $data->pending_queries }}</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            Queries Completed <span
+                                                class="float-right badge bg-success">{{ $data->completed_queries }}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                @empty
+                    <h2>No HCF added</h2>
+                @endforelse
+            </div>
         </div>
         <!-- /.card-body -->
     </div>

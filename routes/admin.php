@@ -109,8 +109,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('patients/list', [UserController::class, 'listPatients'])->name('patient.index');
     Route::prefix('hcf')->group(function () {
         Route::get('list', [UserController::class, 'listModerators'])->name('moderators.index');
-        Route::get('create', [UserController::class, 'createModerators'])->name('moderators.create');
-        Route::post('store', [UserController::class, 'storeModerators'])->name('moderators.store');
+        Route::get('create', [UserController::class, 'createModerator'])->name('moderators.create');
+        Route::post('store', [UserController::class, 'storeModerator'])->name('moderators.store');
+        Route::get('edit/{user}', [UserController::class, 'editModerator'])->name('moderators.edit');
     });
 
 
@@ -185,5 +186,6 @@ Route::put('reset-password', [AuthController::class, 'resetPassword'])
     ->name('reset.password');
 
 Route::get('ajax-search/{table}', [HomeController::class, 'ajaxSearch'])->name('ajaxSearch');
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');

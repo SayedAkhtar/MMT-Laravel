@@ -122,12 +122,47 @@ class UserController extends AppBaseController
 
     public function listModerators()
     {
-        $moderators = [];
+        $moderators = User::where('user_type', User::TYPE_HCF)->get();
+        foreach ($moderators as &$mod) {
+            $mod->confirmed_queries = $mod->confirmedQuery->count();
+            $mod->completed_queries = 0;
+            $mod->confirmedQuery->each(function ($q) use ($mod) {
+                $mod->completed_queries += $q->queries->is_completed ? 1 : 0;
+            });
+            $mod->pending_queries = $mod->confirmed_queries - $mod->completed_queries;
+        }
         return $this->module_view('moderator-list', compact('moderators'));
     }
 
-    public function createModerators()
+    public function createModerator()
     {
         return $this->module_view('moderator-add');
+    }
+
+    public function storeModerator(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required',
+            'image' => 'required',
+            'phone' => 'required',
+            'gender' => 'required'
+        ]);
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store();
+        }
+        try {
+            $user = User::create(array_merge($validated, ['user_type' => User::TYPE_HCF]));
+            if ($user) {
+                return redirect(route('moderators.index'))->with('success', "HCF created successfully");
+            }
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function editModerator(User $user)
+    {
+
+        return $this->module_view('moderator-add', compact('user'));
     }
 }

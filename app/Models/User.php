@@ -66,7 +66,7 @@ class User extends Authenticatable implements HasMedia
         'username' => 'string',
         'password' => 'string',
         'email' => 'string',
-        'phone' => 'integer',
+        'phone' => 'string',
         'remember_token' => 'string',
         'is_active' => 'boolean',
         'added_by' => 'integer',
@@ -139,7 +139,7 @@ class User extends Authenticatable implements HasMedia
 
     public function confirmedQuery()
     {
-        return $this->belongsTo(ConfirmedQuery::class, 'coordinator_id', 'id');
+        return $this->hasMany(ConfirmedQuery::class, 'coordinator_id', 'id');
     }
 
     public function patientQuery()
@@ -191,4 +191,5 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasOneThrough(User::class, PatientDetails::class, 'user_id', 'id', '', 'user_id');
     }
+
 }

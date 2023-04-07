@@ -91,30 +91,15 @@
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
-                            <label>Designation</label>
-                            <select class="form-control select2bs4" style="width: 100%;" name="designation_id">
-                                <option selected="selected">Alabama</option>
-                                <option value="1">Alaska</option>
-                                <option>California</option>
-                                <option>Delaware</option>
-                                <option>Tennessee</option>
-                                <option>Texas</option>
-                                <option>Washington</option>
-                            </select>
+                            <x-multi-select-search label="Designation" name="designation_id" table="designations"
+                                                   multiple="false"/>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label>Qualification</label>
-                            <select class="form-control select2bs4" style="width: 100%;" name="qualification_id">
-                                <option selected="selected">Alabama</option>
-                                <option value="1">Alaska</option>
-                                <option>California</option>
-                                <option>Delaware</option>
-                                <option>Tennessee</option>
-                                <option>Texas</option>
-                                <option>Washington</option>
-                            </select>
+                            <x-multi-select-search label="Qualification" name="qualification_id"
+                                                   table="qualifications"
+                                                   multiple="false"/>
                         </div>
                     </div>
                 </div>
@@ -138,6 +123,12 @@
                                        name="start_of_service">
                             </div>
                             <!-- /.input group -->
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <x-multi-select-search label="Hospitals" name="hospital_id" table="hospitals"
+                                                   multiple="true"/>
                         </div>
                     </div>
                 </div>
