@@ -8,18 +8,21 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Add a Test</h3>
+            <h3 class="card-title">{{ !empty($designation)? 'Edit': 'Add' }} a Designation</h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            <form action="{{ route('designations.store') }}" method="post" enctype="multipart/form-data">
+            <form
+                action="{{ !empty($designation)?route('designations.store'):route('designation.update', ['designation' => $designation->id]) }}"
+                method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
                             <label>Name</label>
-                            <input type="text" class="form-control" placeholder="Enter name" name="name">
+                            <input type="text" class="form-control" placeholder="Enter name" name="name"
+                                   value="{{ $designation->name }}">
                         </div>
                     </div>
                 </div>
@@ -27,7 +30,8 @@
                     <div class="col-sm-12">
                         <div class="form-group">
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="customSwitch1" name="is_active">
+                                <input type="checkbox" class="custom-control-input" id="customSwitch1"
+                                       name="is_active" {{ $designation->is_active ? 'checked':'' }} >
                                 <label class="custom-control-label" for="customSwitch1">Designation Active
                                     Status</label>
                             </div>

@@ -7,7 +7,6 @@ use App\Http\Requests\Device\BulkCreateDesignationAPIRequest;
 use App\Http\Requests\Device\CreateDesignationAPIRequest;
 use App\Http\Requests\Device\UpdateDesignationAPIRequest;
 use App\Http\Resources\Device\DesignationCollection;
-use App\Http\Resources\Device\DesignationResource;
 use App\Repositories\DesignationRepository;
 use App\Traits\IsViewModule;
 use Exception;
@@ -72,7 +71,7 @@ class DesignationController extends AppBaseController
         if (empty($designation)) {
             return back()->with('error', "Something went wrong. Please try again");
         }
-        return back()->with('success', "Designation successfully added");
+        return redirect(route('designations.index'))->with('success', "Designation successfully added");
     }
 
     /**
@@ -80,13 +79,11 @@ class DesignationController extends AppBaseController
      *
      * @param int $id
      *
-     * @return DesignationResource
      */
-    public function show(int $id): DesignationResource
+    public function show(int $id)
     {
         $designation = $this->designationRepository->findOrFail($id);
-
-        return new DesignationResource($designation);
+        return $this->module_view('add', compact('designation'));
     }
 
     /**

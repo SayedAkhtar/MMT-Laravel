@@ -9,6 +9,7 @@ use App\Http\Requests\Device\CreateDoctorAPIRequest;
 use App\Http\Requests\Device\UpdateDoctorAPIRequest;
 use App\Http\Resources\Device\DoctorCollection;
 use App\Http\Resources\Device\DoctorResource;
+use App\Models\Doctor;
 use App\Models\User;
 use App\Repositories\DoctorRepository;
 use App\Traits\IsViewModule;
@@ -84,12 +85,11 @@ class DoctorController extends AppBaseController
      *
      * @param int $id
      *
-     * @return DoctorResource
      */
     public function show(int $id)
     {
-        $doctor = $this->doctorRepository->findOrFail($id);
-        return view($this->module . '/edit', compact('doctor'));
+        $doctor = Doctor::with('hospitals', 'qualification', 'designation')->findOrFail($id);
+        return $this->module_view('edit', compact('doctor'));
     }
 
     /**

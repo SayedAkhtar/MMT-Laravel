@@ -33,7 +33,9 @@
                         <td>{{ $doctor->time_slots }}</td>
                         <td> {{ $doctor->qualification->name }}</td>
                         <td class="text-right">
-                            <a href="#" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                            <a href=" {{ route('doctors.show', ['doctor' => $doctor->id]) }}"
+                               class="btn btn-info btn-sm"><i
+                                    class="fa fa-edit"></i></a>
                             <a href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i></a>
                         </td>
                     </tr>

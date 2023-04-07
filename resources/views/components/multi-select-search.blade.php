@@ -1,6 +1,7 @@
 <div class="form-group">
     <label>{{ $label }} </label>
-    <select class="form-control" id="{{ $name }}" name="{{ $multiple? $name.'[]' : $name }}" multiple="{{ $multiple }}">
+    <select class="form-control" id="{{ $name }}"
+            name="{{ $multiple? $name.'[]' : $name }}" {{ $multiple?"multiple":'' }}>
         @forelse($selectedOptions as $option)
             <option value="{{ $option->id }}" selected>{{$option->name}}</option>
         @empty

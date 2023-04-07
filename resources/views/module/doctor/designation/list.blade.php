@@ -30,7 +30,8 @@
                         <td>{{ $data->name }}</td>
                         <td @class(["text-success" => $data->is_active,"text-danger" => !$data->is_active ])>{{ $data->is_active ? 'Active' : 'Not Active' }}</td>
                         <td class="text-right">
-                            <a href="javascript:void(0)" class="btn btn-info btn-sm"
+                            <a href="{{ route('designations.show', ['designation' => $data->id]) }}"
+                               class="btn btn-info btn-sm"
                                onclick="edit({{ $data->id }})"><i class="fa fa-edit"></i></a>
                             <a href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i></a>
                         </td>

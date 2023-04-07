@@ -2,6 +2,7 @@
 
 namespace App\View\Components;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\Component;
 
 class MultiSelectSearch extends Component
@@ -23,6 +24,13 @@ class MultiSelectSearch extends Component
         $this->table = $table;
         $this->label = $label;
         $this->multiple = $multiple;
+        if ($selectedOptions instanceof Collection) {
+            $temp = [];
+            foreach ($selectedOptions as $option) {
+                $temp[] = $option;
+            }
+            $selectedOptions = $temp;
+        }
         $this->selectedOptions = is_array($selectedOptions) ? $selectedOptions : [$selectedOptions];
     }
 

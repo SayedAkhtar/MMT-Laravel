@@ -144,7 +144,7 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('doctors.index')
         ->middleware(['permission:read_doctor']);
     Route::get('doctors/{doctor}', [DoctorController::class, 'show'])
-        ->name('doctor.show')
+        ->name('doctors.show')
         ->middleware(['permission:read_doctor']);
     Route::put('doctors/{doctor}', [DoctorController::class, 'update'])
         ->name('doctor.update')

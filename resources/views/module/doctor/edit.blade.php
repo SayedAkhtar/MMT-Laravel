@@ -19,13 +19,15 @@
                         <!-- text input -->
                         <div class="form-group">
                             <label>Name</label>
-                            <input type="text" class="form-control" placeholder="Enter name" name="name" value="{{ $doctor->user->name }}">
+                            <input type="text" class="form-control" placeholder="Enter name" name="name"
+                                   value="{{ $doctor->user->name }}">
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" class="form-control" placeholder="Enter email" name="email" value="{{ $doctor->user->email }}">
+                            <input type="email" class="form-control" placeholder="Enter email" name="email"
+                                   value="{{ $doctor->user->email }}">
                         </div>
                     </div>
                 </div>
@@ -40,7 +42,8 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Phone Number</label>
-                            <input type="phone" class="form-control" placeholder="Enter phone with country code" name="phone" value="{{ $doctor->user->phone }}">
+                            <input type="phone" class="form-control" placeholder="Enter phone with country code"
+                                   name="phone" value="{{ $doctor->user->phone }}">
                         </div>
                     </div>
                 </div>
@@ -65,9 +68,12 @@
                             <label>Gender</label>
                             <select class="form-control" name="gender">
                                 <option>Select Option</option>
-                                <option value="male" {{ $doctor->user->gender == 'male' ? 'selected' : '' }}>Male</option>
-                                <option value="female" {{ $doctor->user->gender == 'female' ? 'selected': '' }}>Female</option>
-                                <option value="other" {{ $doctor->user->gender == 'other' ? 'selected' : '' }}>Other</option>
+                                <option value="male" {{ $doctor->user->gender == 'male' ? 'selected' : '' }}>Male
+                                </option>
+                                <option value="female" {{ $doctor->user->gender == 'female' ? 'selected': '' }}>Female
+                                </option>
+                                <option value="other" {{ $doctor->user->gender == 'other' ? 'selected' : '' }}>Other
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -77,7 +83,8 @@
                         <!-- text input -->
                         <div class="form-group">
                             <label>Country</label>
-                            <input type="text" class="form-control" placeholder="Enter name" name="country" value="{{ $doctor->user->country }}">
+                            <input type="text" class="form-control" placeholder="Enter name" name="country"
+                                   value="{{ $doctor->user->country }}">
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -88,7 +95,8 @@
                                     <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                 </div>
                                 <input type="text" class="form-control" data-inputmask-alias="datetime"
-                                       data-inputmask-inputformat="mm/dd/yyyy" data-mask="" inputmode="numeric" name="dob" value="{{ $doctor->user->dob }}">
+                                       data-inputmask-inputformat="mm/dd/yyyy" data-mask="" inputmode="numeric"
+                                       name="dob" value="{{ $doctor->user->dob }}">
                             </div>
                             <!-- /.input group -->
                         </div>
@@ -98,29 +106,16 @@
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
-                            <label>Designation</label>
-                            <select class="form-control select2bs4" style="width: 100%;" name="designation_id">
-                                <option selected="selected">Alabama</option>
-                                <option value="1" {{ $doctor->designation_id == 1 ? 'selected' :'' }}>Alaska</option>
-                                <option {{ $doctor->designation_id == 2 ? 'selected' :'' }}>California</option>
-                                <option {{ $doctor->designation_id == 3 ? 'selected' :'' }}>Delaware</option>
-                                <option {{ $doctor->designation_id == 4 ? 'selected' :'' }}>Tennessee</option>
-                                <option {{ $doctor->designation_id == 5 ? 'selected' :'' }}>Texas</option>
-                                <option {{ $doctor->designation_id == 6 ? 'selected' :'' }}>Washington</option>
-                            </select>
+                            <x-multi-select-search label="Qualification" name="qualification_id"
+                                                   table="qualifications"
+                                                   :multiple="false" :selectedOptions="$doctor->qualification"/>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label>Qualification</label>
-                            <select class="form-control select2bs4" style="width: 100%;" name="qualification_id">
-                                <option selected="selected">Alabama</option>
-                                <option value="1" {{ $doctor->designation_id == 2 ? 'selected' :'' }}>Alaska</option>
-                                <option>California</option>
-                                <option>Delaware</option>
-                                <option>Tennessee</option>
-                                <option>Texas</option>
-                                <option>Washington</option>
+                            <x-multi-select-search label="Designations" name="designation_id"
+                                                   table="designations"
+                                                   :multiple="false" :selectedOptions="$doctor->designation"/>
                             </select>
                         </div>
                     </div>
@@ -130,9 +125,17 @@
                         <!-- text input -->
                         <div class="form-group">
                             <label>Awards</label>
-                            <input type="text" class="form-control" placeholder="Enter name" name="awards" value="{{ $doctor->awards }}">
+                            <input type="text" class="form-control" placeholder="Enter name" name="awards"
+                                   value="{{ $doctor->awards }}">
                         </div>
                     </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <x-multi-select-search label="Hospitals" name="hospital_id" table="hospitals"
+                                                   multiple="true" :selectedOptions="$doctor->hospitals"/>
+                        </div>
+                    </div>
+
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Start of service</label>
@@ -141,7 +144,8 @@
                                     <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                 </div>
                                 <input type="text" class="form-control" data-inputmask-alias="datetime"
-                                       data-inputmask-inputformat="mm/dd/yyyy" data-mask="" inputmode="numeric" name="start_of_service" value="{{ $doctor->start_of_service }}">
+                                       data-inputmask-inputformat="mm/dd/yyyy" data-mask="" inputmode="numeric"
+                                       name="start_of_service" value="{{ $doctor->start_of_service }}">
                             </div>
                             <!-- /.input group -->
                         </div>
@@ -153,8 +157,10 @@
                         <div class="form-group">
                             <label>Time Slots:</label>
                             <div class="input-group date" id="time_slots" data-target-input="nearest">
-                                <input type="text" name="time_slots" class="form-control datetimepicker-input" data-target="#time_slots" value="{{ $doctor->time_slots }}" />
-                                <div class="input-group-append" data-target="#reservationdatetime" data-toggle="datetimepicker">
+                                <input type="text" name="time_slots" class="form-control datetimepicker-input"
+                                       data-target="#time_slots" value="{{ $doctor->time_slots }}"/>
+                                <div class="input-group-append" data-target="#reservationdatetime"
+                                     data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                             </div>
@@ -166,7 +172,8 @@
                         <!-- text input -->
                         <div class="form-group">
                             <label>Description</label>
-                            <textarea class="form-control" rows="3" placeholder="Enter ..." name="description">{{ $doctor->description }}</textarea>
+                            <textarea class="form-control" rows="3" placeholder="Enter ..."
+                                      name="description">{{ $doctor->description }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -194,7 +201,7 @@
         $(function () {
             bsCustomFileInput.init();
             $('[data-mask]').inputmask();
-            $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
+            $('#reservationdatetime').datetimepicker({icons: {time: 'far fa-clock'}});
         });
         $('.select2bs4').select2({
             theme: 'bootstrap4'
