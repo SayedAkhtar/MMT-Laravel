@@ -20,14 +20,13 @@ class CreateDoctorAPIRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['nullable', 'exists:users,id'],
-            'start_of_service' => ['nullable'],
             'awards' => ['nullable'],
             'description' => ['nullable'],
             'designation_id' => ['nullable', 'exists:designations,id'],
             'qualification_id' => ['nullable', 'exists:qualifications,id'],
             'faq' => ['nullable'],
             'time_slots' => ['nullable'],
+            'start_of_service' => ['required'],
             'is_active' => ['boolean'],
         ];
     }

@@ -15,6 +15,7 @@ use App\Traits\IsViewModule;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class DoctorController extends AppBaseController
@@ -50,8 +51,6 @@ class DoctorController extends AppBaseController
      * Create Doctor with given payload.
      *
      * @param CreateDoctorAPIRequest $request
-     *
-     * @return DoctorResource
      * @throws ValidatorException
      *
      */
@@ -64,9 +63,20 @@ class DoctorController extends AppBaseController
         $request->validate($rules);
         $input = $request->all();
         $input['user_type'] = User::TYPE_DOCTOR;
-        $doctor = $this->doctorRepository->create($input);
-//        CreateDoctorAPIRequest
-        return new DoctorResource($doctor);
+        DB::beginTransaction();
+        try {
+            $user = User::create($input);
+            if ($user) {
+                $input['user_id'] = $user->id;
+                $doctor = $this->doctorRepository->create($input);
+                DB::commit();
+                return redirect(route('doctors.index'))->with('success', "Doctor created successfully");
+            }
+            throw new Exception("Not able to create doctor at this moment");
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     /**
