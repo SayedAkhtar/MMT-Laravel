@@ -9,6 +9,7 @@ use App\Http\Requests\Device\CreateDoctorAPIRequest;
 use App\Http\Requests\Device\UpdateDoctorAPIRequest;
 use App\Http\Resources\Device\DoctorCollection;
 use App\Http\Resources\Device\DoctorResource;
+use App\Models\User;
 use App\Repositories\DoctorRepository;
 use App\Traits\IsViewModule;
 use Exception;
@@ -62,7 +63,7 @@ class DoctorController extends AppBaseController
         $rules = (new CreateDoctorAPIRequest)->rules();
         $request->validate($rules);
         $input = $request->all();
-        $input['user_type'] = 5;
+        $input['user_type'] = User::TYPE_DOCTOR;
         $doctor = $this->doctorRepository->create($input);
 //        CreateDoctorAPIRequest
         return new DoctorResource($doctor);

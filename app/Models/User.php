@@ -86,13 +86,15 @@ class User extends Authenticatable implements HasMedia
 
     public const TYPE_USER = 1;
     public const TYPE_ADMIN = 2;
-
     public const TYPE_HCF = 3;
+
+    public const TYPE_DOCTOR = 4;
 
     public const USER_TYPE = [
         self::TYPE_USER => 'User',
         self::TYPE_ADMIN => 'Admin',
         self::TYPE_HCF => 'HCF',
+        self::TYPE_DOCTOR,
     ];
 
     public const PLATFORM = [
@@ -104,6 +106,7 @@ class User extends Authenticatable implements HasMedia
         'USER' => 1,
         'ADMIN' => 2,
         'HCF' => 3,
+        'DOCTOR' => 4
     ];
 
     public const MAX_LOGIN_RETRY_LIMIT = 3;
