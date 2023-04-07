@@ -92,14 +92,14 @@
                         <!-- text input -->
                         <div class="form-group">
                             <x-multi-select-search label="Designation" name="designation_id" table="designations"
-                                                   multiple="false"/>
+                                                   :multiple="false"/>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <x-multi-select-search label="Qualification" name="qualification_id"
                                                    table="qualifications"
-                                                   multiple="false"/>
+                                                   :multiple="false"/>
                         </div>
                     </div>
                 </div>
