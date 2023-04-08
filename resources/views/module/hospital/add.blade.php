@@ -19,13 +19,15 @@
                         <!-- text input -->
                         <div class="form-group">
                             <label>Name</label>
-                            <input type="text" class="form-control" placeholder="Enter name" name="name">
+                            <input type="text" class="form-control" placeholder="Enter name" name="name"
+                                   value="{{ old('name') }}">
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Address</label>
-                            <input type="input" class="form-control" placeholder="Enter full address" name="address">
+                            <input type="text" class="form-control" placeholder="Enter full address" name="address"
+                                   value="{{ old('address') }}">
                         </div>
                     </div>
                 </div>
@@ -34,7 +36,8 @@
                         <!-- text input -->
                         <div class="form-group">
                             <label>Description</label>
-                            <textarea class="form-control" name="description" id="" cols="30" rows="10"></textarea>
+                            <textarea class="form-control" name="description" id="" cols="30"
+                                      rows="10">{{ old('description') }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -48,7 +51,8 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <x-multi-select-search label="Accreditation" name="accreditations" table="accreditations"
-                                                   :multiple="true"/>
+                                                   :multiple="true" :shouldInsert="true"
+                            />
                         </div>
                     </div>
                 </div>

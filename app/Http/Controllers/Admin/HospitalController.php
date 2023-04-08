@@ -6,6 +6,7 @@ use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Device\CreateHospitalAPIRequest;
 use App\Http\Requests\Device\UpdateHospitalAPIRequest;
 use App\Http\Resources\Device\HospitalCollection;
+use App\Models\Accreditation;
 use App\Models\Hospital;
 use App\Models\User;
 use App\Repositories\AccreditationRepository;
@@ -74,6 +75,17 @@ class HospitalController extends AppBaseController
         $input = $request->all();
         try {
             $hospital = $this->hospitalRepository->create($input);
+            $insert_id = [];
+            if (!empty($input['accreditations'])) {
+                foreach ($input['accreditations'] as $data) {
+                    if (intval($data) != 0) {
+                        $insert_id[] = intval($data);
+                    } else {
+                        $model = Accreditation::create(['name' => $data]);
+                        $insert_id[] = $model->id;
+                    }
+                }
+            }
             if ($request->hasFile('logo')) {
                 $hospital->attachImage('logo', 'logo', false);
             }
@@ -83,8 +95,8 @@ class HospitalController extends AppBaseController
             if ($input['treatments']) {
                 $result = $hospital->treatments()->attach($input['treatments']);
             }
-            if ($input['accreditations']) {
-                $result = $hospital->treatments()->attach($input['accreditations']);
+            if ($insert_id) {
+                $result = $hospital->treatments()->attach($insert_id);
             }
         } catch (\Exception $e) {
             return back()->withInput()->with('error', $e->getMessage());

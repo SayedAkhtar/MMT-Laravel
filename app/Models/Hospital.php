@@ -3,12 +3,10 @@
 namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Hospital extends BaseModel implements HasMedia
+class Hospital extends BaseModel
 {
-    use HasRecordOwnerProperties, InteractsWithMedia;
+    use HasRecordOwnerProperties;
 
     /**
      * @var string

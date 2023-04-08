@@ -29,7 +29,7 @@ class ConfirmedQueryResource extends BaseAPIResource
             "name" => $this->coordinator->name,
             "phone" => $this->coordinator->phone,
             "email" => $this->coordinator->email,
-            "image" => $this->coordinator->image,
+            "image" => image_path($this->coordinator->image, true),
         ];
 
         return [

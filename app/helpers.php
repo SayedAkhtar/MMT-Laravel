@@ -56,12 +56,16 @@ function socialLogin($provider): JsonResponse
     return $controller->loginSuccess($data);
 }
 
-function image_path(string $path)
+function image_path(string $path, bool $absolute = false)
 {
     if (\Illuminate\Support\Facades\URL::isValidUrl($path)) {
         return $path;
     } else {
-        return \Illuminate\Support\Facades\Storage::url($path);
+        $imgPath = \Illuminate\Support\Facades\Storage::url($path);
+        if ($absolute) {
+            return \Illuminate\Support\Facades\URL::to($imgPath);
+        }
+        return $imgPath;
     }
 }
 

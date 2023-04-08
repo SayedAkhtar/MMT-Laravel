@@ -54,7 +54,8 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <x-multi-select-search label="Accreditation" name="accreditations" table="accreditations"
-                                                   :multiple="true" :selectedOptions="$hospital->accreditation"/>
+                                                   :multiple="true" :selectedOptions="$hospital->accreditation"
+                                                   :shouldInsert="true"/>
                         </div>
                     </div>
                 </div>

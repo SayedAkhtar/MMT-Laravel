@@ -3,14 +3,10 @@
 namespace App\Http\Controllers\API\Client;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\Client\DoctorCollection;
-use App\Http\Resources\Client\DoctorResource;
 use App\Http\Resources\Client\HomeResource\DoctorHomeResource;
 use App\Models\Doctor;
 use App\Models\Hospital;
 use App\Models\PatientTestimony;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 
@@ -35,14 +31,21 @@ class HomeController extends AppBaseController
             ->whereNotNull('images')
             ->select(['images', 'id'])
             ->orderByDesc('created_at')->limit(10)->get();
-        foreach ($stories as $story){
+        foreach ($stories as $story) {
             $data['stories'][] = ['id' => $story->id, 'thumbnail' => Arr::random($story->images)];
         }
-
-        $data['hospitals'] = $hospitals;
+        $processedHospitals = [];
+        foreach ($hospitals as $temp) {
+            $processedHospitals[] = [
+                'id' => $temp->id,
+                'name' => $temp->name,
+                'logo' => $temp->getMedia('logo')->first()?->getUrl('thumbnail'),
+                'address' => $temp->address,
+            ];
+        }
+        $data['hospitals'] = $processedHospitals;
         $data['doctors'] = $doctors;
         $data['banners'] = $livePath;
-//7ebe63ba26c04c6181a83ee9a68a7b5c
         return $this->successResponse($data);
     }
 }

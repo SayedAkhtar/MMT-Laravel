@@ -21,10 +21,8 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Spatie\Permission\Models\Role;
@@ -62,16 +60,14 @@ class AuthController extends AppBaseController
         /** @var User $user */
         $user = $this->userRepository->create($input);
         $data['username'] = $user->username;
-        $data['link'] = URL::to('email/verify/' . Crypt::encrypt($user->email));
 
         $userRole = Role::find($input['role']);
         $user->assignRole($userRole);
-        Mail::to($user->email)
-            ->send(new MailService('emails.verify_email',
-                'Verify Email Address',
-                $data));
+        $user->markEmailAsVerified();
+        $data = $user->toArray();
+        $data['token'] = $user->createToken('Client Login')->plainTextToken;
 
-        return $this->successResponse($user);
+        return $this->successResponse($data);
     }
 
     /**
@@ -269,7 +265,7 @@ class AuthController extends AppBaseController
      *
      * @return bool
      */
-    public function sendEmailForResetPasswordLink($user, string $code): bool
+    public function sendOTPForResetPasswordLink($user, string $code): bool
     {
         $expireTime = Carbon::now()->addMinutes(User::FORGOT_PASSWORD_WITH['expire_time'])->toISOString();
         $user->update([
@@ -281,10 +277,10 @@ class AuthController extends AppBaseController
         $data['code'] = $code;
         $data['expireTime'] = User::FORGOT_PASSWORD_WITH['expire_time'];
         $data['message'] = 'Please use below code to reset your password.';
-        Mail::to($user->email)
-            ->send(new MailService('emails.ResetPassword',
-                'Reset Password',
-                $data));
+//        Mail::to($user->email)
+//            ->send(new MailService('emails.ResetPassword',
+//                'Reset Password',
+//                $data));
 
         return true;
     }

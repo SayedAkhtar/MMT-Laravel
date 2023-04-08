@@ -1,7 +1,7 @@
 <div class="form-group">
     <label>{{ $label }} </label>
     <select class="form-control" id="{{ $name }}"
-            name="{{ $multiple? $name.'[]' : $name }}" {{ $multiple?"multiple":'' }}>
+            name="{{ $multiple? $name.'[]' : $name }}" {{ $multiple?"multiple":'' }} data-append="{{ $shouldInsert }}">
         @forelse($selectedOptions as $option)
             <option value="{{ $option->id }}" selected>{{$option->name}}</option>
         @empty
@@ -33,7 +33,8 @@
                                     };
                                 });
                             } else {
-                                if (params.term != undefined && params.term.length > 2) {
+                                const shouldInsert = '{{ $shouldInsert }}';
+                                if (params.term != undefined && params.term.length > 2 && shouldInsert) {
                                     results[0] = {
                                         id: params.term,
                                         text: params.term
