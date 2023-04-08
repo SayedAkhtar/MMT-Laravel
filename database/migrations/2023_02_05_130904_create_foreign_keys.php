@@ -66,7 +66,7 @@ class CreateForeignKeys extends Migration
         });
 
         Schema::table('doctor_patient_testimonials', function (Blueprint $table) {
-            $table->foreign('doctor_id')->references('id')->on('doctors')->cascadeOnDelete();
+            $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('set null')->onUpdate('set null');
             $table->foreign('testimonial_id')->references('id')->on('patient_testimonies')->cascadeOnDelete();
             $table->foreign('added_by')->references('id')->on('users')->onDelete('set null')->onUpdate('set null');
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null')->onUpdate('set null');

@@ -72,6 +72,29 @@
 <script src="{{ asset("plugins/chart.js/Chart.min.js") }}"></script>
 @routes
 @stack('scripts')
+<script>
+    $("button[data-action='delete']").click(function (event) {
+        let entity = $(this).data('entity');
+        let entityId = $(this).data('entity-id');
+        $.ajax(route(`${entity}.delete`, {doctor: entityId}), {
+            method: 'delete',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            success: function (res) {
+                if (res.STATUS == 'success') {
+                    window.location.href = window.location.href;
+                } else {
+                    alert(res.DATA);
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+        console.log();
+    })
+</script>
 @livewireScripts
 </body>
 </html>

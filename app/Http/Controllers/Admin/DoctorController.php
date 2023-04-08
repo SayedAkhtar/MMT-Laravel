@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\Device\BulkCreateDoctorAPIRequest;
-use App\Http\Requests\Device\BulkUpdateDoctorAPIRequest;
 use App\Http\Requests\Device\CreateDoctorAPIRequest;
 use App\Http\Requests\Device\UpdateDoctorAPIRequest;
 use App\Http\Resources\Device\DoctorCollection;
@@ -17,6 +15,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class DoctorController extends AppBaseController
@@ -70,13 +69,16 @@ class DoctorController extends AppBaseController
             if ($user) {
                 $input['user_id'] = $user->id;
                 $doctor = $this->doctorRepository->create($input);
+                if (!empty($input['hospital_id'])) {
+                    $result = $doctor->hospitals()->sync($input['hospital_id']);
+                }
                 DB::commit();
                 return redirect(route('doctors.index'))->with('success', "Doctor created successfully");
             }
             throw new Exception("Not able to create doctor at this moment");
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', $e->getMessage());
+            return back()->withInput()->with('error', $e->getMessage());
         }
     }
 
@@ -121,50 +123,18 @@ class DoctorController extends AppBaseController
      */
     public function delete(int $id): JsonResponse
     {
-        $this->doctorRepository->delete($id);
-
+        DB::beginTransaction();
+        try {
+            $doctor = Doctor::findOrFail($id);
+            $doctor->hospitals()->detach();
+            $doctor->user()->delete();
+            DB::commit();
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            DB::rollBack();
+            return $this->errorResponse("Something went wrong");
+        }
         return $this->successResponse('Doctor deleted successfully.');
     }
 
-    /**
-     * Bulk create Doctor's.
-     *
-     * @param BulkCreateDoctorAPIRequest $request
-     *
-     * @return DoctorCollection
-     * @throws ValidatorException
-     *
-     */
-    public function bulkStore(BulkCreateDoctorAPIRequest $request): DoctorCollection
-    {
-        $doctors = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $doctorInput) {
-            $doctors[$key] = $this->doctorRepository->create($doctorInput);
-        }
-
-        return new DoctorCollection($doctors);
-    }
-
-    /**
-     * Bulk update Doctor's data.
-     *
-     * @param BulkUpdateDoctorAPIRequest $request
-     *
-     * @return DoctorCollection
-     * @throws ValidatorException
-     *
-     */
-    public function bulkUpdate(BulkUpdateDoctorAPIRequest $request): DoctorCollection
-    {
-        $doctors = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $doctorInput) {
-            $doctors[$key] = $this->doctorRepository->update($doctorInput, $doctorInput['id']);
-        }
-
-        return new DoctorCollection($doctors);
-    }
 }
