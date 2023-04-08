@@ -64,3 +64,8 @@ function image_path(string $path)
         return \Illuminate\Support\Facades\Storage::url($path);
     }
 }
+
+function google_map_validate($iframe)
+{
+    return (preg_match('/<iframe\s*src="https:\/\/www\.google\.com\/maps\/embed\?[^"]+"*\s*[^>]+>*<\/iframe>/', $iframe)) ? true : false;
+}

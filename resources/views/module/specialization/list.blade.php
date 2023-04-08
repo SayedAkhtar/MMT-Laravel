@@ -41,9 +41,11 @@
                         <td><img src="{{ asset($data->logo) }}" alt="" class="accreditation-img"></td>
                         <td><span>{{ $data->is_active?'Active' : 'False'  }}</span></td>
                         <td class="text-right">
-                            <a href="{{ route('accreditation.show', ['accreditation' => $data->id]) }}"
+                            <a href="{{ route('specializations.show', ['specialization' => $data->id]) }}"
                                class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                            <a href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i></a>
+                            <button data-action="delete"
+                                    data-route="{{ route('specializations.destroy', ['specialization' => $data->id]) }}"
+                                    class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i></button>
                         </td>
                     </tr>
                 @empty

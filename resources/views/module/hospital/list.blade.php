@@ -22,7 +22,6 @@
                     <th>Address</th>
                     <th>Accreditation</th>
                     <th>Treatments</th>
-                    <th>Specializations</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -34,11 +33,13 @@
                         <td>{{ $data->address }}</td>
                         <td> {{ !empty($data->accreditation)? $data->accreditation->pluck('name')->join(',') : "No accreditation yet" }}</td>
                         <td> {{ !empty($data->treatments)? $data->treatments->pluck('name')->join(',') : "No treatments yet" }}</td>
-                        <td> {{ !empty($data->specialization)? $data->specialization->pluck('name')->join(','): "No Specializations yet" }}</td>
                         <td class="text-right">
-                            <a href="javascript:void(0)" class="btn btn-info btn-sm"
-                               onclick="edit({{ $data->id }})"><i class="fa fa-edit"></i></a>
-                            <a href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i></a>
+                            <a href="{{ route('hospitals.show', ['hospital'=> $data->id]) }}"
+                               class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                            <button class="btn btn-danger btn-sm" data-action="delete"
+                                    data-route="{{ route('hospitals.destroy', ['hospital' => $data->id]) }}"
+                                    data-entity="hospital"
+                                    data-entity-id="{{ $data->id }}"><i class="fa fa-trash-alt"></i></button>
                         </td>
                     </tr>
                 @empty
@@ -52,7 +53,6 @@
                     <th>Address</th>
                     <th>Accreditation</th>
                     <th>Treatments</th>
-                    <th>Specializations</th>
                     <th>Actions</th>
                 </tr>
                 </tfoot>

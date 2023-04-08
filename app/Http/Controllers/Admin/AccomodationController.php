@@ -107,7 +107,7 @@ class AccomodationController extends AppBaseController
      * @throws Exception
      *
      */
-    public function delete(int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $this->accomodationRepository->delete($id);
 

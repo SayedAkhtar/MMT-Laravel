@@ -23,9 +23,9 @@ class CreateHospitalAPIRequest extends FormRequest
             'name' => ['nullable', 'string'],
             'address' => ['nullable'],
             'description' => ['nullable'],
-            'geo_location' => ['nullable'],
-            'logo' => ['nullable', 'string'],
-            'images' => ['nullable'],
+            'geo_location' => ['sometimes', 'regex:/<iframe\s*src="https:\/\/www\.google\.com\/maps\/embed\?[^"]+"*\s*[^>]+>*<\/iframe>/u'],
+            'logo' => ['nullable', 'file'],
+            'images.*' => ['nullable', 'file'],
             'is_active' => ['boolean'],
         ];
     }

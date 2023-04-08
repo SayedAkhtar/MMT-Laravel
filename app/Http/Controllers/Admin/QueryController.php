@@ -9,6 +9,7 @@ use App\Http\Requests\Device\CreateQueryAPIRequest;
 use App\Http\Requests\Device\UpdateQueryAPIRequest;
 use App\Http\Resources\Device\QueryCollection;
 use App\Http\Resources\Device\QueryResource;
+use App\Models\Query;
 use App\Repositories\QueryRepository;
 use App\Traits\IsViewModule;
 use Exception;
@@ -47,7 +48,7 @@ class QueryController extends AppBaseController
      */
     public function index(Request $request): View
     {
-        $queries = $this->queryRepository->fetch($request);
+        $queries = Query::with('hospital', 'specialization', 'patient')->whereHas('patient')->get();;
         return $this->module_view('/list', compact('queries'));
     }
 

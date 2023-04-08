@@ -43,7 +43,9 @@
                         <td class="text-right">
                             <a href="{{ route('wellness-centers.show', ['wellness_center' => $data->id]) }}"
                                class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                            <a href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i></a>
+                            <button data-action="delete"
+                                    data-route="{{ route('wellness-centers.destroy', ['wellness_center' => $data->id]) }}"
+                                    class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i></button>
                         </td>
                     </tr>
                 @empty

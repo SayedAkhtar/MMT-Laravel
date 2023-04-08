@@ -36,7 +36,8 @@
                             <a href=" {{ route('doctors.show', ['doctor' => $doctor->id]) }}"
                                class="btn btn-info btn-sm"><i
                                     class="fa fa-edit"></i></a>
-                            <button class="btn btn-danger btn-sm" data-action="delete" data-entity="doctor"
+                            <button class="btn btn-danger btn-sm" data-action="delete"
+                                    data-route="{{ route('doctor.destroy', ['doctor' => $doctor->id]) }}"
                                     data-entity-id="{{ $doctor->id }}"><i class="fa fa-trash-alt"></i></button>
                         </td>
                     </tr>

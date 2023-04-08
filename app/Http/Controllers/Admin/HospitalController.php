@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\Device\BulkCreateHospitalAPIRequest;
-use App\Http\Requests\Device\BulkUpdateHospitalAPIRequest;
 use App\Http\Requests\Device\CreateHospitalAPIRequest;
 use App\Http\Requests\Device\UpdateHospitalAPIRequest;
 use App\Http\Resources\Device\HospitalCollection;
-use App\Http\Resources\Device\HospitalResource;
+use App\Models\Hospital;
 use App\Models\User;
 use App\Repositories\AccreditationRepository;
 use App\Repositories\HospitalRepository;
@@ -17,6 +15,7 @@ use App\Traits\IsViewModule;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Prettus\Validator\Exceptions\ValidatorException;
 
@@ -67,16 +66,30 @@ class HospitalController extends AppBaseController
      *
      * @param CreateHospitalAPIRequest $request
      *
-     * @return HospitalResource
      * @throws ValidatorException
      *
      */
-    public function store(CreateHospitalAPIRequest $request): HospitalResource
+    public function store(CreateHospitalAPIRequest $request)
     {
         $input = $request->all();
-        $hospital = $this->hospitalRepository->create($input);
-
-        return new HospitalResource($hospital);
+        try {
+            $hospital = $this->hospitalRepository->create($input);
+            if ($request->hasFile('logo')) {
+                $hospital->attachImage('logo', 'logo', false);
+            }
+            if ($input['doctors']) {
+                $result = $hospital->doctors()->attach($input['doctors']);
+            }
+            if ($input['treatments']) {
+                $result = $hospital->treatments()->attach($input['treatments']);
+            }
+            if ($input['accreditations']) {
+                $result = $hospital->treatments()->attach($input['accreditations']);
+            }
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', $e->getMessage());
+        }
+        return redirect(route('hospitals.index'))->with('success', "Hospital added successfully");
     }
 
     /**
@@ -84,13 +97,11 @@ class HospitalController extends AppBaseController
      *
      * @param int $id
      *
-     * @return HospitalResource
      */
-    public function show(int $id): HospitalResource
+    public function show(int $id)
     {
         $hospital = $this->hospitalRepository->findOrFail($id);
-
-        return new HospitalResource($hospital);
+        return $this->module_view('edit', compact('hospital'));
     }
 
     /**
@@ -99,16 +110,41 @@ class HospitalController extends AppBaseController
      * @param UpdateHospitalAPIRequest $request
      * @param int $id
      *
-     * @return HospitalResource
      * @throws ValidatorException
      *
      */
-    public function update(UpdateHospitalAPIRequest $request, int $id): HospitalResource
+    public function update(UpdateHospitalAPIRequest $request, int $id)
     {
         $input = $request->all();
-        $hospital = $this->hospitalRepository->update($input, $id);
-
-        return new HospitalResource($hospital);
+//        dd($input);
+        DB::beginTransaction();
+        try {
+            $hospital = Hospital::findOrFail($id);
+            if ($request->hasFile('logo')) {
+                $hospital->attachImage('logo', 'logo', false);
+            }
+            if (!empty($input['doctors'])) {
+                $result = $hospital->doctors()->sync($input['doctors']);
+            } else {
+                $hospital->doctors()->sync([]);
+            }
+            if (!empty($input['treatments'])) {
+                $result = $hospital->treatments()->sync($input['treatments']);
+            } else {
+                $result = $hospital->treatments()->sync([]);
+            }
+            if (!empty($input['accreditations'])) {
+                $result = $hospital->accreditation()->sync($input['accreditations']);
+            } else {
+                $result = $hospital->accreditation()->sync([]);
+            }
+            $hospital = $this->hospitalRepository->update($input, $id);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', $e->getMessage());
+        }
+        return back()->with('success', "Hospital updated successfully");
     }
 
     /**
@@ -120,52 +156,11 @@ class HospitalController extends AppBaseController
      * @throws Exception
      *
      */
-    public function delete(int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $this->hospitalRepository->delete($id);
 
         return $this->successResponse('Hospital deleted successfully.');
     }
 
-    /**
-     * Bulk create Hospital's.
-     *
-     * @param BulkCreateHospitalAPIRequest $request
-     *
-     * @return HospitalCollection
-     * @throws ValidatorException
-     *
-     */
-    public function bulkStore(BulkCreateHospitalAPIRequest $request): HospitalCollection
-    {
-        $hospitals = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $hospitalInput) {
-            $hospitals[$key] = $this->hospitalRepository->create($hospitalInput);
-        }
-
-        return new HospitalCollection($hospitals);
-    }
-
-    /**
-     * Bulk update Hospital's data.
-     *
-     * @param BulkUpdateHospitalAPIRequest $request
-     *
-     * @return HospitalCollection
-     * @throws ValidatorException
-     *
-     */
-    public function bulkUpdate(BulkUpdateHospitalAPIRequest $request): HospitalCollection
-    {
-        $hospitals = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $hospitalInput) {
-            $hospitals[$key] = $this->hospitalRepository->update($hospitalInput, $hospitalInput['id']);
-        }
-
-        return new HospitalCollection($hospitals);
-    }
 }

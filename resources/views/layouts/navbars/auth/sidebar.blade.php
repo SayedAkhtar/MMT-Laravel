@@ -219,19 +219,19 @@
                 <li class="nav-header">Queries</li>
                 <li class="nav-item">
                     <a href="{{ route('queries.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-calendar-alt"></i> Open Queries
+                        <i class="nav-icon fas fa-calendar-alt"></i> All Queries
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('profile.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-calendar-alt"></i> Active Queries
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('profile.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-calendar-alt"></i> Confirmed Queries
-                    </a>
-                </li>
+                {{--                <li class="nav-item">--}}
+                {{--                    <a href="{{ route('profile.index') }}" class="nav-link">--}}
+                {{--                        <i class="nav-icon fas fa-calendar-alt"></i> Active Queries--}}
+                {{--                    </a>--}}
+                {{--                </li>--}}
+                {{--                <li class="nav-item">--}}
+                {{--                    <a href="{{ route('profile.index') }}" class="nav-link">--}}
+                {{--                        <i class="nav-icon fas fa-calendar-alt"></i> Confirmed Queries--}}
+                {{--                    </a>--}}
+                {{--                </li>--}}
 
                 <li class="nav-header">Settings</li>
                 <li class="nav-item">

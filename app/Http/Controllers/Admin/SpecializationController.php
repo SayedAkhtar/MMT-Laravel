@@ -116,7 +116,7 @@ class SpecializationController extends AppBaseController
      * @throws Exception
      *
      */
-    public function delete(int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $this->specializationRepository->delete($id);
 

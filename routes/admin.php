@@ -31,9 +31,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('queries', [QueryController::class, 'store'])
         ->name('query.store')
         ->middleware(['permission:create_query']);
-    Route::post('queries/bulk-create', [QueryController::class, 'bulkStore'])
-        ->name('query.store.bulk')
-        ->middleware(['permission:create_query']);
     Route::get('queries', [QueryController::class, 'index'])
         ->name('queries.index')
         ->middleware(['permission:read_query']);
@@ -44,7 +41,7 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('query.update')
         ->middleware(['permission:update_query']);
     Route::delete('queries/{query}', [QueryController::class, 'delete'])
-        ->name('query.delete')
+        ->name('query.destroy')
         ->middleware(['permission:delete_query']);
 
     Route::get('confirmed-queries', [ConfirmedQueryController::class, 'index'])
@@ -56,14 +53,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('confirmed-queries/{confirmedQuery}', [ConfirmedQueryController::class, 'update'])
         ->name('confirmedQuery.update');
     Route::delete('confirmed-queries/{confirmedQuery}', [ConfirmedQueryController::class, 'delete'])
-        ->name('confirmedQuery.delete');
+        ->name('confirmedQuery.destroy');
 
     Route::post('active-queries', [ActiveQueryController::class, 'store'])
         ->name('activeQuery.store');
     Route::put('active-queries/{activeQuery}', [ActiveQueryController::class, 'update'])
         ->name('activeQuery.update');
     Route::delete('active-queries/{activeQuery}', [ActiveQueryController::class, 'delete'])
-        ->name('activeQuery.delete');
+        ->name('activeQuery.destroy');
 
 //    ------------ End Query Routes ----------------//
 
@@ -87,7 +84,7 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('patientTestimony.update.bulk')
         ->middleware(['permission:update_patienttestimony']);
     Route::delete('patient-testimonies/{patientTestimony}', [PatientTestimonyController::class, 'delete'])
-        ->name('patientTestimony.delete')
+        ->name('patientTestimony.destroy')
         ->middleware(['permission:delete_patienttestimony']);
 
     Route::resource('wellness-centers', WellnessCenterController::class);
@@ -130,15 +127,12 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('accreditation.update')
         ->middleware(['permission:update_accreditation']);
     Route::delete('accreditations/{accreditation}', [AccreditationController::class, 'delete'])
-        ->name('accreditation.delete')
+        ->name('accreditations.destroy')
         ->middleware(['permission:delete_accreditation']);
 
 
     Route::match(['GET', 'POST'], 'doctors/create', [DoctorController::class, 'store'])
         ->name('doctor.store')
-        ->middleware(['permission:create_doctor']);
-    Route::post('doctors/bulk-create', [DoctorController::class, 'bulkStore'])
-        ->name('doctor.store.bulk')
         ->middleware(['permission:create_doctor']);
     Route::get('doctors', [DoctorController::class, 'index'])
         ->name('doctors.index')
@@ -149,11 +143,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('doctors/{doctor}', [DoctorController::class, 'update'])
         ->name('doctor.update')
         ->middleware(['permission:update_doctor']);
-    Route::post('doctors/bulk-update', [DoctorController::class, 'bulkUpdate'])
-        ->name('doctor.update.bulk')
-        ->middleware(['permission:update_doctor']);
     Route::delete('doctors/{doctor}', [DoctorController::class, 'delete'])
-        ->name('doctor.delete')
+        ->name('doctor.destroy')
         ->middleware(['permission:delete_doctor']);
 });
 

@@ -3,11 +3,10 @@
 namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
-use Illuminate\Database\Eloquent\Model as Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Hospital extends Model implements HasMedia
+class Hospital extends BaseModel implements HasMedia
 {
     use HasRecordOwnerProperties, InteractsWithMedia;
 
@@ -65,27 +64,28 @@ class Hospital extends Model implements HasMedia
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function treatments()
     {
-        return $this->hasManyThrough(Treatment::class, HospitalTreatment::class, 'hospital_id', 'id', 'id');
+        return $this->belongsToMany(Treatment::class, 'hospital_treatments');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function accreditation()
     {
-        return $this->hasManyThrough(Accreditation::class, AccreditationHospital::class, 'hospital_id', 'id', 'id');
+        return $this->belongsToMany(Accreditation::class, 'accreditation_hospitals');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function doctors()
     {
-        return $this->hasManyThrough(Doctor::class, DoctorHospital::class, 'hospital_id', 'id');
+        return $this->belongsToMany(Doctor::class, 'doctor_hospitals')
+            ->with('user');
     }
 
     /**

@@ -8,24 +8,28 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Add a Hospital</h3>
+            <h3 class="card-title">Edit a Hospital</h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            <form action="{{ route('hospitals.store') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('hospitals.update', ['hospital' => $hospital->id]) }}" method="post"
+                  enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
                 <div class="row">
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
                             <label>Name</label>
-                            <input type="text" class="form-control" placeholder="Enter name" name="name">
+                            <input type="text" class="form-control" placeholder="Enter name" name="name"
+                                   value="{{ $hospital->name }}">
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Address</label>
-                            <input type="input" class="form-control" placeholder="Enter full address" name="address">
+                            <input type="input" class="form-control" placeholder="Enter full address" name="address"
+                                   value="{{ $hospital->address }}">
                         </div>
                     </div>
                 </div>
@@ -34,7 +38,8 @@
                         <!-- text input -->
                         <div class="form-group">
                             <label>Description</label>
-                            <textarea class="form-control" name="description" id="" cols="30" rows="10"></textarea>
+                            <textarea class="form-control" name="description" id="" cols="30"
+                                      rows="10">{{ $hospital->description }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -42,13 +47,14 @@
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
-                            <x-form-image-input label="Logo" name="logo" :multiple="false"/>
+                            <x-form-image-input label="Logo" name="logo" :multiple="false"
+                                                :defaultImages="$hospital->getMedia('logo')->first()?->getUrl()"/>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <x-multi-select-search label="Accreditation" name="accreditations" table="accreditations"
-                                                   :multiple="true"/>
+                                                   :multiple="true" :selectedOptions="$hospital->accreditation"/>
                         </div>
                     </div>
                 </div>
@@ -56,23 +62,28 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <x-multi-select-search label="Treatments" name="treatments" table="treatments"
-                                                   :multiple="true"/>
+                                                   :multiple="true" :selectedOptions="$hospital->treatments"/>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
+                            @php
+                                $doctors = [];
+                                foreach ($hospital->doctors as $d){
+                                    $doctors[] = $d->user;
+                                }
+                            @endphp
                             <x-multi-select-search label="Doctors" name="doctors" table="doctors"
-                                                   :multiple="true"/>
+                                                   :multiple="true" :selectedOptions="$doctors"/>
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Map Embed Link</label>
-                            <input type="text" class="form-control" placeholder="Google map embed Iframe link"
-                                   name="geo_location">
+                            <input type="text" class="form-control" placeholder="Google map embed links"
+                                   name="geo_location" value="{{ $hospital->geo_location }}">
                         </div>
                     </div>
                     <div class="col-sm-6">

@@ -51,9 +51,9 @@ class TagsController extends AppBaseController
      *
      * @param CreateTagsAPIRequest $request
      *
+     * @return TagsResource
      * @throws ValidatorException
      *
-     * @return TagsResource
      */
     public function store(CreateTagsAPIRequest $request): TagsResource
     {
@@ -81,11 +81,11 @@ class TagsController extends AppBaseController
      * Update Tags with given payload.
      *
      * @param UpdateTagsAPIRequest $request
-     * @param int                  $id
-     *
-     * @throws ValidatorException
+     * @param int $id
      *
      * @return TagsResource
+     * @throws ValidatorException
+     *
      */
     public function update(UpdateTagsAPIRequest $request, int $id): TagsResource
     {
@@ -100,11 +100,11 @@ class TagsController extends AppBaseController
      *
      * @param int $id
      *
+     * @return JsonResponse
      * @throws Exception
      *
-     * @return JsonResponse
      */
-    public function delete(int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $this->tagsRepository->delete($id);
 
@@ -116,9 +116,9 @@ class TagsController extends AppBaseController
      *
      * @param BulkCreateTagsAPIRequest $request
      *
+     * @return TagsCollection
      * @throws ValidatorException
      *
-     * @return TagsCollection
      */
     public function bulkStore(BulkCreateTagsAPIRequest $request): TagsCollection
     {
@@ -137,9 +137,9 @@ class TagsController extends AppBaseController
      *
      * @param BulkUpdateTagsAPIRequest $request
      *
+     * @return TagsCollection
      * @throws ValidatorException
      *
-     * @return TagsCollection
      */
     public function bulkUpdate(BulkUpdateTagsAPIRequest $request): TagsCollection
     {

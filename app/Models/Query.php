@@ -102,11 +102,12 @@ class Query extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOneThrough
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function patient()
     {
-        return $this->hasOneThrough(User::class, PatientDetails::class, 'user_id', 'id', 'patient_id');
+        return $this->hasOne(User::class, 'id', 'patient_id');
+//        return $this->hasOneThrough(User::class, PatientDetails::class, 'user_id', 'id', 'patient_id');
     }
 
     /**

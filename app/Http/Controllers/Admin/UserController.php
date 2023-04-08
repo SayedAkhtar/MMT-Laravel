@@ -12,6 +12,7 @@ use App\Repositories\UserRepository;
 use App\Traits\IsViewModule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Prettus\Validator\Exceptions\ValidatorException;
@@ -118,6 +119,24 @@ class UserController extends AppBaseController
     {
         $patients = PatientDetails::with('user', 'specialization')->get();
         return $this->module_view('patient-list', compact('patients'));
+    }
+
+    public function deletePatients(int $id): JsonResponse
+    {
+        DB::beginTransaction();
+        try {
+            $user = User::findOrFail($id);
+            $user->patientDetails()->delete();
+            $user->patientFamilyDetails()->delete();
+            $user->patientTestimony()->delete();
+            $user->patientQuery()->delete();
+            $user->delete();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse('Patient cannot be deleted.');
+        }
+        return $this->successResponse('Patient deleted successfully.');
     }
 
     public function listModerators()

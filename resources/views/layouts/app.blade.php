@@ -73,26 +73,36 @@
 @routes
 @stack('scripts')
 <script>
-    $("button[data-action='delete']").click(function (event) {
+    $("button[data-action='delete']").click(async function (event) {
         let entity = $(this).data('entity');
+        let route = $(this).data('route');
         let entityId = $(this).data('entity-id');
-        $.ajax(route(`${entity}.delete`, {doctor: entityId}), {
-            method: 'delete',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            success: function (res) {
-                if (res.STATUS == 'success') {
-                    window.location.href = window.location.href;
-                } else {
-                    alert(res.DATA);
-                }
-            },
-            error: function (error) {
-                console.log(error);
+        let params = {};
+        params[entity] = entityId;
+        if (confirm("Are you sure. You want to DELETE ?")) {
+            try {
+                $.ajax(route, {
+                    method: 'delete',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    success: function (res) {
+                        console.log(res.STATUS);
+                        console.log(res);
+                        if (res.STATUS == 'SUCCESS') {
+                            window.location.href = window.location.href;
+                        } else {
+                            alert(res.DATA);
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            } catch (e) {
+                alert(e);
             }
-        })
-        console.log();
+        }
     })
 </script>
 @livewireScripts
