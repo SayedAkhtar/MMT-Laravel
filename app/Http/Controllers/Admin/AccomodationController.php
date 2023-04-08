@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Device\CreateAccomodationAPIRequest;
 use App\Http\Requests\Device\UpdateAccomodationAPIRequest;
-use App\Http\Resources\Device\AccomodationResource;
 use App\Models\Accommodation;
+use App\Models\Facility;
 use App\Repositories\AccomodationRepository;
 use App\Traits\IsViewModule;
 use Exception;
@@ -52,13 +52,27 @@ class AccomodationController extends AppBaseController
 
     public function store(CreateAccomodationAPIRequest $request)
     {
-        $input = $request->except('images');
-        $accommodation = $this->accomodationRepository->create($input);
-        if ($request->hasFile('images')) {
-            $accommodation->attachImage('images', 'accommodation-images', true);
-        }
-        if ($request->has('facilities')) {
-            $accommodation->facilities()->sync($request->get('facilities'));
+        $input = $request->except('images', 'facilities');
+        try {
+            $accommodation = $this->accomodationRepository->create($input);
+            $insert_id = [];
+            if (!empty($input['facilities'])) {
+                foreach ($input['facilities'] as $data) {
+                    if (intval($data) != 0) {
+                        $insert_id[] = intval($data);
+                    } else {
+                        $model = Facility::create(['name' => $data]);
+                        $insert_id[] = $model->id;
+                    }
+                }
+                $accommodation->facilities()->attach($insert_id);
+            }
+            if ($request->hasFile('images')) {
+                $accommodation->attachImage('images', 'accommodation-images', true);
+            }
+
+        } catch (\Exception $e) {
+
         }
         return back()->with('success', "Accommodation added successfully");
     }
@@ -86,16 +100,34 @@ class AccomodationController extends AppBaseController
      * @param UpdateAccomodationAPIRequest $request
      * @param int $id
      *
-     * @return AccomodationResource
      * @throws ValidatorException
      *
      */
-    public function update(UpdateAccomodationAPIRequest $request, int $id): AccomodationResource
+    public function update(UpdateAccomodationAPIRequest $request, int $id)
     {
         $input = $request->all();
-        $accomodation = $this->accomodationRepository->update($input, $id);
+        try {
+            $insert_id = [];
+            if (!empty($input['facilities'])) {
+                foreach ($input['facilities'] as $data) {
+                    if (intval($data) != 0) {
+                        $insert_id[] = intval($data);
+                    } else {
+                        $model = Facility::create(['name' => $data]);
+                        $insert_id[] = $model->id;
+                    }
+                }
+            }
+            $accommodation = $this->accomodationRepository->update($input, $id);
+            $accommodation->facilities()->sync($insert_id);
+            if ($request->hasFile('images')) {
+                $accommodation->updateImage('images', 'accommodation-images', true);
+            }
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
 
-        return new AccomodationResource($accomodation);
+        return redirect(route('accommodations.index'))->with('success', "Update Successfully");
     }
 
     /**

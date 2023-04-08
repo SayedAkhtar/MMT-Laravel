@@ -47,8 +47,8 @@
                         <!-- text input -->
                         <div class="form-group">
                             <label>Geo Location</label>
-                            <input type="text" class="form-control" placeholder="Enter google map coordinate"
-                                   name="geo_location" readonly>
+                            <input type="text" class="form-control" placeholder="Enter google map iframe embed"
+                                   name="geo_location">
                         </div>
                     </div>
                 </div>

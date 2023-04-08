@@ -22,9 +22,9 @@ class UpdateAccomodationAPIRequest extends FormRequest
         return [
             'name' => ['nullable', 'string'],
             'address' => ['nullable', 'string'],
-            'images' => ['nullable', 'string'],
-            'type' => ['nullable', 'exists:accomodation_types,id'],
-            'geo_location' => ['nullable', 'string'],
+            'images.*' => ['nullable', 'file'],
+            'type' => ['nullable', 'exists:accommodation_types,id'],
+            'geo_location' => ['nullable', 'regex:/<iframe\s*src="https:\/\/www\.google\.com\/maps\/embed\?[^"]+"*\s*[^>]+>*<\/iframe>/u'],
             'is_active' => ['boolean'],
         ];
     }

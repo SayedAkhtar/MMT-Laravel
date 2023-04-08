@@ -12,7 +12,8 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            <form action="{{ route('accommodations.update', ['accommodation' => $wellnessCenter->id]) }}" method="post"
+            <form action="{{ route('wellness-centers.update', ['wellness_center' => $wellnessCenter->id]) }}"
+                  method="post"
                   enctype="multipart/form-data">
                 @csrf
                 @method('put')
@@ -68,7 +69,7 @@
                         <div class="form-group">
                             <label>Geo Location</label>
                             <input type="text" class="form-control" placeholder="Enter google map coordinate"
-                                   name="geo_location" readonly>
+                                   name="geo_location">
                         </div>
                     </div>
                 </div>

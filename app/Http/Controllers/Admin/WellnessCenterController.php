@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\Device\BulkCreateWellnessCenterAPIRequest;
-use App\Http\Requests\Device\BulkUpdateWellnessCenterAPIRequest;
 use App\Http\Requests\Device\CreateWellnessCenterAPIRequest;
 use App\Http\Requests\Device\UpdateWellnessCenterAPIRequest;
-use App\Http\Resources\Device\WellnessCenterCollection;
-use App\Http\Resources\Device\WellnessCenterResource;
+use App\Models\DetoxificationCategory;
 use App\Repositories\WellnessCenterRepository;
 use App\Traits\IsViewModule;
 use Exception;
@@ -60,15 +57,26 @@ class WellnessCenterController extends AppBaseController
      *
      * @param CreateWellnessCenterAPIRequest $request
      *
-     * @return WellnessCenterResource
      * @throws ValidatorException
      *
      */
     public function store(CreateWellnessCenterAPIRequest $request)
     {
-        $input = $request->except('logo');
+        $input = $request->except('logo', 'detoxification');
         DB::transaction(function () use ($input, $request) {
             $wellnessCenter = $this->wellnessCenterRepository->create($input);
+            $detoxification_id = [];
+            if (isset($input['detoxification'])) {
+                foreach ($input['detoxification'] as $detox) {
+                    if (intval($detox) != 0) {
+                        $detoxification_id[] = intval($detox);
+                    } else {
+                        $detoxification = DetoxificationCategory::create(['name' => $detox]);
+                        $detoxification_id[] = $detoxification->id;
+                    }
+                }
+                $wellnessCenter->detoxification()->attach($detoxification_id);
+            }
             if ($request->hasFile('logo')) {
                 $wellnessCenter->attachImage('logo', 'wellness-center-logo', false);
             }
@@ -85,7 +93,6 @@ class WellnessCenterController extends AppBaseController
      *
      * @param int $id
      *
-     * @return WellnessCenterResource
      */
     public function show(int $id)
     {
@@ -104,17 +111,39 @@ class WellnessCenterController extends AppBaseController
      *
      * @param UpdateWellnessCenterAPIRequest $request
      * @param int $id
-     *
-     * @return WellnessCenterResource
      * @throws ValidatorException
      *
      */
-    public function update(UpdateWellnessCenterAPIRequest $request, int $id): WellnessCenterResource
+    public function update(UpdateWellnessCenterAPIRequest $request, int $id)
     {
         $input = $request->all();
-        $wellnessCenter = $this->wellnessCenterRepository->update($input, $id);
+        try {
+            DB::transaction(function () use ($input, $request, $id) {
+                $detoxification_id = [];
+                if (!empty($input['detoxification'])) {
+                    foreach ($input['detoxification'] as $detox) {
+                        if (intval($detox) != 0) {
+                            $detoxification_id[] = intval($detox);
+                        } else {
+                            $detoxification = DetoxificationCategory::create(['name' => $detox]);
+                            $detoxification_id[] = $detoxification->id;
+                        }
+                    }
+                }
+                $wellnessCenter = $this->wellnessCenterRepository->update($input, $id);
+                $wellnessCenter->detoxification()->sync($detoxification_id);
+                if ($request->hasFile('logo')) {
+                    $wellnessCenter->updateImage('logo', 'wellness-center-logo', false);
+                }
+                if ($request->hasFile('images')) {
+                    $wellnessCenter->updateImage('images', 'wellness-center-images', true);
+                }
+            });
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
 
-        return new WellnessCenterResource($wellnessCenter);
+        return back()->with('success', "Wellness Center added successfully");
     }
 
     /**
@@ -133,45 +162,4 @@ class WellnessCenterController extends AppBaseController
         return $this->successResponse('WellnessCenter deleted successfully.');
     }
 
-    /**
-     * Bulk create WellnessCenter's.
-     *
-     * @param BulkCreateWellnessCenterAPIRequest $request
-     *
-     * @return WellnessCenterCollection
-     * @throws ValidatorException
-     *
-     */
-    public function bulkStore(BulkCreateWellnessCenterAPIRequest $request): WellnessCenterCollection
-    {
-        $wellnessCenters = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $wellnessCenterInput) {
-            $wellnessCenters[$key] = $this->wellnessCenterRepository->create($wellnessCenterInput);
-        }
-
-        return new WellnessCenterCollection($wellnessCenters);
-    }
-
-    /**
-     * Bulk update WellnessCenter's data.
-     *
-     * @param BulkUpdateWellnessCenterAPIRequest $request
-     *
-     * @return WellnessCenterCollection
-     * @throws ValidatorException
-     *
-     */
-    public function bulkUpdate(BulkUpdateWellnessCenterAPIRequest $request): WellnessCenterCollection
-    {
-        $wellnessCenters = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $wellnessCenterInput) {
-            $wellnessCenters[$key] = $this->wellnessCenterRepository->update($wellnessCenterInput, $wellnessCenterInput['id']);
-        }
-
-        return new WellnessCenterCollection($wellnessCenters);
-    }
 }

@@ -17,7 +17,7 @@ class CreateWellnessCenterAPIRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'is_active' => $this->request->has('is_active'),
+            'is_active' => (bool)$this->request->has('is_active'),
         ]);
     }
 
@@ -33,7 +33,7 @@ class CreateWellnessCenterAPIRequest extends FormRequest
             'description' => ['nullable'],
             'logo' => ['nullable', 'file'],
             'images.*' => ['nullable', 'file'],
-            'geo_location' => ['nullable'],
+            'geo_location' => ['nullable', 'regex:/<iframe\s*src="https:\/\/www\.google\.com\/maps\/embed\?[^"]+"*\s*[^>]+>*<\/iframe>/u'],
             'is_active' => ['boolean'],
         ];
     }

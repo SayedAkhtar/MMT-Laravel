@@ -17,6 +17,7 @@
                     ajax: {
                         url: route('ajaxSearch', {'table': '{{ $table }}'}),
                         dataType: 'json',
+                        delay: 500,
                         data: (params) => {
                             return {
                                 term: params.term,
@@ -32,7 +33,12 @@
                                     };
                                 });
                             } else {
-                                console.error(data);
+                                if (params.term != undefined && params.term.length > 2) {
+                                    results[0] = {
+                                        id: params.term,
+                                        text: params.term
+                                    }
+                                }
                             }
                             return {
                                 results: results,
@@ -41,6 +47,7 @@
                     },
                 });
             });
+
         </script>
     @endpush
 </div>
