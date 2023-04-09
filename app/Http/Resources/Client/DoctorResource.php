@@ -36,7 +36,7 @@ class DoctorResource extends BaseAPIResource
             'qualification' => $this->qualification->name,
             'faq' => $this->faq,
             'time_slots' => $this->time_slots,
-            'specialization' => $this->doctorSpecializations->pluck('name')->join(', '),
+            'specialization' => $this->specializations->pluck('name')->join(', '),
             'hospitals' => $hospital
         ];
     }

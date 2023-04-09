@@ -7,8 +7,8 @@ use App\Models\Specialization;
 class SpecializationRepository extends BaseRepository
 {
     /**
-    * @var  string[]
-    */
+     * @var  string[]
+     */
     protected $fieldSearchable = [
         'id',
         'name',
@@ -21,16 +21,16 @@ class SpecializationRepository extends BaseRepository
     ];
 
     /**
-    * @return  string[]
-    */
+     * @return  string[]
+     */
     public function getFieldsSearchable(): array
     {
         return $this->fieldSearchable;
     }
 
     /**
-    * @return  string
-    */
+     * @return  string
+     */
     public function model(): string
     {
         return Specialization::class;
@@ -42,6 +42,6 @@ class SpecializationRepository extends BaseRepository
      */
     public function getAvailableRelations(): array
     {
-       return ['addedByUser','updatedByUser','pastQueries','doctorSpecializations','specializationTreatments','query','patientDetails'];
+        return ['addedByUser', 'updatedByUser', 'pastQueries', 'specializations', 'specializationTreatments', 'query', 'patientDetails'];
     }
 }

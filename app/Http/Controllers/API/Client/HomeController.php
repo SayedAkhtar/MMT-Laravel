@@ -25,7 +25,7 @@ class HomeController extends AppBaseController
             $livePath[] = asset('/img/banners/' . $img->getBasename());
         }
         $hospitals = Hospital::query()->orderByDesc('created_at')->limit(10)->get();
-        $doctors = Doctor::with(['user', 'doctorSpecializations'])->orderByDesc('created_at')->limit(10)->get();
+        $doctors = Doctor::with(['user', 'specializations'])->orderByDesc('created_at')->limit(10)->get();
         $doctors = DoctorHomeResource::collection($doctors)->resolve();
         $stories = PatientTestimony::query()
             ->whereNotNull('images')

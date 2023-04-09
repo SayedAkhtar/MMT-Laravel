@@ -113,7 +113,7 @@
                     <div class="form-group">
                         <label for="inputEstimatedBudget">Specialization</label>
                         <input type="text" class="form-control"
-                               value="{{ $query->doctor->doctor->doctorSpecializations->pluck('name')->join(',') }}"
+                               value="{{ $query->doctor->doctor->specializations->pluck('name')->join(',') }}"
                                readonly>
                     </div>
                     <div class="form-group">

@@ -43,11 +43,21 @@ class DoctorController extends AppBaseController
     public function index(Request $request): DoctorCollection
     {
         if ($request->has('hospital_id')) {
-            $doctors = Doctor::whereHas('hospitals')->get();
+            $doctors = Doctor::with('hospitals', function ($q) use ($request) {
+                $q->where('hospitals.id', $request->input('hospital_id'));
+            })->get();
+        } else if ($request->has('specialization_id')) {
+            $doctors = Doctor::whereHas('specializations', function ($q) use ($request) {
+                return $q->where('specializations.id', $request->input('specialization_id'));
+            })->get();
         } else {
             $doctors = $this->doctorRepository->fetch($request);
         }
-        return new DoctorCollection($doctors);
+        if (!empty($doctors)) {
+            return new DoctorCollection($doctors);
+        } else {
+            return [];
+        }
     }
 
     /**
