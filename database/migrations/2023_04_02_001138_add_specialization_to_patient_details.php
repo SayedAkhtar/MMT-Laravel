@@ -28,7 +28,7 @@ class AddSpecializationToPatientDetails extends Migration
     {
         Schema::table('patient_family_details', function (Blueprint $table) {
             $table->dropForeign('patient_family_details_speciality_foreign');
-            $table->dropIfExists('speciality');
+            $table->dropColumn(['speciality']);
         });
     }
 }

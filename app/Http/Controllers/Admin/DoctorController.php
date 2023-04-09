@@ -6,7 +6,6 @@ use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Device\CreateDoctorAPIRequest;
 use App\Http\Requests\Device\UpdateDoctorAPIRequest;
 use App\Http\Resources\Device\DoctorCollection;
-use App\Http\Resources\Device\DoctorResource;
 use App\Models\Doctor;
 use App\Models\User;
 use App\Repositories\DoctorRepository;
@@ -100,16 +99,27 @@ class DoctorController extends AppBaseController
      * @param UpdateDoctorAPIRequest $request
      * @param int $id
      *
-     * @return DoctorResource
      * @throws ValidatorException
      *
      */
-    public function update(UpdateDoctorAPIRequest $request, int $id): DoctorResource
+    public function update(UpdateDoctorAPIRequest $request, int $id)
     {
         $input = $request->all();
-        $doctor = $this->doctorRepository->update($input, $id);
-
-        return new DoctorResource($doctor);
+        DB::beginTransaction();
+        try {
+            $doctor = $this->doctorRepository->update($input, $id);
+            if (!empty($input['hospital_id'])) {
+                $result = $doctor->hospitals()->sync($input['hospital_id']);
+            }
+            if (!empty($input['specialization_id'])) {
+                $result = $doctor->specializations()->sync($input['specialization_id']);
+            }
+            DB::commit();
+            return back()->with('success', "Doctor updated successfully");
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withInput()->with('error', $e->getMessage());
+        }
     }
 
     /**

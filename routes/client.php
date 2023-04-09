@@ -13,6 +13,7 @@ Route::group(['middleware' => ['auth:sanctum', 'validate.user']], function () {
     Route::get('home', [\App\Http\Controllers\API\Client\HomeController::class, 'modules']);
 
     Route::apiResource('queries', QueryController::class);
+    Route::post('query-upload-visa', [QueryController::class, 'uploadVisa']);
     Route::get('confirmed-query', [QueryController::class, 'confirmedQueryDetail']);
     Route::apiResource('specializations', HospitalController::class)->only(['index', 'show']);
     Route::apiResource('hospitals', HospitalController::class)->only(['index', 'show']);
@@ -58,5 +59,8 @@ Route::post('forgot-password', [AuthController::class, 'forgotPassword'])
     ->name('forgot.password');
 Route::post('validate-otp', [AuthController::class, 'validateResetPasswordOtp'])
     ->name('reset.password.validate.otp');
+Route::post('resend-otp', [AuthController::class, 'resendOtp'])
+    ->name('resend.otp');
+Route::post('check-otp', [AuthController::class, 'validateOtp']);
 Route::put('reset-password', [AuthController::class, 'resetPassword'])
     ->name('reset.password');

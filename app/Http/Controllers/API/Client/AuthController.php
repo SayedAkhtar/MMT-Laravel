@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Nette\Schema\ValidationException;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Spatie\Permission\Models\Role;
 
@@ -64,6 +65,7 @@ class AuthController extends AppBaseController
         $userRole = Role::find($input['role']);
         $user->assignRole($userRole);
         $user->markEmailAsVerified();
+        $user->otp = rand(4, 4);
         $data = $user->toArray();
         $data['token'] = $user->createToken('Client Login')->plainTextToken;
 
@@ -354,5 +356,32 @@ class AuthController extends AppBaseController
         $user->getRoleNames();
         $data = $user->toArray();
         return $this->loginSuccess($data);
+    }
+
+    public function resendOtp()
+    {
+        $user = User::find(Auth::id());
+        $phone = $user->phone;
+    }
+
+    public function validateOtp(Request $request)
+    {
+        $request->validate([
+            'otp' => 'required|numeric|min:4',
+            'phone' => 'required| exists:users,phone'
+        ]);
+        try {
+            $user = User::where('phone', $request->phone)->first();
+            if ($user->otp == $request->input('otp')) {
+                return $this->successResponse('Otp Verified');
+            }
+        } catch (ValidationException $e) {
+            return $this->errorResponse($e->getMessage());
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error($e->getMessage());
+            return $this->errorResponse("Internal server error " . $e->getMessage());
+        }
+        return $this->errorResponse("User Not found", 404);
+
     }
 }

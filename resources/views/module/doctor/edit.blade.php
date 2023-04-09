@@ -8,11 +8,13 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Edit </h3>
+            <h3 class="card-title">Edit Dr. {{ $doctor->user->name }}</h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            <form action="{{ route('doctor.store') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('doctor.update', ['doctor' => $doctor->id]) }}" method="post"
+                  enctype="multipart/form-data">
+                @method('put')
                 @csrf
                 <div class="row">
                     <div class="col-sm-6">
@@ -132,7 +134,15 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <x-multi-select-search label="Hospitals" name="hospital_id" table="hospitals"
-                                                   multiple="true" :selectedOptions="$doctor->hospitals"/>
+                                                   :multiple="true" :selectedOptions="$doctor->hospitals"/>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <x-multi-select-search label="Specializations" name="specialization_id"
+                                                   table="specializations"
+                                                   :multiple="true" :selectedOptions="$doctor->specializations"/>
                         </div>
                     </div>
 

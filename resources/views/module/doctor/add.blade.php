@@ -131,6 +131,13 @@
                                                    multiple="true"/>
                         </div>
                     </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <x-multi-select-search label="Specializations" name="specialization_id"
+                                                   table="specializations"
+                                                   multiple="true"/>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12">

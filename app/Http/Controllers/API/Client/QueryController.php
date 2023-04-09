@@ -10,6 +10,7 @@ use App\Http\Resources\Client\ConfirmedQueryResource;
 use App\Http\Resources\Client\QueryCollection;
 use App\Http\Resources\Client\QueryResource;
 use App\Models\ConfirmedQuery;
+use App\Models\Query;
 use App\Repositories\QueryRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -112,5 +113,24 @@ class QueryController extends AppBaseController
         ])->orderByDesc('updated_at')->first();
 
         return $this->successResponse(ConfirmedQueryResource::make($confirmedQuery));
+    }
+
+    public function uploadVisa(Request $request)
+    {
+        $request->validate([
+            'files' => ['required'],
+            'files.*' => ['mimes:png,jpeg,jpg,pdf', 'max:10240'],
+            'model_id' => ['required'],
+            'name' => ['required']
+        ]);
+        try {
+            $query = Query::findOrFail($request->input('model_id'));
+            $query->updateImage('files', $request->input('name'), false);
+            return $this->successResponse("File uploaded");
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error($e->getMessage());
+            return $this->errorResponse("File not uploaded", 500);
+        }
+
     }
 }

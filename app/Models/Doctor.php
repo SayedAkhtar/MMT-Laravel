@@ -67,11 +67,11 @@ class Doctor extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function doctorSpecializations()
+    public function specializations()
     {
-        return $this->hasManyThrough(Specialization::class, DoctorSpecialization::class, 'doctor_id', 'id', 'id');
+        return $this->belongsToMany(Specialization::class, 'doctor_specializations');
     }
 
     /**
