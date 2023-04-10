@@ -13,6 +13,7 @@ Route::group(['middleware' => ['auth:sanctum', 'validate.user']], function () {
     Route::get('home', [\App\Http\Controllers\API\Client\HomeController::class, 'modules']);
 
     Route::apiResource('queries', QueryController::class);
+    Route::post('upload-patient-response', [QueryController::class, 'updatePatientResponse']);
     Route::post('query-upload-visa', [QueryController::class, 'uploadVisa']);
     Route::get('confirmed-query', [QueryController::class, 'confirmedQueryDetail']);
     Route::apiResource('specializations', HospitalController::class)->only(['index', 'show']);

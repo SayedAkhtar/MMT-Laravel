@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Client;
 
+use App\Constants\QueryStatus;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Client\CreateQueryAPIRequest;
 use App\Http\Requests\Client\UpdateQueryAPIRequest;
@@ -45,7 +46,7 @@ class QueryController extends AppBaseController
      */
     public function index(Request $request): JsonResponse
     {
-        $queries = $this->queryRepository->fetch($request);
+        $queries = Query::with('specialization', 'activeQuery')->orderByDesc('id')->get();
         $activeQueries = ActiveQueryResource::collection($queries)->resolve();
         $activeQueries = array_values(array_filter($activeQueries, function ($el) {
             if (count($el) > 0) return $el;
@@ -67,7 +68,21 @@ class QueryController extends AppBaseController
     public function store(CreateQueryAPIRequest $request): QueryResource
     {
         $input = $request->all();
-        $query = $this->queryRepository->create($input);
+        try {
+            unset($input['medical_visa']);
+            unset($input['passport_image']);
+            if ($request->hasFile('medical_visa')) {
+                $input['medical_visa'] = $request->file('medical_visa')->store('public');
+            }
+            if ($request->hasFile('passport_image')) {
+                $input['passport_image'] = $request->file('passport_image')->store('public');
+            }
+            $input['status'] = QueryStatus::QUERY_OPEN;
+            $input['patient_id'] = Auth::id();
+            $query = $this->queryRepository->create($input);
+        } catch (\Exception $e) {
+
+        }
 
         return new QueryResource($query);
     }
@@ -134,6 +149,20 @@ class QueryController extends AppBaseController
             return $this->errorResponse("File not uploaded", 500);
         }
 
+    }
+
+    public function updatePatientResponse(Request $request)
+    {
+        $request->validate([
+            'query_id' => 'required| exists:queries,id'
+        ]);
+        if ($request->has('document')) {
+            $path = $request->file('document')->store('public');
+            $activeQuery = ActiveQuery::where('query_id', $request->input('query_id'))->first();
+            $activeQuery->patient_response = $path;
+            $activeQuery->save();
+            return $this->successResponse("Upload successful");
+        }
     }
 
     public function transactionSuccess(Request $request)

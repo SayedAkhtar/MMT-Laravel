@@ -24,7 +24,7 @@ class Query extends BaseModel
         'hospital_id',
         'doctor_id',
         'medical_history',
-        'preffered_country',
+        'preferred_country',
         'medical_report',
         'passport',
         'passport_image',
@@ -138,6 +138,6 @@ class Query extends BaseModel
      */
     public function doctor()
     {
-        return $this->hasOne(User::class, 'id', 'doctor_id');
+        return $this->hasOne(Doctor::class, 'id', 'doctor_id');
     }
 }

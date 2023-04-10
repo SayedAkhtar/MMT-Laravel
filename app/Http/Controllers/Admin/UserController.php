@@ -167,7 +167,7 @@ class UserController extends AppBaseController
             'gender' => 'required'
         ]);
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store();
+            $validated['image'] = $request->file('image')->store('public');
         }
         try {
             $user = User::create(array_merge($validated, ['user_type' => User::TYPE_HCF]));

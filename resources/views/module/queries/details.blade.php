@@ -62,22 +62,34 @@
                     <thead>
                     <tr>
                         <th>File Name</th>
-                        <th>File Size</th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
-
-                    <tr>
-                        <td>Functional-requirements.docx</td>
-                        <td>49.8005 kb</td>
-                        <td class="text-right py-0 align-middle">
-                            <div class="btn-group btn-group-sm">
-                                <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                                <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                            </div>
-                        </td>
-                    </tr>
+                    @if(!empty($query->medical_visa))
+                        <tr>
+                            <td>Medical Visa</td>
+                            <td class="text-right py-0 align-middle">
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{{ Storage::url($query->medical_visa) }}" target="_blank"
+                                       class="btn btn-info"><i
+                                            class="fas fa-eye"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    @endif
+                    @if(!empty($query->passport_image))
+                        <tr>
+                            <td>Passport Image</td>
+                            <td class="text-right py-0 align-middle">
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{{ Storage::url($query->passport_image) }}" target="_blank"
+                                       class="btn btn-info"><i
+                                            class="fas fa-eye"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    @endif
                     </tbody>
                 </table>
             </div>
@@ -98,28 +110,28 @@
                 @if(!empty($query->doctor_id))
                     <div class="form-group">
                         <label for="inputEstimatedBudget">Name</label>
-                        <input type="text" class="form-control" value="{{ $query->doctor->name }}" readonly>
+                        <input type="text" class="form-control" value="{{ $query->doctor->user->name }}" readonly>
                     </div>
                     <div class="form-group">
                         <label for="inputEstimatedBudget">Designation</label>
-                        <input type="text" class="form-control" value="{{ $query->doctor->doctor->designation->name }}"
+                        <input type="text" class="form-control" value="{{ $query->doctor->designation->name }}"
                                readonly>
                     </div>
                     <div class="form-group">
                         <label for="inputEstimatedBudget">Qualification</label>
                         <input type="text" class="form-control"
-                               value="{{ $query->doctor->doctor->qualification->name }}" readonly>
+                               value="{{ $query->doctor->qualification->name }}" readonly>
                     </div>
                     <div class="form-group">
                         <label for="inputEstimatedBudget">Specialization</label>
                         <input type="text" class="form-control"
-                               value="{{ $query->doctor->doctor->specializations->pluck('name')->join(',') }}"
+                               value="{{ $query->doctor->specializations->pluck('name')->join(',') }}"
                                readonly>
                     </div>
                     <div class="form-group">
                         <label for="inputEstimatedBudget">Treatment</label>
                         <input type="text" class="form-control"
-                               value="{{ $query->doctor->doctor->doctorTreatments->pluck('name')->join(',') }}"
+                               value="{{ $query->doctor->doctorTreatments->pluck('name')->join(',') }}"
                                readonly>
                     </div>
                 @else
