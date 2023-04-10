@@ -164,7 +164,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <!-- text input -->
-                        <livewire:time-slots-component/>
+                        @livewire('time-slots-component', ['slots' => $doctor->time_slots])
                     </div>
                 </div>
                 <div class="row">
@@ -201,10 +201,9 @@
         $(function () {
             bsCustomFileInput.init();
             $('[data-mask]').inputmask();
-            $('#reservationdatetime').datetimepicker({icons: {time: 'far fa-clock'}});
         });
         $('.select2bs4').select2({
             theme: 'bootstrap4'
-        })
+        });
     </script>
 @endpush

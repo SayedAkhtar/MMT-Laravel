@@ -8,6 +8,15 @@ class TimeSlotsComponent extends Component
 {
     public $slots = [];
 
+    public function mount($slots = [])
+    {
+//        $temp = json_decode($slots);
+//        foreach ($temp as $day => $time) {
+//            $this->slots[$day] = $time;
+//        }
+        $this->slots = $slots;
+    }
+
     public function addSlot(string $day, $slot)
     {
         $this->slots[$day][] = $slot;

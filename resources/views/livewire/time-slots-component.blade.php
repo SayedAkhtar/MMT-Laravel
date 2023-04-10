@@ -1,6 +1,11 @@
 <div>
     <label>Time Slots:</label>
     <input type="hidden" name="time_slots" value="{{ json_encode($slots) }}">
+    @php
+        if(gettype($slots) == "string"){
+            $slots = json_decode($slots);
+        }
+    @endphp
     @foreach($slots as $day => $slot)
         <div class="row mb-3">
             @foreach($slot as $index => $time)
