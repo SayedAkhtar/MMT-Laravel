@@ -7,14 +7,17 @@ use Livewire\Component;
 class TimeSlotsComponent extends Component
 {
     public $slots = [];
-    public function addSlot($slot)
+
+    public function addSlot(string $day, $slot)
     {
-        $this->slots []= $slot;
+        $this->slots[$day][] = $slot;
     }
-    public function deleteSlot($index)
+
+    public function deleteSlot($day, $index)
     {
-        unset($this->slots[$index]);
+        unset($this->slots[$day][$index]);
     }
+
     public function render()
     {
         return view('livewire.time-slots-component');

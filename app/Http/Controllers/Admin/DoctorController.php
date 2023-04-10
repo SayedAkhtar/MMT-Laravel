@@ -71,6 +71,9 @@ class DoctorController extends AppBaseController
                 if (!empty($input['hospital_id'])) {
                     $result = $doctor->hospitals()->sync($input['hospital_id']);
                 }
+                if (!empty($input['specialization_id'])) {
+                    $result = $doctor->specializations()->sync($input['hospital_id']);
+                }
                 DB::commit();
                 return redirect(route('doctors.index'))->with('success', "Doctor created successfully");
             }

@@ -164,17 +164,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <!-- text input -->
-                        <div class="form-group">
-                            <label>Time Slots:</label>
-                            <div class="input-group date" id="time_slots" data-target-input="nearest">
-                                <input type="text" name="time_slots" class="form-control datetimepicker-input"
-                                       data-target="#time_slots" value="{{ $doctor->time_slots }}"/>
-                                <div class="input-group-append" data-target="#reservationdatetime"
-                                     data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
-                            </div>
-                        </div>
+                        <livewire:time-slots-component/>
                     </div>
                 </div>
                 <div class="row">

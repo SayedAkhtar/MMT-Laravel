@@ -155,7 +155,6 @@ class QueryController extends AppBaseController
             $query = ActiveQuery::where('query_id', $request->input('query_id'))->first();
             $query->is_payment_done = true;
             $query->is_payment_id = $payment->id;
-//
         } catch (\Exception $e) {
             return $this->errorResponse("Opps! Something went wrong. If the amount was deducted then the payment will get reversed in 3-5 business days.", 500);
         }

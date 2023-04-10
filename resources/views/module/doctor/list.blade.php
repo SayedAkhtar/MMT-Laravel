@@ -30,7 +30,14 @@
                         <td>{{ $doctor->user->name }}</td>
                         <td>{{ $doctor->designation->name }}
                         </td>
-                        <td>{{ $doctor->time_slots }}</td>
+                        <td>
+                            @if(!empty($doctor->time_slots))
+                                @forelse($doctor->time_slots as $day => $slots)
+                                    <b class="text-capitalize">{{$day}}</b> : {{ implode(',', $slots) }} <br/>
+                                @empty
+                                @endforelse
+                            @endif
+                        </td>
                         <td> {{ $doctor->qualification->name }}</td>
                         <td class="text-right">
                             <a href=" {{ route('doctors.show', ['doctor' => $doctor->id]) }}"
