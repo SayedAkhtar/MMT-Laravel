@@ -38,9 +38,8 @@ class DoctorController extends AppBaseController
      *
      * @param Request $request
      *
-     * @return DoctorCollection
      */
-    public function index(Request $request): DoctorCollection
+    public function index(Request $request)
     {
         if ($request->has('hospital_id')) {
             $doctors = Doctor::with('hospitals', function ($q) use ($request) {
@@ -56,7 +55,7 @@ class DoctorController extends AppBaseController
         if (!empty($doctors)) {
             return new DoctorCollection($doctors);
         } else {
-            return [];
+            return $this->errorResponse("No doctors found", 404);
         }
     }
 

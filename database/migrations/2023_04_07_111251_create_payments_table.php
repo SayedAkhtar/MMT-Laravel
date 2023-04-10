@@ -16,11 +16,11 @@ class CreatePaymentsTable extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->increments('id');
             $table->string('r_payment_id');
-            $table->string('method');
-            $table->string('currency');
-            $table->string('user_email');
+            $table->string('method')->nullable()->default(null);
+            $table->string('currency')->default('inr');
+            $table->string('phone')->nullable()->default(null);
             $table->string('amount');
-            $table->longText('json_response');
+            $table->longText('json_response')->nullable()->default(null);
             $table->timestamps();
         });
     }

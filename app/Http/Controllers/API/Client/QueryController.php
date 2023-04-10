@@ -133,4 +133,11 @@ class QueryController extends AppBaseController
         }
 
     }
+
+    public function transactionSuccess(Request $request)
+    {
+        $request->validate([
+            'query_id' => 'required',
+        ]);
+    }
 }
