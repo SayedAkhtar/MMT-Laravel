@@ -74,6 +74,9 @@ class DoctorController extends AppBaseController
                 if (!empty($input['specialization_id'])) {
                     $result = $doctor->specializations()->sync($input['hospital_id']);
                 }
+                if ($request->hasFile('image')) {
+                    $doctor->updateImage('image', 'avatar', false);
+                }
                 DB::commit();
                 return redirect(route('doctors.index'))->with('success', "Doctor created successfully");
             }
@@ -93,6 +96,7 @@ class DoctorController extends AppBaseController
     public function show(int $id)
     {
         $doctor = Doctor::with('hospitals', 'qualification', 'designation')->findOrFail($id);
+        dd(json_decode($doctor->time_slots));
         return $this->module_view('edit', compact('doctor'));
     }
 
@@ -110,12 +114,16 @@ class DoctorController extends AppBaseController
         $input = $request->all();
         DB::beginTransaction();
         try {
+            unset($input['image']);
             $doctor = $this->doctorRepository->update($input, $id);
             if (!empty($input['hospital_id'])) {
                 $result = $doctor->hospitals()->sync($input['hospital_id']);
             }
             if (!empty($input['specialization_id'])) {
                 $result = $doctor->specializations()->sync($input['specialization_id']);
+            }
+            if ($request->hasFile('image')) {
+                $doctor->updateImage('image', 'avatar', false);
             }
             DB::commit();
             return back()->with('success', "Doctor updated successfully");

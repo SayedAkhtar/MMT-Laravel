@@ -164,7 +164,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <!-- text input -->
-                        @livewire('time-slots-component', ['slots' => $doctor->time_slots])
+                        {{--                        @livewire('time-slots-component', ['slots' => $doctor->time_slots])--}}
                     </div>
                 </div>
                 <div class="row">
