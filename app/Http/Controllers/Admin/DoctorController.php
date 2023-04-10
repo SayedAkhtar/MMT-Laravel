@@ -96,7 +96,7 @@ class DoctorController extends AppBaseController
     public function show(int $id)
     {
         $doctor = Doctor::with('hospitals', 'qualification', 'designation')->findOrFail($id);
-//        dd(json_decode($doctor->time_slots));
+//        dd(json_encode(json_decode($doctor->time_slots)));
         return $this->module_view('edit', compact('doctor'));
     }
 

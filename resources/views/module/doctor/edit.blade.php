@@ -53,16 +53,18 @@
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
-                            <label for="exampleInputFile">File input</label>
+                            <label for="exampleInputFile">Avatar Image</label>
                             <div class="input-group">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="exampleInputFile" name="image">
                                     <label class="custom-file-label" for="exampleInputFile">Choose file</label>
                                 </div>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">Upload</span>
-                                </div>
                             </div>
+                            @if(!empty($doctor->getMedia('avatar')->first()))
+                                <img class="mt-2" src="{{ $doctor->getMedia('avatar')->first()->getUrl() }}" alt=""
+                                     height="100"
+                                     width="100">
+                            @endif
                         </div>
                     </div>
                     <div class="col-sm-6">

@@ -32,7 +32,7 @@
                         </td>
                         <td>
                             @if(!empty($doctor->time_slots))
-                                @forelse(json_decode($doctor->time_slots) as $day => $slots)
+                                @forelse($doctor->time_slots as $day => $slots)
                                     <b class="text-capitalize">{{$day}}</b> : {{ implode(',', $slots) }} <br/>
                                 @empty
                                 @endforelse
