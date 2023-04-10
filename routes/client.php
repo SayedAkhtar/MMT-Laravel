@@ -21,7 +21,7 @@ Route::group(['middleware' => ['auth:sanctum', 'validate.user']], function () {
     Route::apiResource('doctors', DoctorController::class)->only(['index', 'show']);
     Route::apiResource('family', \App\Http\Controllers\API\Client\PatientFamilyDetailsController::class);
 
-    Route::post('update-transaction-result', [QueryController::class,]);
+    Route::post('update-transaction-result', [QueryController::class, 'transactionSuccess']);
 
 });
 

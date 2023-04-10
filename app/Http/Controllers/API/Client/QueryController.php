@@ -9,7 +9,9 @@ use App\Http\Resources\Client\ActiveQueryResource;
 use App\Http\Resources\Client\ConfirmedQueryResource;
 use App\Http\Resources\Client\QueryCollection;
 use App\Http\Resources\Client\QueryResource;
+use App\Models\ActiveQuery;
 use App\Models\ConfirmedQuery;
+use App\Models\Payment;
 use App\Models\Query;
 use App\Repositories\QueryRepository;
 use Illuminate\Http\JsonResponse;
@@ -138,6 +140,25 @@ class QueryController extends AppBaseController
     {
         $request->validate([
             'query_id' => 'required',
+            'r_payment_id' => 'required',
+            'amount' => 'required',
         ]);
+        try {
+            $payment = Payment::create([
+                'r_payment_id' => $request->input('r_payment_id'),
+                'method' => $request->input('method') ?? 'razorpay',
+                'currency' => $request->input('currency') ?? 'inr',
+                'phone' => \auth()->user()->phone,
+                'amount' => $request->input('amount'),
+                'json_response' => $request->input('response'),
+            ]);
+            $query = ActiveQuery::where('query_id', $request->input('query_id'))->first();
+            $query->is_payment_done = true;
+            $query->is_payment_id = $payment->id;
+//
+        } catch (\Exception $e) {
+            return $this->errorResponse("Opps! Something went wrong. If the amount was deducted then the payment will get reversed in 3-5 business days.", 500);
+        }
+        return $this->successResponse('Your payment is verified');
     }
 }
