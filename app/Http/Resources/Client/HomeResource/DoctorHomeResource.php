@@ -19,7 +19,7 @@ class DoctorHomeResource extends BaseAPIResource
         return [
             'id' => $this->id,
             'name' => $this->user->name,
-            'avatar' => $doctor->getMedia('avatar')->first() ? $doctor->getMedia('avatar')->first()->getUrl('thumbnail') : asset('img/doctor-avatar.webp'),
+            'avatar' => $this->getMedia('avatar')->first() ? $doctor->getMedia('avatar')->first()->getUrl('thumbnail') : asset('img/doctor-avatar.webp'),
             'start_of_service' => Carbon::make($this->start_of_service)->diffInYears() . " yrs of Experience",
             'designation' => $this->designation->name,
             'specialization' => $this->when($this->specializations != null, function () {
