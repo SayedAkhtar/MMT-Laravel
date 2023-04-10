@@ -24,7 +24,7 @@ class HospitalResource extends BaseAPIResource
             'name' => $this->name,
             'address' => $this->address,
             'description' => $this->description,
-            'logo' => $this->logo,
+            'logo' => $this->getMedia('logo')->first()?->getUrl(),
             'is_active' => $this->is_active,
         ];
     }

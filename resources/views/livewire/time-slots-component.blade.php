@@ -6,20 +6,23 @@
             $slots = json_decode($slots);
         }
     @endphp
-    @foreach($slots as $day => $slot)
-        <div class="row mb-3">
-            @foreach($slot as $index => $time)
-                <div class="col-3">
-                    <div class="input-group">
-                        <input type="text" class="form-control text-capitalize" value="{{ $day." ".$time }}" disabled/>
-                        <div class="input-group-append" wire:click="deleteSlot('{{$day}}' ,{{ $index }})">
-                            <div class="btn btn-danger"><i class="fa fa-trash-alt"></i></div>
+    @if(!empty($slots))
+        @foreach($slots as $day => $slot)
+            <div class="row mb-3">
+                @foreach($slot as $index => $time)
+                    <div class="col-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control text-capitalize" value="{{ $day." ".$time }}"
+                                   disabled/>
+                            <div class="input-group-append" wire:click="deleteSlot('{{$day}}' ,{{ $index }})">
+                                <div class="btn btn-danger"><i class="fa fa-trash-alt"></i></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
-        </div>
-    @endforeach
+                @endforeach
+            </div>
+        @endforeach
+    @endif
     <div class="row">
         <div class="col-4">
             <div class="form-group">

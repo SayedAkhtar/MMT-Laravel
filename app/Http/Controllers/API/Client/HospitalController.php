@@ -72,7 +72,7 @@ class HospitalController extends AppBaseController
      */
     public function show(int $id): JsonResponse
     {
-        $hospital = $this->hospitalRepository->findOrFail($id);
+        $hospital = Hospital::findOrFail($id);
 
         return $this->successResponse(new HospitalResource($hospital));
     }
