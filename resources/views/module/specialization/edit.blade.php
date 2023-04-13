@@ -8,7 +8,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Add a Hospital</h3>
+            <h3 class="card-title">Edit a Specialization</h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
@@ -42,7 +42,7 @@
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="customSwitch1"
                                        name="is_active" {{ $specialization->is_active?'checked':'' }}>
-                                <label class="custom-control-label" for="customSwitch1">Accreditation Active
+                                <label class="custom-control-label" for="customSwitch1">Specialization Active
                                     Status</label>
                             </div>
                         </div>

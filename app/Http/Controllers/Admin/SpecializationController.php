@@ -96,7 +96,7 @@ class SpecializationController extends AppBaseController
      * @throws ValidatorException
      *
      */
-    public function update(UpdateSpecializationAPIRequest $request, int $id): RedirectResponse
+    public function update(UpdateSpecializationAPIRequest $request, int $id)
     {
         $input = $request->all();
         $specialization = $this->specializationRepository->update($input, $id);

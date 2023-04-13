@@ -1,6 +1,8 @@
 <div>
     <label>Time Slots:</label>
-    <input type="hidden" name="time_slots" value="{{ !empty($slots)?json_encode($slots):'' }}">
+    @if(!empty($slots))
+        <input type="hidden" name="time_slots" value="{{ !empty($slots)?json_encode($slots):'' }}">
+    @endif
     @php
         if(gettype($slots) == "string"){
             $slots = json_decode($slots);
