@@ -22771,8 +22771,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   mounted: function mounted() {
-    this.initUserOnlineChannel();
-    this.initUserOnlineListeners();
+    // this.initUserOnlineChannel();
+    // this.initUserOnlineListeners();
+    this.initializeAgora();
   },
   methods: {
     /**
@@ -22910,6 +22911,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         mode: "rtc",
         codec: "h264"
       }));
+      this.client.on('user-published', this.handleUserPublished);
+      this.client.on('user-unpublished', this.handleUserLeft);
     },
     joinRoom: function joinRoom(token, channel) {
       var _this4 = this;
@@ -22919,14 +22922,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               console.log("called join room");
               _context3.next = 3;
-              return _this4.client.join(_this4.agora_id, channel, token, 0);
+              return _this4.client.join("20971648246c496fa6e2a8856c4e0d1e", "my_channel", null);
             case 3:
               _context3.next = 5;
               return _this4.createLocalStream();
             case 5:
-              _this4.client.on('user-published', _this4.handleUserPublished);
-              _this4.client.on('user-unpublished', _this4.handleUserLeft);
-            case 7:
             case "end":
               return _context3.stop();
           }
@@ -22982,32 +22982,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     handleUserPublished: function handleUserPublished(user, mediaType) {
       var _this6 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-        var sleep, audioTrack, videoTrack;
         return _regeneratorRuntime().wrap(function _callee6$(_context6) {
           while (1) switch (_context6.prev = _context6.next) {
             case 0:
-              _this6.onlineUsers[user.uid] = user;
-
-              // Initiate the Subscription
-              _context6.next = 3;
-              return _this6.client.subscribe(user, mediaType);
-            case 3:
-              sleep = function sleep(ms) {
-                return new Promise(function (resolve) {
-                  return setTimeout(resolve, ms);
-                });
-              };
-              _context6.next = 6;
-              return sleep(5000);
-            case 6:
-              if (mediaType === 'audio') {
-                audioTrack = user.audioTrack;
-                audioTrack.play();
-              } else {
-                videoTrack = user.videoTrack;
-                videoTrack.play("user-".concat(user.uid));
-              }
-            case 7:
+              // this.onlineUsers[user.uid] = user
+              console.warn(user);
+              console.warn(mediaType);
+              _context6.next = 4;
+              return _this6.subscribe(user, mediaType);
+            case 4:
             case "end":
               return _context6.stop();
           }
@@ -23030,7 +23013,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     createLocalStream: function createLocalStream() {
       var _this7 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
-        var sleep;
         return _regeneratorRuntime().wrap(function _callee8$(_context8) {
           while (1) switch (_context8.prev = _context8.next) {
             case 0:
@@ -23042,20 +23024,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return agora_rtc_sdk_ng__WEBPACK_IMPORTED_MODULE_0___default().createCameraVideoTrack();
             case 5:
               _this7.localVideoStream = _context8.sent;
-              sleep = function sleep(ms) {
-                return new Promise(function (resolve) {
-                  return setTimeout(resolve, ms);
-                });
-              };
-              _context8.next = 9;
-              return sleep(500);
-            case 9:
-              _context8.next = 11;
+              _context8.next = 8;
               return _this7.localVideoStream.play('local-video');
-            case 11:
-              _context8.next = 13;
+            case 8:
+              _context8.next = 10;
               return _this7.client.publish(_this7.localVideoStream);
-            case 13:
+            case 10:
             case "end":
               return _context8.stop();
           }
@@ -23089,6 +23063,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         this.localStream.muteVideo();
         this.mutedVideo = true;
       }
+    },
+    subscribe: function subscribe(user, mediaType) {
+      var _this9 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
+        var audioTrack, videoTrack;
+        return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+          while (1) switch (_context9.prev = _context9.next) {
+            case 0:
+              _context9.next = 2;
+              return _this9.client.subscribe(user, mediaType);
+            case 2:
+              if (mediaType === 'audio') {
+                audioTrack = user.audioTrack;
+                audioTrack.play();
+              } else {
+                videoTrack = user.videoTrack;
+                videoTrack.play("remote-video");
+              }
+            case 3:
+            case "end":
+              return _context9.stop();
+          }
+        }, _callee9);
+      }))();
     }
   }
 });

@@ -22,7 +22,7 @@ class AgoraVideoController extends Controller
 
         $appID = env('AGORA_APP_ID');
         $appCertificate = env('AGORA_APP_CERTIFICATE');
-        $channelName = $request->channelName;
+        $channelName = "my_channel";
         $user = Auth::user()->name;
         $role = RtcTokenBuilder::RoleAttendee;
         $expireTimeInSeconds = 3600;

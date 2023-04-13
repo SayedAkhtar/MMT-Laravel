@@ -14,6 +14,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Prettus\Validator\Exceptions\ValidatorException;
 
@@ -64,6 +65,7 @@ class DoctorController extends AppBaseController
         $input['user_type'] = User::TYPE_DOCTOR;
         DB::beginTransaction();
         try {
+            $input['password'] = Hash::make($input['password']);
             $user = User::create($input);
             if ($user) {
                 $input['user_id'] = $user->id;

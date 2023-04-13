@@ -102,8 +102,9 @@ export default {
     },
 
     mounted() {
-        this.initUserOnlineChannel();
-        this.initUserOnlineListeners();
+        // this.initUserOnlineChannel();
+        // this.initUserOnlineListeners();
+        this.initializeAgora();
     },
 
     methods: {
@@ -212,19 +213,20 @@ export default {
          */
         initializeAgora() {
             this.client = markRaw(AgoraRTC.createClient({mode: "rtc", codec: "h264"}));
+            this.client.on('user-published', this.handleUserPublished)
+            this.client.on('user-unpublished', this.handleUserLeft)
         },
 
         async joinRoom(token, channel) {
             console.log("called join room");
             await this.client.join(
-                this.agora_id,
-                channel,
-                token,
-                0,
+                "20971648246c496fa6e2a8856c4e0d1e",
+                "my_channel",
+                null
             );
             await this.createLocalStream();
-            this.client.on('user-published', this.handleUserPublished)
-            this.client.on('user-unpublished', this.handleUserLeft)
+            // this.client.on('user-published', this.handleUserPublished)
+            // this.client.on('user-unpublished', this.handleUserLeft)
         },
 
         async initializedAgoraListeners() {
@@ -250,21 +252,11 @@ export default {
         },
 
         async handleUserPublished(user, mediaType) {
-            this.onlineUsers[user.uid] = user
-
-            // Initiate the Subscription
-            await this.client.subscribe(user, mediaType);
-
-            let sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-            await sleep(5000);
-
-            if (mediaType === 'audio') {
-                let audioTrack = user.audioTrack
-                audioTrack.play()
-            } else {
-                let videoTrack = user.videoTrack
-                videoTrack.play(`user-${user.uid}`)
-            }
+            // this.onlineUsers[user.uid] = user
+            console.warn(user);
+            console.warn(mediaType);
+            await this.subscribe(user, mediaType);
+            // // Initiate the Subscription
         },
 
         async handleUserLeft(user) {
@@ -274,9 +266,6 @@ export default {
         async createLocalStream() {
             this.localAudioStream = await AgoraRTC.createMicrophoneAudioTrack();
             this.localVideoStream = await AgoraRTC.createCameraVideoTrack();
-            let sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-            await sleep(500);
-
             await this.localVideoStream.play('local-video');
             await this.client.publish(this.localVideoStream);
         },
@@ -313,6 +302,17 @@ export default {
                 this.mutedVideo = true;
             }
         },
+
+        async subscribe(user, mediaType) {
+            await this.client.subscribe(user, mediaType);
+            if (mediaType === 'audio') {
+                let audioTrack = user.audioTrack
+                audioTrack.play()
+            } else {
+                let videoTrack = user.videoTrack
+                videoTrack.play(`remote-video`)
+            }
+        }
     },
 };
 </script>
