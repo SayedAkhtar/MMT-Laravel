@@ -127,29 +127,16 @@ class HospitalController extends AppBaseController
      */
     public function update(UpdateHospitalAPIRequest $request, int $id)
     {
-        $input = $request->all();
-//        dd($input);
+        $input = $request->except('logo');
         DB::beginTransaction();
         try {
             $hospital = Hospital::findOrFail($id);
             if ($request->hasFile('logo')) {
                 $hospital->attachImage('logo', 'logo', false);
             }
-            if (!empty($input['doctors'])) {
-                $result = $hospital->doctors()->sync($input['doctors']);
-            } else {
-                $hospital->doctors()->sync([]);
-            }
-            if (!empty($input['treatments'])) {
-                $result = $hospital->treatments()->sync($input['treatments']);
-            } else {
-                $result = $hospital->treatments()->sync([]);
-            }
-            if (!empty($input['accreditations'])) {
-                $result = $hospital->accreditation()->sync($input['accreditations']);
-            } else {
-                $result = $hospital->accreditation()->sync([]);
-            }
+            $hospital->doctors()->sync($input['doctors'] ?? []);
+            $hospital->treatments()->sync($input['treatments'] ?? []);
+            $hospital->accreditation()->sync($input['accreditations'] ?? []);
             $hospital = $this->hospitalRepository->update($input, $id);
             DB::commit();
         } catch (\Exception $e) {

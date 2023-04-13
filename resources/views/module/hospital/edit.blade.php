@@ -71,7 +71,10 @@
                             @php
                                 $doctors = [];
                                 foreach ($hospital->doctors as $d){
-                                    $doctors[] = $d->user;
+                                    $option = new stdClass();
+                                    $option->id = $d->id;
+                                    $option->name = $d->user->name;
+                                    $doctors[] = $option;
                                 }
                             @endphp
                             <x-multi-select-search label="Doctors" name="doctors" table="doctors"

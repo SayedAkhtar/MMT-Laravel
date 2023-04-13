@@ -95,7 +95,7 @@ class DoctorController extends AppBaseController
      */
     public function show(int $id)
     {
-        $doctor = Doctor::with('hospitals', 'qualification', 'designation')->findOrFail($id);
+        $doctor = Doctor::with('hospitals', 'qualification', 'designation', 'user')->findOrFail($id);
         return $this->module_view('edit', compact('doctor'));
     }
 

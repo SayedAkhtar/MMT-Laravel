@@ -82,8 +82,7 @@ class Hospital extends BaseModel
      */
     public function doctors()
     {
-        return $this->belongsToMany(Doctor::class, 'doctor_hospitals')
-            ->with('user');
+        return $this->belongsToMany(Doctor::class, 'doctor_hospitals');
     }
 
     /**
