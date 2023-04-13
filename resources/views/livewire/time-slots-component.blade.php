@@ -1,7 +1,7 @@
 <div>
     <label>Time Slots:</label>
     @if(!empty($slots))
-        <input type="hidden" name="time_slots" value="{{ !empty($slots)?json_encode($slots):'' }}">
+        <input type="hidden" name="time_slots" value="{{ !empty($slots)?json_encode($slots):'' }}" required>
     @endif
     @php
         if(gettype($slots) == "string"){
@@ -26,7 +26,7 @@
         @endforeach
     @endif
     <div class="row">
-        <div class="col-4">
+        <div class="col-6">
             <div class="form-group">
                 <select class="form-control" id="daySelect">
                     <option value="monday">Monday</option>
@@ -39,7 +39,7 @@
                 </select>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-6">
             <div class="input-group date" id="time_slots" data-target-input="nearest">
                 <input type="text" class="form-control datetimepicker-input"
                        data-target="#time_slots"/>

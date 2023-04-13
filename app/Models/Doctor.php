@@ -25,6 +25,7 @@ class Doctor extends BaseModel
         'qualification_id',
         'faq',
         'time_slots',
+        'price',
         'is_active',
         'created_at',
         'updated_at',

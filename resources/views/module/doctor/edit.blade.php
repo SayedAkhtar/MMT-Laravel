@@ -157,16 +157,23 @@
                                 </div>
                                 <input type="text" class="form-control" data-inputmask-alias="datetime"
                                        data-inputmask-inputformat="mm/dd/yyyy" data-mask="" inputmode="numeric"
-                                       name="start_of_service" value="{{ $doctor->start_of_service }}">
+                                       name="start_of_service" value="{{ $doctor->start_of_service }}" required>
                             </div>
                             <!-- /.input group -->
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-6">
                         <!-- text input -->
                         @livewire('time-slots-component', ['slots' => $doctor->time_slots])
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Consultation Price: </label>
+                            <input type="number" class="form-control" placeholder="Enter price in Dollars" name="price"
+                                   value="{{ $doctor->price }}" required>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
