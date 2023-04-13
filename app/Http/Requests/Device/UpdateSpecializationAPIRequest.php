@@ -27,7 +27,7 @@ class UpdateSpecializationAPIRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['string', 'required', 'unique:specializations,name,' . $this->route('specialization')],
+            'name' => ['string', 'required',],
             'logo' => ['nullable', 'file'],
             'is_active' => ['sometimes'],
         ];
