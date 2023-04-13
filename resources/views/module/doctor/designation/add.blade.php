@@ -13,7 +13,7 @@
         <!-- /.card-header -->
         <div class="card-body">
             <form
-                action="{{ !empty($designation)?route('designations.store'):route('designation.update', ['designation' => $designation->id]) }}"
+                action="{{ empty($designation)?route('designations.store'):route('designation.update', ['designation' => $designation->id]) }}"
                 method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
@@ -22,7 +22,7 @@
                         <div class="form-group">
                             <label>Name</label>
                             <input type="text" class="form-control" placeholder="Enter name" name="name"
-                                   value="{{ $designation->name }}">
+                                   value="{{ !empty($designation->name)? $designation->name : '' }}">
                         </div>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                         <div class="form-group">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="customSwitch1"
-                                       name="is_active" {{ $designation->is_active ? 'checked':'' }} >
+                                       name="is_active" {{ !empty($designation->is_active) ? 'checked':'' }} >
                                 <label class="custom-control-label" for="customSwitch1">Designation Active
                                     Status</label>
                             </div>

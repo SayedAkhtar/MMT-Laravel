@@ -61,7 +61,8 @@ class DesignationController extends AppBaseController
 
     public function create(Request $request)
     {
-        return $this->module_view('add');
+        $designation = [];
+        return $this->module_view('add', compact('designation'));
     }
 
     public function store(CreateDesignationAPIRequest $request)
