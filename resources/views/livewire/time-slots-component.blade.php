@@ -12,7 +12,7 @@
         @foreach($slots as $day => $slot)
             <div class="row mb-3">
                 @foreach($slot as $index => $time)
-                    <div class="col-3">
+                    <div class="col-6">
                         <div class="input-group">
                             <input type="text" class="form-control text-capitalize" value="{{ $day." ".$time }}"
                                    disabled/>
