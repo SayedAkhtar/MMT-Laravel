@@ -14,6 +14,13 @@ class CreateAccreditationAPIRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'is_active' => $this->request->has('is_active'),
+        ]);
+    }
+
     /**
      * @return array
      */

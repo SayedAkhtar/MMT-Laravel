@@ -86,7 +86,8 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <x-multi-select-search label="Specializations" name="specialization" table="specializations"
+                            <x-multi-select-search label="Specializations" name="specializations"
+                                                   table="specializations"
                                                    multiple=true/>
                         </div>
                     </div>

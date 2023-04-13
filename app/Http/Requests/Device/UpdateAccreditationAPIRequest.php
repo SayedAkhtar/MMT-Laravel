@@ -28,8 +28,8 @@ class UpdateAccreditationAPIRequest extends FormRequest
     {
         return [
             'name' => ['nullable', 'string'],
-            'logo' => ['nullable', 'string'],
-            'is_active' => ['boolean'],
+            'logo' => ['nullable', 'file', "max:3072"],
+            'is_active' => ['nullable'],
         ];
     }
 }

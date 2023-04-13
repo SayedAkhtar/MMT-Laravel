@@ -8,7 +8,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Add a Treatment</h3>
+            <h3 class="card-title">Edit a Treatment</h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
@@ -37,7 +37,7 @@
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
-                            <x-form-image-input label="Logo" name="images" multiple="true"
+                            <x-form-image-input label="Logo" name="images" :multiple="true"
                                                 :defaultImages="$treatment->images"/>
                         </div>
                     </div>
@@ -92,7 +92,8 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <x-multi-select-search label="Specializations" name="specialization" table="specializations"
+                            <x-multi-select-search label="Specializations" name="specializations"
+                                                   table="specializations"
                                                    multiple=true :selectedOptions="$treatment->specializations"/>
                         </div>
                     </div>

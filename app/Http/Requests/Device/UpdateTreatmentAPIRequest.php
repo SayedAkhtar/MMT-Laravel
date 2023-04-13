@@ -22,7 +22,7 @@ class UpdateTreatmentAPIRequest extends FormRequest
         return [
             'name' => ['string', 'required', 'unique:treatments,name,' . $this->route('treatment')],
             'price' => ['integer', 'required'],
-            'images' => ['nullable'],
+            'images.*' => ['nullable', 'file'],
             'days_required' => ['integer', 'required'],
             'recovery_time' => ['integer', 'required'],
             'success_rate' => ['integer', 'required'],

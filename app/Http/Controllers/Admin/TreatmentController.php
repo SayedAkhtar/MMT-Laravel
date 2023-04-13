@@ -52,10 +52,10 @@ class TreatmentController extends AppBaseController
      */
     public function store(CreateTreatmentAPIRequest $request)
     {
-        $input = $request->all();
+        $input = $request->except('images');
         $treatment = $this->treatmentRepository->create($input);
         if ($request->hasFile('images')) {
-            $treatment->addMultipleMediaFromRequest(['images'])->each(fn($fileAdder) => $fileAdder->toMediaCollection('treatment'));
+            $treatment->attachImage('images', 'treatment', true);
         }
         if ($request->has('hospitals')) {
             $treatment->hospitals()->attach($request->get('hospitals'));
@@ -64,7 +64,7 @@ class TreatmentController extends AppBaseController
             $treatment->doctors()->attach($request->get('doctors'));
         }
         if ($request->has('specializations')) {
-            $treatment->doctors()->attach($request->get('specializations'));
+            $treatment->specializations()->attach($request->get('specializations'));
         }
         return back()->with('success', "Treatment added successfully");
     }
@@ -81,7 +81,14 @@ class TreatmentController extends AppBaseController
         foreach ($treatment->doctors as &$data) {
             $data->name = $data->user->name;
         }
-        $treatment->images = $treatment->getFirstMediaUrl('treatment-logo');
+        $temp = [];
+        if (!empty($treatment->getMedia('treatment'))) {
+
+            foreach ($treatment->getMedia('treatment') as $obj) {
+                $temp[] = $obj->getUrl('thumbnail');
+            }
+        }
+        $treatment->images = $temp;
         return $this->module_view('edit', compact('treatment'));
     }
 
@@ -97,12 +104,11 @@ class TreatmentController extends AppBaseController
      */
     public function update(UpdateTreatmentAPIRequest $request, int $id)
     {
-        $input = $request->all();
+        $input = $request->except('images');
         $treatment = $this->treatmentRepository->update($input, $id);
         if ($request->hasFile('images')) {
-            $result = $treatment->updateImage('images', 'treatment-logo', false);
+            $result = $treatment->updateImage('images', 'treatment', true);
         }
-
         if ($request->has('hospitals')) {
             $treatment->hospitals()->sync($request->get('hospitals'));
         }
@@ -110,7 +116,7 @@ class TreatmentController extends AppBaseController
             $treatment->doctors()->sync($request->get('doctors'));
         }
         if ($request->has('specializations')) {
-            $treatment->doctors()->sync($request->get('specializations'));
+            $treatment->specializations()->sync($request->get('specializations'));
         }
         return back()->with('success', "Updated successfully");
     }

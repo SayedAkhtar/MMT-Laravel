@@ -67,7 +67,7 @@ class AccreditationController extends AppBaseController
      */
     public function store(CreateAccreditationAPIRequest $request)
     {
-        $input = $request->all();
+        $input = $request->except('logo');
         $accreditation = $this->accreditationRepository->create($input);
         if ($request->hasFile('logo')) {
             $accreditation->attachImage('logo', 'logo', false);
@@ -98,16 +98,17 @@ class AccreditationController extends AppBaseController
      * @param UpdateAccreditationAPIRequest $request
      * @param int $id
      *
-     * @return AccreditationResource
      * @throws ValidatorException
      *
      */
-    public function update(UpdateAccreditationAPIRequest $request, int $id): AccreditationResource
+    public function update(UpdateAccreditationAPIRequest $request, int $id)
     {
-        $input = $request->all();
+        $input = $request->except('logo');
         $accreditation = $this->accreditationRepository->update($input, $id);
-
-        return new AccreditationResource($accreditation);
+        if ($request->hasFile('logo')) {
+            $accreditation->updateImage('logo', 'logo', false);
+        }
+        return back()->with('success', "Update successfull");
     }
 
     /**
