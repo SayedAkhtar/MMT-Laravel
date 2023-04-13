@@ -12,8 +12,10 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            <form action="{{ route('specializations.store') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('specializations.update', ['specialization' => $specialization->id]) }}"
+                  method="post" enctype="multipart/form-data">
                 @csrf
+                @method('put')
                 <div class="row">
                     <div class="col-sm-6">
                         <!-- text input -->
