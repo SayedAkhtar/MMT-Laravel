@@ -6,25 +6,25 @@ use Livewire\Component;
 
 class TimeSlotsComponent extends Component
 {
-    public $slots = [];
+    public $slots = "";
 
-    public function mount($slots = [])
+    public function mount($slots = "")
     {
-//        $temp = json_decode($slots);
-//        foreach ($temp as $day => $time) {
-//            $this->slots[$day] = $time;
-//        }
         $this->slots = $slots;
     }
 
-    public function addSlot(string $day, $slot)
+    public function addSlot(string $day, string $slot)
     {
-        $this->slots[$day][] = $slot;
+        $temp = json_decode($this->slots, true);
+        $temp[$day][] = $slot;
+        $this->slots = json_encode($temp);
     }
 
-    public function deleteSlot($day, $index)
+    public function deleteSlot(string $day, int $index)
     {
-        unset($this->slots[$day][$index]);
+        $temp = json_decode($this->slots, true);
+        unset($temp[$day][$index]);
+        $this->slots = json_encode($temp);
     }
 
     public function render()

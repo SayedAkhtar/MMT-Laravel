@@ -27,7 +27,7 @@ class UpdateDoctorAPIRequest extends FormRequest
             'designation_id' => ['nullable', 'string'],
             'qualification_id' => ['nullable', 'exists:qualifications,id'],
             'faq' => ['nullable'],
-            'time_slots' => ['nullable'],
+            'time_slots' => ['nullable', "string"],
             'is_active' => ['boolean'],
         ];
     }

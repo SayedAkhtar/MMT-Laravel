@@ -96,7 +96,6 @@ class DoctorController extends AppBaseController
     public function show(int $id)
     {
         $doctor = Doctor::with('hospitals', 'qualification', 'designation')->findOrFail($id);
-//        dd(json_encode(json_decode($doctor->time_slots)));
         return $this->module_view('edit', compact('doctor'));
     }
 
@@ -111,10 +110,9 @@ class DoctorController extends AppBaseController
      */
     public function update(UpdateDoctorAPIRequest $request, int $id)
     {
-        $input = $request->all();
+        $input = $request->except('image');
         DB::beginTransaction();
         try {
-            unset($input['image']);
             $doctor = $this->doctorRepository->update($input, $id);
             if (!empty($input['hospital_id'])) {
                 $result = $doctor->hospitals()->sync($input['hospital_id']);

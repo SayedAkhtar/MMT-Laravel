@@ -1,12 +1,8 @@
 <div>
     <label>Time Slots:</label>
-    @if(!empty($slots))
-        <input type="hidden" name="time_slots" value="{{ !empty($slots)?json_encode($slots):'' }}" required>
-    @endif
+    <input type="hidden" name="time_slots" value="{{ !empty($slots)? $slots:"" }}" required>
     @php
-        if(gettype($slots) == "string"){
-            $slots = json_decode($slots);
-        }
+        $slots = json_decode($slots, true);
     @endphp
     @if(!empty($slots))
         @foreach($slots as $day => $slot)
