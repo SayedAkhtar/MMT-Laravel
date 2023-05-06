@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\TagsController;
 use App\Http\Controllers\Admin\TestController;
 use App\Http\Controllers\Admin\TreatmentController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\VideoConsultationController;
 use App\Http\Controllers\Admin\WellnessCenterController;
 use Illuminate\Support\Facades\Route;
 
@@ -102,6 +103,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('specializations', SpecializationController::class);
 
     Route::resource('hospitals', HospitalController::class);
+
+    Route::resource('video-consultation', VideoConsultationController::class);
 
     Route::get('patients/list', [UserController::class, 'listPatients'])->name('patient.index');
     Route::prefix('hcf')->group(function () {

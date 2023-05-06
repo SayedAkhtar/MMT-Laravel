@@ -3,15 +3,16 @@
 use App\Http\Controllers\API\Client\AuthController;
 use App\Http\Controllers\API\Client\DoctorController;
 use App\Http\Controllers\API\Client\FileUploadController;
+use App\Http\Controllers\API\Client\HomeController;
 use App\Http\Controllers\API\Client\HospitalController;
 use App\Http\Controllers\API\Client\PushNotificationController;
 use App\Http\Controllers\API\Client\QueryController;
 use App\Http\Controllers\API\Client\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => ['auth:sanctum', 'validate.user']], function () {
-    Route::get('home', [\App\Http\Controllers\API\Client\HomeController::class, 'modules']);
 
+Route::group(['middleware' => ['auth:sanctum', 'validate.user', 'api']], function () {
+    Route::get('home', [HomeController::class, 'modules'])->middleware('api');
     Route::apiResource('queries', QueryController::class);
     Route::post('upload-patient-response', [QueryController::class, 'updatePatientResponse']);
     Route::post('query-upload-visa', [QueryController::class, 'uploadVisa']);
@@ -21,10 +22,12 @@ Route::group(['middleware' => ['auth:sanctum', 'validate.user']], function () {
     Route::get('hospitals/{id}/doctors', [HospitalController::class, 'doctors']);
     Route::apiResource('doctors', DoctorController::class)->only(['index', 'show']);
     Route::apiResource('family', \App\Http\Controllers\API\Client\PatientFamilyDetailsController::class);
-
     Route::post('update-transaction-result', [QueryController::class, 'transactionSuccess']);
 
 });
+
+Route::post('submit-consultation', [\App\Http\Controllers\API\Client\VideoConsultationController::class, 'store']);
+Route::get('/search', [HomeController::class, 'searchHospitalDoctor'])->middleware('api');
 
 Route::get('users', [UserController::class, 'index'])
     ->name('users.index');

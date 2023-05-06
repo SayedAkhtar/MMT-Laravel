@@ -28,7 +28,7 @@
                         <div class="form-group">
                             <label>Name</label>
                             <input type="text" class="form-control" placeholder="Enter name" name="name"
-                                   value="{{ $user->name }}">
+                                   value="{{ !empty($user)? $user->name: "" }}">
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -36,7 +36,7 @@
                         <div class="form-group">
                             <label>Phone Number</label>
                             <input type="text" class="form-control" placeholder="Enter mobile number" name="phone"
-                                   value="{{ $user->phone }}">
+                                   value="{{!empty($user)? $user->phone:'' }}">
                         </div>
                     </div>
 
@@ -45,8 +45,13 @@
                         <div class="form-group">
                             <label>Gender</label>
                             <select name="gender" id="" class="form-control">
-                                <option value="male" {{ $user->gender == 'male'?'selected':'' }}>Male</option>
-                                <option value="female" {{ $user->gender == 'female'?'selected':'' }}>Female</option>
+                                <option value="male" {{ !empty($user)? ($user->gender == 'male'?'selected':''):'' }}>
+                                    Male
+                                </option>
+                                <option
+                                    value="female" {{ !empty($user)? ($user->gender == 'female'?'selected':''):'' }}>
+                                    Female
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -57,7 +62,7 @@
                         <div class="form-group">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="customSwitch1"
-                                       name="is_active" {{ $user->is_active?'checked':'' }}>
+                                       name="is_active" {{ !empty($user)? ($user->is_active?'checked':''):'' }}>
                                 <label class="custom-control-label" for="customSwitch1">Moderator Active
                                     Status</label>
                             </div>

@@ -7,7 +7,9 @@ use App\Http\Resources\Client\HomeResource\DoctorHomeResource;
 use App\Models\Doctor;
 use App\Models\Hospital;
 use App\Models\PatientTestimony;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
 
 class HomeController extends AppBaseController
@@ -47,5 +49,32 @@ class HomeController extends AppBaseController
         $data['doctors'] = $doctors;
         $data['banners'] = $livePath;
         return $this->successResponse($data);
+    }
+
+    public function searchHospitalDoctor(Request $request)
+    {
+        $term = $request->input('term');
+        $hospitals = Hospital::query()->where('name', 'like', '%' . $term . '%')->select(['id', 'name', 'address'])->get();
+        $doctors = Doctor::with(['user', 'specializations'])->whereHas('user', function ($q) use ($term) {
+            $q->where('name', 'like', '%' . $term . '%');
+        })->get();
+        $results = [];
+        foreach ($hospitals as $hospital) {
+            $result['id'] = $hospital->id;
+            $result['name'] = $hospital->name;
+            $result['description'] = $hospital->address;
+            $result['logo'] = $hospital->getMedia('logo')->first()?->getUrl() ?? 'https://via.placeholder.com/640x480.png/00eeaa?text=No%20Image';
+            $result['type'] = 'hospital';
+            $results[] = $result;
+        }
+        foreach ($doctors as $doctor) {
+            $result['id'] = $doctor->id;
+            $result['name'] = $doctor->user->name;
+            $result['description'] = $doctor->specializations->pluck('name')->join(', ') . ' \n ' . Carbon::make($doctor->start_of_service)->diffInYears() . " yrs of Experience";
+            $result['logo'] = $doctor->getMedia('avatar')->first()?->getUrl() ?? 'https://via.placeholder.com/640x480.png/00eeaa?text=No%20Image';
+            $result['type'] = 'doctor';
+            $results[] = $result;
+        }
+        return $this->successResponse($results);
     }
 }

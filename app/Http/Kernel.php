@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Http;
 
+use App\Http\Middleware\MakeResponseTypeJson;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -39,6 +41,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
+            MakeResponseTypeJson::class,
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
@@ -65,5 +68,6 @@ class Kernel extends HttpKernel
         'validate.user' => \App\Http\Middleware\ValidateUserMiddleware::class,
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
+        'json.response' => MakeResponseTypeJson::class
     ];
 }

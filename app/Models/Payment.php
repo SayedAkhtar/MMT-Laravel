@@ -9,6 +9,10 @@ class Payment extends Model
 {
     use HasFactory;
 
+    public const SUCCESS = "COMPLETED";
+    public const FAILED = "FAILED";
+    public const PENDING = "PENDING";
+    public const INITIATED = "STARTED";
     protected $table = 'payments';
     protected $guarded = ['id'];
 }
