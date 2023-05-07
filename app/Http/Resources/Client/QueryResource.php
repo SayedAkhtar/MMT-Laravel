@@ -22,7 +22,7 @@ class QueryResource extends BaseAPIResource
         $allQuery = [
             'id' => $this->id,
             'name' => $this->patient->name,
-            'specialization' => $this->specialization->name,
+            'specialization' => $this->specialization->name ?? "Not Selected",
             'created_at' => Carbon::make($this->created_at ?? now())->format('M d, Y | h:m a'),
             'is_completed' => (bool)$this->is_completed,
 //            'completed_at' => $this->when($this->completed_at != null, Carbon::make($this->completed_at)->format('M d, Y | h:m a')),

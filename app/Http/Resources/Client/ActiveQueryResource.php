@@ -21,7 +21,7 @@ class ActiveQueryResource extends BaseAPIResource
         }
         $data = [
             'id' => $this->id,
-            'specialization' => $this->specialization->name,
+            'specialization' => $this->specialization->name ?? "No Specialization Selected",
             'doctor_response' => !empty($this->activeQuery) ? $this->activeQuery->doctor_response : '',
             'is_payment_required' => !empty($this->activeQuery) && (bool)$this->activeQuery->is_payment_required,
             'is_payment_done' => !empty($this->activeQuery) && (bool)$this->activeQuery->is_payment_done,

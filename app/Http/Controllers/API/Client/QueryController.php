@@ -18,6 +18,7 @@ use App\Repositories\QueryRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class QueryController extends AppBaseController
@@ -61,11 +62,8 @@ class QueryController extends AppBaseController
      *
      * @param CreateQueryAPIRequest $request
      *
-     * @return QueryResource
-     * @throws ValidatorException
-     *
      */
-    public function store(CreateQueryAPIRequest $request): QueryResource
+    public function store(CreateQueryAPIRequest $request)
     {
         $input = $request->all();
         try {
@@ -80,11 +78,13 @@ class QueryController extends AppBaseController
             $input['status'] = QueryStatus::QUERY_OPEN;
             $input['patient_id'] = Auth::id();
             $query = $this->queryRepository->create($input);
+            return new QueryResource($query);
         } catch (\Exception $e) {
-
+            Log::error($e->getMessage());
+            return $this->errorResponse("Something went wrong");
         }
 
-        return new QueryResource($query);
+
     }
 
     /**
