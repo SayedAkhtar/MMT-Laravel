@@ -5,11 +5,11 @@ namespace App\Http\Controllers\API\Client;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Device\FileUploadAPIRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
-use \Illuminate\Http\Request;
 
 class FileUploadController extends AppBaseController
 {
@@ -34,17 +34,15 @@ class FileUploadController extends AppBaseController
         $files = $request->file('files');
         $model = $request->input('model');
         foreach ($files as $file) {
-            if(empty($model)){
+            if (empty($model)) {
                 $user = Auth::user();
                 $user->addMedia($file)->toMediaCollection('user', config('app.media_disc'));
-            }
-            else{
+            } else {
                 $modelpath = "App\Models\\$model";
                 $model = App::make($modelpath);
                 $model = $model->findOrFail($request->model_id);
                 $collection = strtolower($request->collection ?? $request->model);
-                $model->addMedia($file)->toMediaCollection( $collection, config('app.media_disc'));
-
+                $model->addMedia($file)->toMediaCollection($collection, config('app.media_disc'));
             }
         }
 

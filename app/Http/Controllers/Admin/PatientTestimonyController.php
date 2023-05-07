@@ -48,21 +48,16 @@ class PatientTestimonyController extends AppBaseController
         return $this->module_view('list', compact('testimonials'));
     }
 
-    /**
-     * Create PatientTestimony with given payload.
-     *
-     * @param CreatePatientTestimonyAPIRequest $request
-     *
-     * @return PatientTestimonyResource
-     * @throws ValidatorException
-     *
-     */
-    public function store(CreatePatientTestimonyAPIRequest $request): PatientTestimonyResource
+    public function create()
+    {
+        return $this->module_view('add');
+    }
+
+    public function store(CreatePatientTestimonyAPIRequest $request)
     {
         $input = $request->all();
         $patientTestimony = $this->patientTestimonyRepository->create($input);
 
-        return new PatientTestimonyResource($patientTestimony);
     }
 
     /**
@@ -72,11 +67,10 @@ class PatientTestimonyController extends AppBaseController
      *
      * @return PatientTestimonyResource
      */
-    public function show(int $id): PatientTestimonyResource
+    public function show(int $id)
     {
         $patientTestimony = $this->patientTestimonyRepository->findOrFail($id);
 
-        return new PatientTestimonyResource($patientTestimony);
     }
 
     /**
@@ -89,12 +83,11 @@ class PatientTestimonyController extends AppBaseController
      * @throws ValidatorException
      *
      */
-    public function update(UpdatePatientTestimonyAPIRequest $request, int $id): PatientTestimonyResource
+    public function update(UpdatePatientTestimonyAPIRequest $request, int $id)
     {
         $input = $request->all();
         $patientTestimony = $this->patientTestimonyRepository->update($input, $id);
 
-        return new PatientTestimonyResource($patientTestimony);
     }
 
     /**

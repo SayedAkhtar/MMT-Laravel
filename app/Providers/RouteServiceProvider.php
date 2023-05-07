@@ -56,19 +56,18 @@ class RouteServiceProvider extends ServiceProvider
 
     public function deviceRoutes()
     {
-        Route::prefix('admin')
-        ->middleware('web')
-        ->namespace($this->namespace)
-        ->group(base_path('routes/admin.php'));
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/admin.php'));
     }
 
     public function clientRoutes()
     {
         Route::prefix('api/client')
-        ->middleware('api')
-        ->namespace($this->namespace)
-        ->name('client.')
-        ->group(base_path('routes/client.php'));
+            ->middleware('api')
+            ->namespace($this->namespace)
+            ->name('client.')
+            ->group(base_path('routes/client.php'));
     }
 
     /**

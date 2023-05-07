@@ -585,8 +585,8 @@ a {
                         <button class="btn-mute"></button>
                         <button class="btn-camera"></button>
                     </div>
-                    <a href="#" class="name-tag">Andy Will</a>
-                    <img v-if="this.client == null"
+                    <a href="#" class="name-tag">Patient</a>
+                    <img v-if="this.patientJoined === false"
                          src="https://images.unsplash.com/photo-1566821582776-92b13ab46bb4?ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60"
                          alt="participant">
                 </div>
@@ -595,8 +595,7 @@ a {
                         <button class="btn-mute"></button>
                         <button class="btn-camera"></button>
                     </div>
-                    <a href="#" class="name-tag">Emmy Lou</a>
-
+                    <a href="#" class="name-tag">Doctor</a>
                     <img v-if="this.localVideoStream == null"
                          src="https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80"
                          alt="participant">
@@ -713,7 +712,6 @@ a {
                         </div>
                         <div class="message-content">
                             <p class="name">Emmy Lou</p>
-                            <div class="message">Woooww! Awesome❤️</div>
                         </div>
                     </div>
                 </div>
@@ -815,11 +813,12 @@ import {markRaw} from "vue";
 
 export default {
     name: "AgoraChat",
-    props: ["authuser", "authuserid", "allusers", "agora_id"],
+    props: ["authuser", "authuserid", "agora_id", "channelName"],
     data() {
         return {
             callPlaced: false,
             client: null,
+            patientJoined: false,
             localVideoStream: null,
             localAudioStream: null,
             mutedAudio: false,
@@ -828,7 +827,6 @@ export default {
             onlineUsers: [],
             incomingCall: false,
             incomingCaller: "",
-            agoraChannel: null,
             showChat: "",
         };
     },
@@ -836,7 +834,11 @@ export default {
     mounted() {
         // this.initUserOnlineChannel();
         // this.initUserOnlineListeners();
-        this.placeCall()
+        this.placeCall();
+    },
+    created() {
+        console.log(this.channelName);
+        console.log(this.agora_id);
     },
 
     methods: {
@@ -899,6 +901,7 @@ export default {
         },
 
         async placeCall(id, calleeName) {
+            console.log()
             try {
                 // channelName = the caller's and the callee's id. you can use anything. tho.
                 const channelName = `${this.authuser}_${calleeName}`;
@@ -955,8 +958,8 @@ export default {
         async joinRoom(token, channel) {
             console.log("called join room");
             await this.client.join(
-                "20971648246c496fa6e2a8856c4e0d1e",
-                "my_channel",
+                this.agora_id,
+                this.channelName,
                 null
             );
             await this.createLocalStream();
@@ -985,15 +988,13 @@ export default {
         },
 
         async handleUserPublished(user, mediaType) {
-            // this.onlineUsers[user.uid] = user
-            console.warn(user);
-            console.warn(mediaType);
             await this.subscribe(user, mediaType);
-            // // Initiate the Subscription
+            this.patientJoined = true;
         },
 
         async handleUserLeft(user) {
-            console.warn("user Left")
+            console.warn("user Left");
+            this.patientJoined = false;
         },
 
         async createLocalStream() {

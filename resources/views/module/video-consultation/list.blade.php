@@ -53,8 +53,9 @@
                 <tfoot>
                 <tr>
                     <th>Id</th>
-                    <th>Name</th>
-                    <th>Is Active</th>
+                    <th>Doctor</th>
+                    <th>Patient</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
                 </tfoot>

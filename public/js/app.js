@@ -22754,11 +22754,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "AgoraChat",
-  props: ["authuser", "authuserid", "allusers", "agora_id"],
+  props: ["authuser", "authuserid", "agora_id", "channelName"],
   data: function data() {
     return {
       callPlaced: false,
       client: null,
+      patientJoined: false,
       localVideoStream: null,
       localAudioStream: null,
       mutedAudio: false,
@@ -22767,7 +22768,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       onlineUsers: [],
       incomingCall: false,
       incomingCaller: "",
-      agoraChannel: null,
       showChat: ""
     };
   },
@@ -22775,6 +22775,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     // this.initUserOnlineChannel();
     // this.initUserOnlineListeners();
     this.placeCall();
+  },
+  created: function created() {
+    console.log(this.channelName);
+    console.log(this.agora_id);
   },
   methods: {
     /**
@@ -22839,37 +22843,38 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
-              _context.prev = 0;
+              console.log();
+              _context.prev = 1;
               // channelName = the caller's and the callee's id. you can use anything. tho.
               channelName = "".concat(_this2.authuser, "_").concat(calleeName);
-              _context.next = 4;
+              _context.next = 5;
               return _this2.generateToken(channelName);
-            case 4:
+            case 5:
               tokenRes = _context.sent;
-              _context.next = 7;
+              _context.next = 8;
               return axios.post("/agora/call-user", {
                 user_to_call: id,
                 username: _this2.authuser,
                 channel_name: channelName
               });
-            case 7:
+            case 8:
               console.log("Calling Initialize Agora");
               _this2.initializeAgora();
-              _context.next = 11;
+              _context.next = 12;
               return _this2.joinRoom(tokenRes.data, channelName);
-            case 11:
+            case 12:
               _this2.callPlaced = true;
-              _context.next = 17;
+              _context.next = 18;
               break;
-            case 14:
-              _context.prev = 14;
-              _context.t0 = _context["catch"](0);
+            case 15:
+              _context.prev = 15;
+              _context.t0 = _context["catch"](1);
               console.log(_context.t0);
-            case 17:
+            case 18:
             case "end":
               return _context.stop();
           }
-        }, _callee, null, [[0, 14]]);
+        }, _callee, null, [[1, 15]]);
       }))();
     },
     acceptCall: function acceptCall() {
@@ -22926,7 +22931,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               console.log("called join room");
               _context3.next = 3;
-              return _this4.client.join("20971648246c496fa6e2a8856c4e0d1e", "my_channel", null);
+              return _this4.client.join(_this4.agora_id, _this4.channelName, null);
             case 3:
               _context3.next = 5;
               return _this4.createLocalStream();
@@ -22989,12 +22994,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         return _regeneratorRuntime().wrap(function _callee6$(_context6) {
           while (1) switch (_context6.prev = _context6.next) {
             case 0:
-              // this.onlineUsers[user.uid] = user
-              console.warn(user);
-              console.warn(mediaType);
-              _context6.next = 4;
+              _context6.next = 2;
               return _this6.subscribe(user, mediaType);
-            case 4:
+            case 2:
+              _this6.patientJoined = true;
+            case 3:
             case "end":
               return _context6.stop();
           }
@@ -23002,12 +23006,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     handleUserLeft: function handleUserLeft(user) {
+      var _this7 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
         return _regeneratorRuntime().wrap(function _callee7$(_context7) {
           while (1) switch (_context7.prev = _context7.next) {
             case 0:
               console.warn("user Left");
-            case 1:
+              _this7.patientJoined = false;
+            case 2:
             case "end":
               return _context7.stop();
           }
@@ -23015,7 +23021,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     createLocalStream: function createLocalStream() {
-      var _this7 = this;
+      var _this8 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
         return _regeneratorRuntime().wrap(function _callee8$(_context8) {
           while (1) switch (_context8.prev = _context8.next) {
@@ -23023,16 +23029,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               _context8.next = 2;
               return agora_rtc_sdk_ng__WEBPACK_IMPORTED_MODULE_0___default().createMicrophoneAudioTrack();
             case 2:
-              _this7.localAudioStream = _context8.sent;
+              _this8.localAudioStream = _context8.sent;
               _context8.next = 5;
               return agora_rtc_sdk_ng__WEBPACK_IMPORTED_MODULE_0___default().createCameraVideoTrack();
             case 5:
-              _this7.localVideoStream = _context8.sent;
+              _this8.localVideoStream = _context8.sent;
               _context8.next = 8;
-              return _this7.localVideoStream.play('local-video');
+              return _this8.localVideoStream.play('local-video');
             case 8:
               _context8.next = 10;
-              return _this7.client.publish(_this7.localVideoStream);
+              return _this8.client.publish(_this8.localVideoStream);
             case 10:
             case "end":
               return _context8.stop();
@@ -23041,11 +23047,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     endCall: function endCall() {
-      var _this8 = this;
+      var _this9 = this;
       this.localStream.close();
       this.client.leave(function () {
         console.log("Leave channel successfully");
-        _this8.callPlaced = false;
+        _this9.callPlaced = false;
       }, function (err) {
         console.log("Leave channel failed");
       });
@@ -23069,14 +23075,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
     },
     subscribe: function subscribe(user, mediaType) {
-      var _this9 = this;
+      var _this10 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
         var audioTrack, videoTrack;
         return _regeneratorRuntime().wrap(function _callee9$(_context9) {
           while (1) switch (_context9.prev = _context9.next) {
             case 0:
               _context9.next = 2;
-              return _this9.client.subscribe(user, mediaType);
+              return _this10.client.subscribe(user, mediaType);
             case 2:
               if (mediaType === 'audio') {
                 audioTrack = user.audioTrack;
@@ -23152,7 +23158,7 @@ var _hoisted_7 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
     href: "#",
     "class": "name-tag"
-  }, "Andy Will", -1 /* HOISTED */);
+  }, "Patient", -1 /* HOISTED */);
 });
 var _hoisted_8 = {
   key: 0,
@@ -23176,7 +23182,7 @@ var _hoisted_11 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
     href: "#",
     "class": "name-tag"
-  }, "Emmy Lou", -1 /* HOISTED */);
+  }, "Doctor", -1 /* HOISTED */);
 });
 var _hoisted_12 = {
   key: 0,
@@ -23213,7 +23219,7 @@ var _hoisted_16 = /*#__PURE__*/_withScopeId(function () {
   })], -1 /* HOISTED */);
 });
 var _hoisted_17 = [_hoisted_16];
-var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"chat-container\" data-v-f5a5b2d6><div class=\"chat-area\" data-v-f5a5b2d6><div class=\"message-wrapper\" data-v-f5a5b2d6><div class=\"profile-picture\" data-v-f5a5b2d6><img src=\"https://images.unsplash.com/photo-1581824283135-0666cf353f35?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1276&amp;q=80\" alt=\"pp\" data-v-f5a5b2d6></div><div class=\"message-content\" data-v-f5a5b2d6><p class=\"name\" data-v-f5a5b2d6>Ryan Patrick</p><div class=\"message\" data-v-f5a5b2d6>Helloo team!😍</div></div></div><div class=\"message-wrapper\" data-v-f5a5b2d6><div class=\"profile-picture\" data-v-f5a5b2d6><img src=\"https://images.unsplash.com/photo-1566821582776-92b13ab46bb4?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=900&amp;q=60\" alt=\"pp\" data-v-f5a5b2d6></div><div class=\"message-content\" data-v-f5a5b2d6><p class=\"name\" data-v-f5a5b2d6>Andy Will</p><div class=\"message\" data-v-f5a5b2d6>Hello! Can you hear me?🤯 <a class=\"mention\" data-v-f5a5b2d6>@ryanpatrick</a></div></div></div><div class=\"message-wrapper\" data-v-f5a5b2d6><div class=\"profile-picture\" data-v-f5a5b2d6><img src=\"https://images.unsplash.com/photo-1600207438283-a5de6d9df13e?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1234&amp;q=80\" alt=\"pp\" data-v-f5a5b2d6></div><div class=\"message-content\" data-v-f5a5b2d6><p class=\"name\" data-v-f5a5b2d6>Jessica Bell</p><div class=\"message\" data-v-f5a5b2d6>Hi team! Let&#39;s get started it.</div></div></div><div class=\"message-wrapper reverse\" data-v-f5a5b2d6><div class=\"profile-picture\" data-v-f5a5b2d6><img src=\"https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1650&amp;q=80\" alt=\"pp\" data-v-f5a5b2d6></div><div class=\"message-content\" data-v-f5a5b2d6><p class=\"name\" data-v-f5a5b2d6>Emmy Lou</p><div class=\"message\" data-v-f5a5b2d6>Good morning!🌈</div></div></div><div class=\"message-wrapper\" data-v-f5a5b2d6><div class=\"profile-picture\" data-v-f5a5b2d6><img src=\"https://images.unsplash.com/photo-1576110397661-64a019d88a98?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1234&amp;q=80\" alt=\"pp\" data-v-f5a5b2d6></div><div class=\"message-content\" data-v-f5a5b2d6><p class=\"name\" data-v-f5a5b2d6>Tim Russel</p><div class=\"message\" data-v-f5a5b2d6>New design document⬇️</div><div class=\"message-file\" data-v-f5a5b2d6><div class=\"icon sketch\" data-v-f5a5b2d6><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" data-v-f5a5b2d6><path fill=\"#ffd54f\" d=\"M96 191.02v-144l160-30.04 160 30.04v144z\" data-v-f5a5b2d6></path><path fill=\"#ffecb3\" d=\"M96 191.02L256 16.98l160 174.04z\" data-v-f5a5b2d6></path><path fill=\"#ffa000\" d=\"M0 191.02l256 304 256-304z\" data-v-f5a5b2d6></path><path fill=\"#ffca28\" d=\"M96 191.02l160 304 160-304z\" data-v-f5a5b2d6></path><g fill=\"#ffc107\" data-v-f5a5b2d6><path d=\"M0 191.02l96-144v144zM416 47.02v144h96z\" data-v-f5a5b2d6></path></g></svg></div><div class=\"file-info\" data-v-f5a5b2d6><div class=\"file-name\" data-v-f5a5b2d6>NewYear.sketch</div><div class=\"file-size\" data-v-f5a5b2d6>120 MB</div></div></div></div></div><div class=\"message-wrapper\" data-v-f5a5b2d6><div class=\"profile-picture\" data-v-f5a5b2d6><img src=\"https://images.unsplash.com/photo-1581824283135-0666cf353f35?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1276&amp;q=80\" alt=\"pp\" data-v-f5a5b2d6></div><div class=\"message-content\" data-v-f5a5b2d6><p class=\"name\" data-v-f5a5b2d6>Ryan Patrick</p><div class=\"message\" data-v-f5a5b2d6>Hi team!❤️</div><div class=\"message\" data-v-f5a5b2d6>I downloaded the file <a class=\"mention\" data-v-f5a5b2d6>@timrussel</a></div></div></div><div class=\"message-wrapper reverse\" data-v-f5a5b2d6><div class=\"profile-picture\" data-v-f5a5b2d6><img src=\"https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1650&amp;q=80\" alt=\"pp\" data-v-f5a5b2d6></div><div class=\"message-content\" data-v-f5a5b2d6><p class=\"name\" data-v-f5a5b2d6>Emmy Lou</p><div class=\"message\" data-v-f5a5b2d6>Woooww! Awesome❤️</div></div></div></div><div class=\"chat-typing-area-wrapper\" data-v-f5a5b2d6><div class=\"chat-typing-area\" data-v-f5a5b2d6><input type=\"text\" placeholder=\"Type your meesage...\" class=\"chat-input\" data-v-f5a5b2d6><button class=\"send-button\" data-v-f5a5b2d6><svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-send\" viewBox=\"0 0 24 24\" data-v-f5a5b2d6><path d=\"M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z\" data-v-f5a5b2d6></path></svg></button></div></div></div>", 1);
+var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"chat-container\" data-v-f5a5b2d6><div class=\"chat-area\" data-v-f5a5b2d6><div class=\"message-wrapper\" data-v-f5a5b2d6><div class=\"profile-picture\" data-v-f5a5b2d6><img src=\"https://images.unsplash.com/photo-1581824283135-0666cf353f35?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1276&amp;q=80\" alt=\"pp\" data-v-f5a5b2d6></div><div class=\"message-content\" data-v-f5a5b2d6><p class=\"name\" data-v-f5a5b2d6>Ryan Patrick</p><div class=\"message\" data-v-f5a5b2d6>Helloo team!😍</div></div></div><div class=\"message-wrapper\" data-v-f5a5b2d6><div class=\"profile-picture\" data-v-f5a5b2d6><img src=\"https://images.unsplash.com/photo-1566821582776-92b13ab46bb4?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=900&amp;q=60\" alt=\"pp\" data-v-f5a5b2d6></div><div class=\"message-content\" data-v-f5a5b2d6><p class=\"name\" data-v-f5a5b2d6>Andy Will</p><div class=\"message\" data-v-f5a5b2d6>Hello! Can you hear me?🤯 <a class=\"mention\" data-v-f5a5b2d6>@ryanpatrick</a></div></div></div><div class=\"message-wrapper\" data-v-f5a5b2d6><div class=\"profile-picture\" data-v-f5a5b2d6><img src=\"https://images.unsplash.com/photo-1600207438283-a5de6d9df13e?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1234&amp;q=80\" alt=\"pp\" data-v-f5a5b2d6></div><div class=\"message-content\" data-v-f5a5b2d6><p class=\"name\" data-v-f5a5b2d6>Jessica Bell</p><div class=\"message\" data-v-f5a5b2d6>Hi team! Let&#39;s get started it.</div></div></div><div class=\"message-wrapper reverse\" data-v-f5a5b2d6><div class=\"profile-picture\" data-v-f5a5b2d6><img src=\"https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1650&amp;q=80\" alt=\"pp\" data-v-f5a5b2d6></div><div class=\"message-content\" data-v-f5a5b2d6><p class=\"name\" data-v-f5a5b2d6>Emmy Lou</p><div class=\"message\" data-v-f5a5b2d6>Good morning!🌈</div></div></div><div class=\"message-wrapper\" data-v-f5a5b2d6><div class=\"profile-picture\" data-v-f5a5b2d6><img src=\"https://images.unsplash.com/photo-1576110397661-64a019d88a98?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1234&amp;q=80\" alt=\"pp\" data-v-f5a5b2d6></div><div class=\"message-content\" data-v-f5a5b2d6><p class=\"name\" data-v-f5a5b2d6>Tim Russel</p><div class=\"message\" data-v-f5a5b2d6>New design document⬇️</div><div class=\"message-file\" data-v-f5a5b2d6><div class=\"icon sketch\" data-v-f5a5b2d6><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" data-v-f5a5b2d6><path fill=\"#ffd54f\" d=\"M96 191.02v-144l160-30.04 160 30.04v144z\" data-v-f5a5b2d6></path><path fill=\"#ffecb3\" d=\"M96 191.02L256 16.98l160 174.04z\" data-v-f5a5b2d6></path><path fill=\"#ffa000\" d=\"M0 191.02l256 304 256-304z\" data-v-f5a5b2d6></path><path fill=\"#ffca28\" d=\"M96 191.02l160 304 160-304z\" data-v-f5a5b2d6></path><g fill=\"#ffc107\" data-v-f5a5b2d6><path d=\"M0 191.02l96-144v144zM416 47.02v144h96z\" data-v-f5a5b2d6></path></g></svg></div><div class=\"file-info\" data-v-f5a5b2d6><div class=\"file-name\" data-v-f5a5b2d6>NewYear.sketch</div><div class=\"file-size\" data-v-f5a5b2d6>120 MB</div></div></div></div></div><div class=\"message-wrapper\" data-v-f5a5b2d6><div class=\"profile-picture\" data-v-f5a5b2d6><img src=\"https://images.unsplash.com/photo-1581824283135-0666cf353f35?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1276&amp;q=80\" alt=\"pp\" data-v-f5a5b2d6></div><div class=\"message-content\" data-v-f5a5b2d6><p class=\"name\" data-v-f5a5b2d6>Ryan Patrick</p><div class=\"message\" data-v-f5a5b2d6>Hi team!❤️</div><div class=\"message\" data-v-f5a5b2d6>I downloaded the file <a class=\"mention\" data-v-f5a5b2d6>@timrussel</a></div></div></div><div class=\"message-wrapper reverse\" data-v-f5a5b2d6><div class=\"profile-picture\" data-v-f5a5b2d6><img src=\"https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1650&amp;q=80\" alt=\"pp\" data-v-f5a5b2d6></div><div class=\"message-content\" data-v-f5a5b2d6><p class=\"name\" data-v-f5a5b2d6>Emmy Lou</p></div></div></div><div class=\"chat-typing-area-wrapper\" data-v-f5a5b2d6><div class=\"chat-typing-area\" data-v-f5a5b2d6><input type=\"text\" placeholder=\"Type your meesage...\" class=\"chat-input\" data-v-f5a5b2d6><button class=\"send-button\" data-v-f5a5b2d6><svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-send\" viewBox=\"0 0 24 24\" data-v-f5a5b2d6><path d=\"M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z\" data-v-f5a5b2d6></path></svg></button></div></div></div>", 1);
 var _hoisted_19 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
     version: "1.1",
@@ -23283,7 +23289,7 @@ var _hoisted_35 = {
   "class": "action-btns"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [_hoisted_6, _hoisted_7, this.client == null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("img", _hoisted_8)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [_hoisted_10, _hoisted_11, this.localVideoStream == null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("img", _hoisted_12)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [_hoisted_6, _hoisted_7, this.patientJoined === false ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("img", _hoisted_8)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [_hoisted_10, _hoisted_11, this.localVideoStream == null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("img", _hoisted_12)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "video-action-button mic",
     onClick: _cache[0] || (_cache[0] = function () {
       return $options.handleAudioToggle && $options.handleAudioToggle.apply($options, arguments);
@@ -23305,7 +23311,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[3] || (_cache[3] = function () {
       return $options.toggleChatWindow && $options.toggleChatWindow.apply($options, arguments);
     })
-  }, _hoisted_20)], 2 /* CLASS */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("main", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.allusers, function (user) {
+  }, _hoisted_20)], 2 /* CLASS */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("main", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.allusers, function (user) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
       type: "button",
       "class": "btn btn-primary mr-2",

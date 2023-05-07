@@ -13,6 +13,7 @@ use App\Repositories\UserRepository;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Prettus\Validator\Exceptions\ValidatorException;
 
@@ -161,5 +162,25 @@ class UserController extends AppBaseController
         }
 
         return new UserCollection($users);
+    }
+
+    public function updateFirebase(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'uid' => 'required',
+                'token' => 'required'
+            ]);
+            $user = Auth::user();
+            $user->firebase_user = $validated['uid'];
+            $user->firebase_token = $validated['token'];
+            if ($user->save()) {
+                return $this->successResponse($user);
+            }
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage());
+        }
+        return $this->errorResponse("Internal server error");
+
     }
 }

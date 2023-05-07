@@ -38,22 +38,36 @@
         </div>
         <!-- /.card-body -->
         <div class="card-footer">
-            <form action=""
-                  method="post"
-                  enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                <input type="hidden" name="status" value="active"/>
-                <button class="btn btn-info btn-xl">Make Call Active</button>
-            </form>
-            <form action=""
-                  method="post"
-                  enctype="multipart/form-data" class="my-2">
-                @csrf
-                @method('PUT')
-                <input type="hidden" name="status" value="complete"/>
-                <button class="btn btn-danger btn-xl">Mark Call As Completed</button>
-            </form>
+            <div class="row">
+                <div class="col-md-2 col-sm-12">
+                    <a href="{{ route('start-consultation', ['id' => $consultation->channel_name]) }}"
+                       class="btn btn-info btn-xl" target="_blank">Go to chat screen</a>
+                </div>
+                @if(!$consultation->is_active)
+                    <div class="col-md-2 col-sm-12">
+                        <form action=""
+                              method="post"
+                              enctype="multipart/form-data" class="m-0">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="status" value="active"/>
+                            <button class="btn btn-info btn-xl">Make Call Active</button>
+                        </form>
+                    </div>
+                @endif
+                @if($consultation->is_active)
+                    <div class="col-md-2 col-sm-12">
+                        <form action=""
+                              method="post"
+                              enctype="multipart/form-data" class="my-0">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="status" value="complete"/>
+                            <button class="btn btn-danger btn-xl">Mark Call As Completed</button>
+                        </form>
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
 @endsection

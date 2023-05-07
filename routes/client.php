@@ -8,6 +8,7 @@ use App\Http\Controllers\API\Client\HospitalController;
 use App\Http\Controllers\API\Client\PushNotificationController;
 use App\Http\Controllers\API\Client\QueryController;
 use App\Http\Controllers\API\Client\UserController;
+use App\Http\Controllers\API\Client\VideoConsultationController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -23,10 +24,12 @@ Route::group(['middleware' => ['auth:sanctum', 'validate.user', 'api']], functio
     Route::apiResource('doctors', DoctorController::class)->only(['index', 'show']);
     Route::apiResource('family', \App\Http\Controllers\API\Client\PatientFamilyDetailsController::class);
     Route::post('update-transaction-result', [QueryController::class, 'transactionSuccess']);
+    Route::get('consultations', [VideoConsultationController::class, 'index']);
+    Route::post('update-firebase', [UserController::class, 'updateFirebase']);
 
 });
 
-Route::post('submit-consultation', [\App\Http\Controllers\API\Client\VideoConsultationController::class, 'store']);
+Route::post('submit-consultation', [VideoConsultationController::class, 'store']);
 Route::get('/search', [HomeController::class, 'searchHospitalDoctor'])->middleware('api');
 
 Route::get('users', [UserController::class, 'index'])

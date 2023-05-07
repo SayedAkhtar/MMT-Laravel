@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\VideoConsultation;
 use App\Traits\IsViewModule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class VideoConsultationController extends Controller
 {
@@ -105,14 +107,10 @@ class VideoConsultationController extends Controller
         return back()->withErrors('Something wrong happened please try again.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\VideoConsultation $videoConsultation
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(VideoConsultation $videoConsultation)
+    public function startConsultation($id)
     {
-        //
+        $consultation = VideoConsultation::where('channel_name', $id)->first();
+        $users = User::where('id', '<>', Auth::id())->get();
+        return view('agora-chat', ['users' => $users, 'channel_name' => $consultation->channel_name]);
     }
 }

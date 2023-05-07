@@ -65,28 +65,23 @@ Route::group(['middleware' => ['auth']], function () {
 
 //    ------------ End Query Routes ----------------//
 
-
-    Route::post('patient-testimonies', [PatientTestimonyController::class, 'store'])
-        ->name('patientTestimony.store')
-        ->middleware(['permission:create_patienttestimony']);
-    Route::post('patient-testimonies/bulk-create', [PatientTestimonyController::class, 'bulkStore'])
-        ->name('patientTestimony.store.bulk')
-        ->middleware(['permission:create_patienttestimony']);
-    Route::get('patient-testimonies', [PatientTestimonyController::class, 'index'])
-        ->name('patient-testimonies.index')
-        ->middleware(['permission:read_patienttestimony']);
-    Route::get('patient-testimonies/{patientTestimony}', [PatientTestimonyController::class, 'show'])
-        ->name('patientTestimony.show')
-        ->middleware(['permission:read_patienttestimony']);
-    Route::put('patient-testimonies/{patientTestimony}', [PatientTestimonyController::class, 'update'])
-        ->name('patientTestimony.update')
-        ->middleware(['permission:update_patienttestimony']);
-    Route::post('patient-testimonies/bulk-update', [PatientTestimonyController::class, 'bulkUpdate'])
-        ->name('patientTestimony.update.bulk')
-        ->middleware(['permission:update_patienttestimony']);
-    Route::delete('patient-testimonies/{patientTestimony}', [PatientTestimonyController::class, 'delete'])
-        ->name('patientTestimony.destroy')
-        ->middleware(['permission:delete_patienttestimony']);
+    Route::resource('patient-testimonies', PatientTestimonyController::class);
+//    Route::post(, [PatientTestimonyController::class, 'store'])
+//        ->name('patientTestimony.store')
+//        ->middleware(['permission:create_patienttestimony']);
+//    Route::get('patient-testimonies', [PatientTestimonyController::class, 'index'])
+//        ->name('patient-testimonies.index')
+//        ->middleware(['permission:read_patienttestimony']);
+//    Route::get('patient-testimonies', [PatientTestimonyController::class, 'create']);
+//    Route::get('patient-testimonies/{patientTestimony}', [PatientTestimonyController::class, 'show'])
+//        ->name('patientTestimony.show')
+//        ->middleware(['permission:read_patienttestimony']);
+//    Route::put('patient-testimonies/{patientTestimony}', [PatientTestimonyController::class, 'update'])
+//        ->name('patientTestimony.update')
+//        ->middleware(['permission:update_patienttestimony']);
+//    Route::delete('patient-testimonies/{patientTestimony}', [PatientTestimonyController::class, 'delete'])
+//        ->name('patientTestimony.destroy')
+//        ->middleware(['permission:delete_patienttestimony']);
 
     Route::resource('wellness-centers', WellnessCenterController::class);
 
@@ -105,7 +100,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('hospitals', HospitalController::class);
 
     Route::resource('video-consultation', VideoConsultationController::class);
-
+    Route::get('consultation/{id}', [VideoConsultationController::class, 'startConsultation'])->name('start-consultation');
     Route::get('patients/list', [UserController::class, 'listPatients'])->name('patient.index');
     Route::prefix('hcf')->group(function () {
         Route::get('list', [UserController::class, 'listModerators'])->name('moderators.index');

@@ -10,6 +10,10 @@ class VideoConsultation extends Model
     use HasFactory;
 
     protected $guarded = [];
+    protected $casts = [
+        'is_active' => 'bool',
+        'is_completed' => 'bool'
+    ];
 
     public function doctor()
     {
@@ -20,4 +24,5 @@ class VideoConsultation extends Model
     {
         return $this->belongsTo(PatientDetails::class);
     }
+
 }
