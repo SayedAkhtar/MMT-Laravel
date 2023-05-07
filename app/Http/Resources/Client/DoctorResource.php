@@ -21,17 +21,21 @@ class DoctorResource extends BaseAPIResource
             return $this->resource->toArray();
         }
         $hospital = [];
-        foreach ($this->hospitals as $e) {
-            $hospital[] = ['id' => $e->id, 'name' => $e->name];
+        if (!empty($this->hospitals)) {
+            foreach ($this->hospitals as $e) {
+                $hospital[] = ['id' => $e->id, 'name' => $e->name];
+            }
         }
         $time_slot = json_decode($this->time_slots, true);
         $data = [];
-        foreach ($time_slot as $key => $value) {
-            foreach ($value as $v) {
-                $data[] = [
-                    "name" => Str::headline($key) . " " . $v,
-                    "utc" => Carbon::parse($key . " " . $v)->getTimestamp()
-                ];
+        if (!empty($time_slot)) {
+            foreach ($time_slot as $key => $value) {
+                foreach ($value as $v) {
+                    $data[] = [
+                        "name" => Str::headline($key) . " " . $v,
+                        "utc" => Carbon::parse($key . " " . $v)->getTimestamp()
+                    ];
+                }
             }
         }
         return [
