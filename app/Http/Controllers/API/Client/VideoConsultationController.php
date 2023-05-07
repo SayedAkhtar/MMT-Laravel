@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Client;
 
 use App\Http\Controllers\AppBaseController;
+use App\Models\PatientDetails;
 use App\Models\Payment;
 use App\Models\VideoConsultation;
 use Carbon\Carbon;
@@ -33,14 +34,23 @@ class VideoConsultationController extends AppBaseController
     {
         $validated = $request->validate([
             'doctor_id' => 'required|exists:doctors,id',
-            'patient_id' => 'required|exists:patient_details,id',
-            'scheduled_at' => 'required|integer'
+            'scheduled_at' => 'required|integer',
+            'r_payment_id' => 'required',
         ]);
+        $patient_id = PatientDetails::where('user_id', Auth::id())->firstOrFail()->id;
         try {
+            $payment = Payment::create([
+                'r_payment_id' => $request->input('r_payment_id'),
+                'method' => $request->input('method') ?? 'razorpay',
+                'currency' => $request->input('currency') ?? 'inr',
+                'phone' => Auth::user()->phone,
+                'amount' => $request->input('amount'),
+                'json_response' => $request->input('response'),
+            ]);
             $result = VideoConsultation::create([
                 'doctor_id' => $validated['doctor_id'],
                 'channel_name' => Str::uuid(),
-                'patient_id' => $validated['patient_id'],
+                'patient_id' => $patient_id,
                 'scheduled_at' => $validated['scheduled_at'],
                 'payment_id' => 1,
                 'payment_status' => Payment::SUCCESS,

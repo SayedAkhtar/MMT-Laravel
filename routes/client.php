@@ -25,11 +25,11 @@ Route::group(['middleware' => ['auth:sanctum', 'validate.user', 'api']], functio
     Route::apiResource('family', \App\Http\Controllers\API\Client\PatientFamilyDetailsController::class);
     Route::post('update-transaction-result', [QueryController::class, 'transactionSuccess']);
     Route::get('consultations', [VideoConsultationController::class, 'index']);
+    Route::post('submit-consultation', [VideoConsultationController::class, 'store']);
     Route::post('update-firebase', [UserController::class, 'updateFirebase']);
 
 });
 
-Route::post('submit-consultation', [VideoConsultationController::class, 'store']);
 Route::get('/search', [HomeController::class, 'searchHospitalDoctor'])->middleware('api');
 
 Route::get('users', [UserController::class, 'index'])
