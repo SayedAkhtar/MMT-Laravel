@@ -84,12 +84,9 @@ class Hospital extends BaseModel
     {
         return $this->belongsToMany(Doctor::class, 'doctor_hospitals');
     }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
-     */
+    
     public function tags()
     {
-        return $this->belongsToMany(Tags::class, 'hospital_id', 'id');
+        return $this->belongsToMany(Tags::class, 'hospital_tags');
     }
 }

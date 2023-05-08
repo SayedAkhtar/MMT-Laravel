@@ -49,7 +49,13 @@
                         <td class="text-right">
                             <a href="{{ route('treatments.show', ['treatment' => $data->id]) }}"
                                class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                            <a href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i></a>
+                            <form action="{{ route('treatments.destroy', ['treatment' => $data->id]) }}" method="post"
+                                  class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @empty

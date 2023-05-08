@@ -53,13 +53,15 @@
                         <!-- text input -->
                         <div class="form-group">
                             <x-multi-select-search label="Type" name="type" table="accommodation_types"
+                                                   :shouldInsert="true"
                                                    :multiple="false"/>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
-                            <x-multi-select-search label="Facilities" name="facilities" table="facilities"/>
+                            <x-multi-select-search label="Facilities" name="facilities" table="facilities"
+                                                   :shouldInsert="true"/>
                         </div>
                     </div>
                 </div>

@@ -59,6 +59,7 @@
                         <div class="form-group">
                             <x-multi-select-search label="Type" name="type" table="accommodation_types"
                                                    :multiple="false"
+                                                   :shouldInsert="true"
                                                    :selectedOptions="$accommodation->category"/>
                         </div>
                     </div>
@@ -66,6 +67,7 @@
                         <!-- text input -->
                         <div class="form-group">
                             <x-multi-select-search label="Facilities" name="facilities" table="facilities"
+                                                   :shouldInsert="true"
                                                    :selectedOptions="$accommodation->facilities->all()"/>
                         </div>
                     </div>
@@ -76,7 +78,10 @@
                     <div class="col-sm-12">
                         <div class="form-group">
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="customSwitch1" name="is_active">
+                                <input type="checkbox" class="custom-control-input" id="customSwitch1"
+                                       name="is_active"
+                                       @if($accommodation->is_active) checked @endif
+                                >
                                 <label class="custom-control-label" for="customSwitch1">Test Active
                                     Status</label>
                             </div>

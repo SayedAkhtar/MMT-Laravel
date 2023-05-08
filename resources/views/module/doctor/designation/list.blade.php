@@ -33,7 +33,22 @@
                             <a href="{{ route('designations.show', ['designation' => $data->id]) }}"
                                class="btn btn-info btn-sm"
                                onclick="edit({{ $data->id }})"><i class="fa fa-edit"></i></a>
-                            <a href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i></a>
+                            @if(count($data->doctors) < 1)
+                                <form action="{{ route('designations.destroy', ['designation' => $data->id]) }}"
+                                      method="post"
+                                      class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            @else
+                                <button type="button" class="btn btn-danger btn-sm"
+                                        onclick="alert('{{ count($data->doctors)}} doctors present cannot delete')">
+                                    <i class="fa fa-trash-alt"></i>
+                                </button>
+                            @endif
+
                         </td>
                     </tr>
                 @endforeach

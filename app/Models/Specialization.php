@@ -77,4 +77,9 @@ class Specialization extends BaseModel
     {
         return $this->belongsTo(PatientDetails::class, 'speciality', 'id');
     }
+
+    public function doctors()
+    {
+        return $this->belongsToMany(Doctor::class, 'doctor_specializations');
+    }
 }

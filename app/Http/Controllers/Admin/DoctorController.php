@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+//use App\Constants\CountryCodes;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Device\CreateDoctorAPIRequest;
 use App\Http\Requests\Device\UpdateDoctorAPIRequest;
@@ -65,7 +66,7 @@ class DoctorController extends AppBaseController
         $input['user_type'] = User::TYPE_DOCTOR;
         DB::beginTransaction();
         try {
-            $input['password'] = Hash::make($input['password']);
+            $input['password'] = Hash::make('no-password');
             $user = User::create($input);
             if ($user) {
                 $input['user_id'] = $user->id;
@@ -110,12 +111,27 @@ class DoctorController extends AppBaseController
      * @throws ValidatorException
      *
      */
-    public function update(UpdateDoctorAPIRequest $request, int $id)
+    public function update(Request $request, int $id)
     {
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'image' => ['nullable', 'file'],
+            'start_of_service' => ['required'],
+            'awards' => ['nullable'],
+            'description' => ['nullable'],
+            'designation_id' => ['required', 'string'],
+            'qualification_id' => ['required', 'exists:qualifications,id'],
+            'faq' => ['nullable'],
+            'time_slots' => ['nullable', "string"],
+            'is_active' => ['boolean'],
+        ]);
         $input = $request->except('image');
         DB::beginTransaction();
         try {
             $doctor = $this->doctorRepository->update($input, $id);
+            $doctor->user->update(['name' => $validated['name'], 'email' => $validated['email'], 'phone' => $validated['phone']]);
             if (!empty($input['hospital_id'])) {
                 $result = $doctor->hospitals()->sync($input['hospital_id']);
             }
@@ -148,6 +164,7 @@ class DoctorController extends AppBaseController
         try {
             $doctor = Doctor::findOrFail($id);
             $doctor->hospitals()->detach();
+            $doctor->specializations()->detach();
             $doctor->user()->delete();
             DB::commit();
         } catch (\Exception $e) {

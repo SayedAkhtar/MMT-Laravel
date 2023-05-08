@@ -30,7 +30,7 @@ class CreateAccomodationAPIRequest extends FormRequest
             'name' => ['nullable', 'string'],
             'address' => ['nullable', 'string'],
             'images.*' => ['nullable', 'file'],
-            'type' => ['nullable', 'exists:accommodation_types,id'],
+            'type' => ['nullable'],
             'geo_location' => ['nullable', 'regex:/<iframe\s*src="https:\/\/www\.google\.com\/maps\/embed\?[^"]+"*\s*[^>]+>*<\/iframe>/u']
         ];
     }

@@ -42,6 +42,7 @@
                         <div class="form-group">
                             <x-multi-select-search label="Detoxifications Performed" name="detoxification"
                                                    table="detoxification_categories"
+                                                   :shouldInsert="true"
                                                    :multiple="true"/>
                         </div>
                     </div>

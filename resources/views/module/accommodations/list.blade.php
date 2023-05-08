@@ -43,7 +43,14 @@
                         <td class="text-right">
                             <a href="{{ route('accommodations.show', ['accommodation' => $data->id]) }}"
                                class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                            <a href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i></a>
+                            <form action="{{ route('accommodations.destroy', ['accommodation' => $data->id]) }}"
+                                  method="post" class="d-inline">
+                                @method('DELETE')
+                                @csrf
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i>
+                                </button>
+                            </form>
+
                         </td>
                     </tr>
                 @empty

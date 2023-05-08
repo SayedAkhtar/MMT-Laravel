@@ -35,4 +35,9 @@ class Designation extends Model
         'added_by' => 'integer',
         'updated_by' => 'integer',
     ];
+
+    public function doctors()
+    {
+        return $this->hasMany(Doctor::class);
+    }
 }

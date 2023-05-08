@@ -50,6 +50,7 @@
                             <x-multi-select-search label="Detoxification's Performed" name="detoxification"
                                                    table="detoxification_categories"
                                                    :multiple="true"
+                                                   :shouldInsert="true"
                                                    :selectedOptions="$wellnessCenter->detoxification->all()"/>
                         </div>
                     </div>
@@ -88,7 +89,12 @@
                     <div class="col-sm-12">
                         <div class="form-group">
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="customSwitch1" name="is_active">
+                                <input type="checkbox"
+                                       class="custom-control-input"
+                                       id="customSwitch1"
+                                       name="is_active"
+                                       @if($wellnessCenter->is_active) checked @endif
+                                >
                                 <label class="custom-control-label" for="customSwitch1">Test Active
                                     Status</label>
                             </div>

@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\Device\BulkCreateDesignationAPIRequest;
 use App\Http\Requests\Device\CreateDesignationAPIRequest;
 use App\Http\Requests\Device\UpdateDesignationAPIRequest;
 use App\Http\Resources\Device\DesignationCollection;
 use App\Repositories\DesignationRepository;
 use App\Traits\IsViewModule;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Prettus\Validator\Exceptions\ValidatorException;
@@ -109,24 +107,14 @@ class DesignationController extends AppBaseController
      *
      * @param int $id
      *
-     * @return JsonResponse
      * @throws Exception
      *
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $id)
     {
+
         $this->designationRepository->delete($id);
 
-        return $this->successResponse('Designation deleted successfully.');
+        return back()->with('success', "Deletion success");
     }
-
-    /**
-     * Bulk create Designation's.
-     *
-     * @param BulkCreateDesignationAPIRequest $request
-     *
-     * @return DesignationCollection
-     * @throws ValidatorException
-     *
-     */
 }

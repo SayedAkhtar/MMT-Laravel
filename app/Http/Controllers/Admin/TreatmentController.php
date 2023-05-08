@@ -7,8 +7,6 @@ use App\Http\Requests\Device\CreateTreatmentAPIRequest;
 use App\Http\Requests\Device\UpdateTreatmentAPIRequest;
 use App\Repositories\TreatmentRepository;
 use App\Traits\IsViewModule;
-use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Prettus\Validator\Exceptions\ValidatorException;
 
@@ -66,7 +64,7 @@ class TreatmentController extends AppBaseController
         if ($request->has('specializations')) {
             $treatment->specializations()->attach($request->get('specializations'));
         }
-        return back()->with('success', "Treatment added successfully");
+        return redirect(route('treatments.show', ['treatment' => $treatment->id]))->with('success', "Treatment added successfully");
     }
 
     /**
@@ -121,20 +119,12 @@ class TreatmentController extends AppBaseController
         return back()->with('success', "Updated successfully");
     }
 
-    /**
-     * Delete given Treatment.
-     *
-     * @param int $id
-     *
-     * @return JsonResponse
-     * @throws Exception
-     *
-     */
-    public function destroy(int $id): JsonResponse
+
+    public function destroy(int $id)
     {
         $this->treatmentRepository->delete($id);
 
-        return $this->successResponse('Treatment deleted successfully.');
+        return back()->with('success', 'Treatment deleted successfully.');
     }
 
 }

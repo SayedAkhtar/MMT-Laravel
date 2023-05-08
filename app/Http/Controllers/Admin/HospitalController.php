@@ -13,8 +13,6 @@ use App\Repositories\AccreditationRepository;
 use App\Repositories\HospitalRepository;
 use App\Repositories\TreatmentRepository;
 use App\Traits\IsViewModule;
-use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -50,7 +48,7 @@ class HospitalController extends AppBaseController
      */
     public function index(Request $request): View
     {
-        $hospitals = $this->hospitalRepository->fetch($request);
+        $hospitals = Hospital::query()->where('is_active', true)->get();
         return $this->module_view('list', compact('hospitals'));
     }
 
@@ -75,14 +73,14 @@ class HospitalController extends AppBaseController
         $input = $request->all();
         try {
             $hospital = $this->hospitalRepository->create($input);
-            $insert_id = [];
+            $accreditation_id = [];
             if (!empty($input['accreditations'])) {
                 foreach ($input['accreditations'] as $data) {
                     if (intval($data) != 0) {
-                        $insert_id[] = intval($data);
+                        $accreditation_id[] = intval($data);
                     } else {
                         $model = Accreditation::create(['name' => $data]);
-                        $insert_id[] = $model->id;
+                        $accreditation_id[] = $model->id;
                     }
                 }
             }
@@ -95,8 +93,8 @@ class HospitalController extends AppBaseController
             if ($input['treatments']) {
                 $result = $hospital->treatments()->attach($input['treatments']);
             }
-            if ($insert_id) {
-                $result = $hospital->treatments()->attach($insert_id);
+            if ($accreditation_id) {
+                $result = $hospital->accreditation()->attach($accreditation_id);
             }
         } catch (\Exception $e) {
             return back()->withInput()->with('error', $e->getMessage());
@@ -134,9 +132,20 @@ class HospitalController extends AppBaseController
             if ($request->hasFile('logo')) {
                 $hospital->attachImage('logo', 'logo', false);
             }
+            $accreditation_id = [];
+            if (!empty($input['accreditations'])) {
+                foreach ($input['accreditations'] as $data) {
+                    if (intval($data) != 0) {
+                        $accreditation_id[] = intval($data);
+                    } else {
+                        $model = Accreditation::create(['name' => $data]);
+                        $accreditation_id[] = $model->id;
+                    }
+                }
+            }
             $hospital->doctors()->sync($input['doctors'] ?? []);
             $hospital->treatments()->sync($input['treatments'] ?? []);
-            $hospital->accreditation()->sync($input['accreditations'] ?? []);
+            $hospital->accreditation()->sync($accreditation_id);
             $hospital = $this->hospitalRepository->update($input, $id);
             DB::commit();
         } catch (\Exception $e) {
@@ -148,18 +157,22 @@ class HospitalController extends AppBaseController
 
     /**
      * Delete given Hospital.
-     *
-     * @param int $id
-     *
-     * @return JsonResponse
-     * @throws Exception
-     *
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $id)
     {
-        $this->hospitalRepository->delete($id);
+        try {
+            $hospital = Hospital::findOrFail($id);
+            $hospital->doctors()->detach();
+            $hospital->tags()->detach();
+            $hospital->accreditation()->detach();
+            $hospital->treatments()->detach();
+            $hospital->is_active = false;
+            $hospital->save();
+            return back()->with('success', 'Hospital deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors($e->getMessage());
+        }
 
-        return $this->successResponse('Hospital deleted successfully.');
     }
 
 }

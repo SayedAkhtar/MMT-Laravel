@@ -36,10 +36,13 @@
                         <td class="text-right">
                             <a href="{{ route('hospitals.show', ['hospital'=> $data->id]) }}"
                                class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                            <button class="btn btn-danger btn-sm" data-action="delete"
-                                    data-route="{{ route('hospitals.destroy', ['hospital' => $data->id]) }}"
-                                    data-entity="hospital"
-                                    data-entity-id="{{ $data->id }}"><i class="fa fa-trash-alt"></i></button>
+                            <form action="{{ route('hospitals.destroy', ['hospital' => $data->id]) }}"
+                                  method="post" class="d-inline">
+                                @method('DELETE')
+                                @csrf
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @empty

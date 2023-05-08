@@ -28,30 +28,30 @@
                             <input type="email" class="form-control" placeholder="Enter email" name="email" required>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <!-- text input -->
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" class="form-control" placeholder="Enter name" name="password"
-                                   required>
-                        </div>
-                    </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label>Phone Number: <small class="text-red">( Ony accepts number with country
-                                    code. Ex: +91)</small></label>
-                            <input type="text" class="form-control"
-                                   placeholder="Enter phone with country code. Ex: +91 "
-                                   name="phone" required pattern="^\+[1-9]{1}[0-9]{3,14}$"
-                                   title="Please enter a valid mobile number"
-                                   oninvalid="setCustomValidity('Please enter a valid mobile number')"
-                                   value="">
+                            <label>Phone Number</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend w-25">
+                                    <select name="country_code" id="" class="form-select">
+                                        @foreach(\App\Constants\CountryCodes::getList() as $data)
+                                            <option value="{{ $data['dial_code'] }}"
+                                                    @if($data['code'] == 'IN') selected @endif>
+                                                {{ $data['code'] }}
+                                                ({{ $data['dial_code'] }})
+                                            </option>
+                                        @endforeach
+
+                                    </select>
+                                </div>
+                                <input type="text" class="form-control"
+                                       placeholder="Enter phone number"
+                                       pattern="[0-9]+"
+                                       name="phone">
+                            </div>
+
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
@@ -69,8 +69,6 @@
                             </select>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
@@ -78,22 +76,6 @@
                             <input type="text" class="form-control" placeholder="Enter name" name="country">
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Date of birth</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                </div>
-                                <input type="text" class="form-control" data-inputmask-alias="datetime"
-                                       data-inputmask-inputformat="mm/dd/yyyy" data-mask="" inputmode="numeric"
-                                       name="dob">
-                            </div>
-                            <!-- /.input group -->
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
@@ -108,8 +90,6 @@
                                                    :multiple="false"/>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
@@ -144,8 +124,6 @@
                                                    multiple="true"/>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
@@ -159,8 +137,6 @@
                                    required>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-sm-12">
                         <!-- text input -->
                         <div class="form-group">

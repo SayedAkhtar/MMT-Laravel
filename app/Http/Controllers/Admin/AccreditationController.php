@@ -3,16 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\Device\BulkCreateAccreditationAPIRequest;
-use App\Http\Requests\Device\BulkUpdateAccreditationAPIRequest;
 use App\Http\Requests\Device\CreateAccreditationAPIRequest;
 use App\Http\Requests\Device\UpdateAccreditationAPIRequest;
 use App\Http\Resources\Device\AccreditationCollection;
 use App\Http\Resources\Device\AccreditationResource;
 use App\Repositories\AccreditationRepository;
 use App\Traits\IsViewModule;
-use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Prettus\Validator\Exceptions\ValidatorException;
@@ -56,15 +52,6 @@ class AccreditationController extends AppBaseController
         return $this->module_view('add');
     }
 
-    /**
-     * Create Accreditation with given payload.
-     *
-     * @param CreateAccreditationAPIRequest $request
-     *
-     * @return AccreditationResource
-     * @throws ValidatorException
-     *
-     */
     public function store(CreateAccreditationAPIRequest $request)
     {
         $input = $request->except('logo');
@@ -108,64 +95,15 @@ class AccreditationController extends AppBaseController
         if ($request->hasFile('logo')) {
             $accreditation->updateImage('logo', 'logo', false);
         }
-        return back()->with('success', "Update successfull");
+        return back()->with('success', "Update successfully");
     }
 
-    /**
-     * Delete given Accreditation.
-     *
-     * @param int $id
-     *
-     * @return JsonResponse
-     * @throws Exception
-     *
-     */
-    public function delete(int $id): JsonResponse
+
+    public function delete(int $id)
     {
         $this->accreditationRepository->delete($id);
 
-        return $this->successResponse('Accreditation deleted successfully.');
+        return back()->with('success', 'Accreditation deleted successfully.');
     }
 
-    /**
-     * Bulk create Accreditation's.
-     *
-     * @param BulkCreateAccreditationAPIRequest $request
-     *
-     * @return AccreditationCollection
-     * @throws ValidatorException
-     *
-     */
-    public function bulkStore(BulkCreateAccreditationAPIRequest $request): AccreditationCollection
-    {
-        $accreditations = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $accreditationInput) {
-            $accreditations[$key] = $this->accreditationRepository->create($accreditationInput);
-        }
-
-        return new AccreditationCollection($accreditations);
-    }
-
-    /**
-     * Bulk update Accreditation's data.
-     *
-     * @param BulkUpdateAccreditationAPIRequest $request
-     *
-     * @return AccreditationCollection
-     * @throws ValidatorException
-     *
-     */
-    public function bulkUpdate(BulkUpdateAccreditationAPIRequest $request): AccreditationCollection
-    {
-        $accreditations = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $accreditationInput) {
-            $accreditations[$key] = $this->accreditationRepository->update($accreditationInput, $accreditationInput['id']);
-        }
-
-        return new AccreditationCollection($accreditations);
-    }
 }

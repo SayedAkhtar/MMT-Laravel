@@ -9,9 +9,9 @@ use App\Models\Accommodation;
 use App\Models\Facility;
 use App\Repositories\AccomodationRepository;
 use App\Traits\IsViewModule;
-use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class AccomodationController extends AppBaseController
@@ -52,11 +52,20 @@ class AccomodationController extends AppBaseController
 
     public function store(CreateAccomodationAPIRequest $request)
     {
-        $input = $request->except('images', 'facilities');
+        $input = $request->except('images');
         try {
+            if (!empty($input['type']) && intval($input['type']) == 0) {
+                $input['type'] = DB::table('accommodation_types')->insertGetId([
+                    'name' => $input['type'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'added_by' => Auth::id(),
+                    'updated_by' => Auth::id(),
+                ]);
+            }
             $accommodation = $this->accomodationRepository->create($input);
-            $insert_id = [];
             if (!empty($input['facilities'])) {
+                $insert_id = [];
                 foreach ($input['facilities'] as $data) {
                     if (intval($data) != 0) {
                         $insert_id[] = intval($data);
@@ -67,14 +76,15 @@ class AccomodationController extends AppBaseController
                 }
                 $accommodation->facilities()->attach($insert_id);
             }
+
             if ($request->hasFile('images')) {
                 $accommodation->attachImage('images', 'accommodation-images', true);
             }
 
         } catch (\Exception $e) {
-
+            return back()->withErrors($e->getMessage());
         }
-        return back()->with('success', "Accommodation added successfully");
+        return redirect(route('accommodations.index'))->with('success', "Accommodation added successfully");
     }
 
     /**
@@ -107,6 +117,15 @@ class AccomodationController extends AppBaseController
     {
         $input = $request->all();
         try {
+            if (!empty($input['type']) && intval($input['type']) == 0) {
+                $input['type'] = DB::table('accommodation_types')->insertGetId([
+                    'name' => $input['type'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'added_by' => Auth::id(),
+                    'updated_by' => Auth::id(),
+                ]);
+            }
             $insert_id = [];
             if (!empty($input['facilities'])) {
                 foreach ($input['facilities'] as $data) {
@@ -134,16 +153,12 @@ class AccomodationController extends AppBaseController
      * Delete given Accommodation.
      *
      * @param int $id
-     *
-     * @return JsonResponse
-     * @throws Exception
-     *
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $id)
     {
         $this->accomodationRepository->delete($id);
 
-        return $this->successResponse('Accommodation deleted successfully.');
+        return back()->with('success', 'Accommodation deleted successfully.');
     }
 
 }

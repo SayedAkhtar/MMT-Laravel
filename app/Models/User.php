@@ -50,6 +50,7 @@ class User extends Authenticatable implements HasMedia
         'reset_password_expire_time',
         'reset_password_code',
         'user_type',
+        'country_code',
     ];
 
     /**

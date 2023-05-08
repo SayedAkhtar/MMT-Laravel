@@ -41,7 +41,6 @@
                                     }
                                 }
                             }
-                            console.log(results);
                             return {
                                 results: results,
                             }

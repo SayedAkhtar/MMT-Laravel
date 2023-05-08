@@ -62,11 +62,12 @@ class WellnessCenterController extends AppBaseController
      */
     public function store(CreateWellnessCenterAPIRequest $request)
     {
-        $input = $request->except('logo', 'detoxification');
-        DB::transaction(function () use ($input, $request) {
+        $input = $request->except('logo');
+        DB::beginTransaction();
+        try {
             $wellnessCenter = $this->wellnessCenterRepository->create($input);
-            $detoxification_id = [];
             if (isset($input['detoxification'])) {
+                $detoxification_id = [];
                 foreach ($input['detoxification'] as $detox) {
                     if (intval($detox) != 0) {
                         $detoxification_id[] = intval($detox);
@@ -83,9 +84,14 @@ class WellnessCenterController extends AppBaseController
             if ($request->hasFile('images')) {
                 $wellnessCenter->attachImage('images', 'wellness-center-images', true);
             }
-        });
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors($e->getMessage());
+        }
 
-        return back()->with('success', "Wellness Center added successfully");
+
+        return redirect(route('wellness-centers.index'))->with('success', "Wellness Center added successfully");
     }
 
     /**

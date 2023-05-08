@@ -3,17 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\Device\BulkCreateSpecializationAPIRequest;
-use App\Http\Requests\Device\BulkUpdateSpecializationAPIRequest;
 use App\Http\Requests\Device\CreateSpecializationAPIRequest;
 use App\Http\Requests\Device\UpdateSpecializationAPIRequest;
-use App\Http\Resources\Device\SpecializationCollection;
 use App\Repositories\SpecializationRepository;
 use App\Traits\IsViewModule;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Prettus\Validator\Exceptions\ValidatorException;
 
@@ -119,49 +117,8 @@ class SpecializationController extends AppBaseController
     public function destroy(int $id): JsonResponse
     {
         $this->specializationRepository->delete($id);
-
+        DB::table('doctor_specializations')->where('specialization_id', $id)->delete();
         return $this->successResponse('Specialization deleted successfully.');
     }
 
-    /**
-     * Bulk create Specialization's.
-     *
-     * @param BulkCreateSpecializationAPIRequest $request
-     *
-     * @return SpecializationCollection
-     * @throws ValidatorException
-     *
-     */
-    public function bulkStore(BulkCreateSpecializationAPIRequest $request): SpecializationCollection
-    {
-        $specializations = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $specializationInput) {
-            $specializations[$key] = $this->specializationRepository->create($specializationInput);
-        }
-
-        return new SpecializationCollection($specializations);
-    }
-
-    /**
-     * Bulk update Specialization's data.
-     *
-     * @param BulkUpdateSpecializationAPIRequest $request
-     *
-     * @return SpecializationCollection
-     * @throws ValidatorException
-     *
-     */
-    public function bulkUpdate(BulkUpdateSpecializationAPIRequest $request): SpecializationCollection
-    {
-        $specializations = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $specializationInput) {
-            $specializations[$key] = $this->specializationRepository->update($specializationInput, $specializationInput['id']);
-        }
-
-        return new SpecializationCollection($specializations);
-    }
 }

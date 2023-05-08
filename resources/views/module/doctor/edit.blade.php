@@ -32,24 +32,29 @@
                                    value="{{ $doctor->user->email }}">
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <!-- text input -->
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="text" class="form-control" placeholder="Enter name" name="password">
-                        </div>
-                    </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Phone Number</label>
-                            <input type="phone" class="form-control" placeholder="Enter phone with country code"
-                                   name="phone" value="{{ $doctor->user->phone }}">
+                            <div class="input-group">
+                                <div class="input-group-prepend w-25">
+                                    <select name="country_code" id="" class="form-select">
+                                        @foreach(\App\Constants\CountryCodes::getList() as $data)
+                                            <option value="{{ $data['dial_code'] }}">
+                                                {{ $data['code'] }}
+                                                ({{ $data['dial_code'] }})
+                                            </option>
+                                        @endforeach
+
+                                    </select>
+                                </div>
+                                <input type="text" class="form-control"
+                                       placeholder="Enter phone number"
+                                       pattern="[0-9]+"
+                                       name="phone" value="{{ $doctor->user->phone }}">
+                            </div>
+
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
@@ -81,8 +86,6 @@
                             </select>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
@@ -91,22 +94,6 @@
                                    value="{{ $doctor->user->country }}">
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Date of birth</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                </div>
-                                <input type="text" class="form-control" data-inputmask-alias="datetime"
-                                       data-inputmask-inputformat="mm/dd/yyyy" data-mask="" inputmode="numeric"
-                                       name="dob" value="{{ $doctor->user->dob }}">
-                            </div>
-                            <!-- /.input group -->
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
@@ -123,8 +110,6 @@
                             </select>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
@@ -162,8 +147,6 @@
                             <!-- /.input group -->
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-sm-6">
                         <!-- text input -->
                         @livewire('time-slots-component', ['slots' => $doctor->time_slots])
@@ -175,8 +158,6 @@
                                    value="{{ $doctor->price }}" required>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-sm-12">
                         <!-- text input -->
                         <div class="form-group">
