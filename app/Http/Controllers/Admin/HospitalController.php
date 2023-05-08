@@ -130,7 +130,7 @@ class HospitalController extends AppBaseController
         try {
             $hospital = Hospital::findOrFail($id);
             if ($request->hasFile('logo')) {
-                $hospital->attachImage('logo', 'logo', false);
+                $hospital->updateImage('logo', 'logo', false);
             }
             $accreditation_id = [];
             if (!empty($input['accreditations'])) {
