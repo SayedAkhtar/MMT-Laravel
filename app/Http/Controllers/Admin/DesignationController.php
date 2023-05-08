@@ -45,8 +45,8 @@ class DesignationController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $designation = $this->designationRepository->fetch($request);
-        return $this->module_view('list', compact('designation'));
+        $designations = $this->designationRepository->fetch($request);
+        return $this->module_view('list', compact('designations'));
     }
 
     /**

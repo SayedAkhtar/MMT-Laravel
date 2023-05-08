@@ -13,9 +13,12 @@
         <!-- /.card-header -->
         <div class="card-body">
             <form
-                action="{{ empty($designation)?route('designations.store'):route('designation.update', ['designation' => $designation->id]) }}"
+                action="{{ empty($designation)?route('designations.store'):route('designations.update', ['designation' => $designation->id]) }}"
                 method="post" enctype="multipart/form-data">
                 @csrf
+                @if(!empty($designation))
+                    @method('PUT')
+                @endif
                 <div class="row">
                     <div class="col-sm-6">
                         <!-- text input -->

@@ -810,6 +810,7 @@ a {
 <script>
 import AgoraRTC from "agora-rtc-sdk-ng";
 import {markRaw} from "vue";
+import firebase from "firebase";
 
 export default {
     name: "AgoraChat",
