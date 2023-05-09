@@ -38,7 +38,12 @@
                     <tr>
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $data->name }}</td>
-                        <td><img src="{{ asset($data->logo) }}" alt="" class="accreditation-img"></td>
+                        <td>
+                            @if($data->hasMedia('logo'))
+                                <img src="{{ $data->getMedia('logo')->first()->getUrl() }}" alt=""
+                                     class="accreditation-img">
+                            @endif
+                        </td>
                         <td><span>{{ $data->is_active?'Active' : 'False'  }}</span></td>
                         <td class="text-right">
                             <a href="{{ route('specializations.show', ['specialization' => $data->id]) }}"

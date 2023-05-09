@@ -35,9 +35,12 @@
                                     <label class="custom-file-label" for="exampleInputFile">Choose file</label>
                                 </div>
                             </div>
-                            <div class="card d-block" style="width: fit-content">
-                                <img src="{{ $accreditation->getMedia('logo')->first()->getUrl() }}" alt="" width="100">
-                            </div>
+                            @if($accreditation->hasMedia('logo'))
+                                <div class="card d-block" style="width: fit-content">
+                                    <img src="{{ $accreditation->getMedia('logo')->first()->getUrl() }}" alt=""
+                                         width="100">
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

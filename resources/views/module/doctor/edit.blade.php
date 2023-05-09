@@ -142,7 +142,8 @@
                                 </div>
                                 <input type="text" class="form-control" data-inputmask-alias="datetime"
                                        data-inputmask-inputformat="mm/dd/yyyy" data-mask="" inputmode="numeric"
-                                       name="start_of_service" value="{{ $doctor->start_of_service }}" required>
+                                       name="start_of_service"
+                                       value="{{ date('m/d/yy',strtotime($doctor->start_of_service)) }}" required>
                             </div>
                             <!-- /.input group -->
                         </div>
