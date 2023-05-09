@@ -37,9 +37,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card d-block" style="width: fit-content">
-                            <img src="{{ $specialization->getMedia('logo')->first()->getUrl() }}" alt="" width="100">
-                        </div>
+                        @if($specialization->hasMedia('logo'))
+                            <div class="card d-block" style="width: fit-content">
+                                <img src="{{ $specialization->getMedia('logo')->first()->getUrl() }}" alt=""
+                                     width="100">
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <div class="row">
