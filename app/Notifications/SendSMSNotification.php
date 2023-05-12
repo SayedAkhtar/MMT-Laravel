@@ -2,7 +2,6 @@
 
 namespace App\Notifications;
 
-use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\URL;
 use NotificationChannels\Twilio\TwilioChannel;
@@ -13,7 +12,7 @@ class SendSMSNotification extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param    mixed  $notifiable
+     * @param mixed $notifiable
      *
      * @return  array
      */
@@ -23,16 +22,16 @@ class SendSMSNotification extends Notification
     }
 
     /**
-     * @param    mixed  $notifiable
+     * @param mixed $notifiable
      *
      * @return  TwilioSmsMessage
      */
     public function toTwilio($notifiable): TwilioSmsMessage
     {
         $code = $notifiable->reset_password_code;
-        $link = URL::to('reset-password/'.$code);
+        $link = URL::to('reset-password/' . $code);
 
         return (new TwilioSmsMessage())
-            ->content(html_entity_decode(view('sms.password_reset', compact('link'))));
+            ->content("Your {$code} account was approved!");
     }
 }

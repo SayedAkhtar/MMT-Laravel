@@ -95,14 +95,14 @@ class UserController extends AppBaseController
     public function update(UpdateUserAPIRequest $request, int $id)
     {
         $input = $request->all();
-        if (isset($input['password'])) {
+        if (isset($input['password']) && $input['old_password']) {
             $input['password'] = Hash::make($input['password']);
         }
         $user = $this->userRepository->update($input, $id);
         if ($user) {
             return response()->json(["data" => $user], 200);
         } else {
-            return response()->json(["STATUS" => "Opps!", "MESSAGE" => "Counld not update user. Please try again"], 400);
+            return response()->json(["STATUS" => "Opps!", "MESSAGE" => "Could not update user. Please try again"], 400);
         }
     }
 

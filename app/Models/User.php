@@ -115,8 +115,8 @@ class User extends Authenticatable implements HasMedia
 
     public const FORGOT_PASSWORD_WITH = [
         'link' => [
-            'email' => true,
-            'sms' => false,
+            'email' => false,
+            'sms' => true,
         ],
         'expire_time' => '20',
     ];
@@ -128,7 +128,7 @@ class User extends Authenticatable implements HasMedia
 
     public function routeNotificationForTwilio()
     {
-        return $this->phone_number; // e.g "+91909945XXXX"
+        return $this->country_code . $this->phone; // e.g "+91909945XXXX"
     }
 
     public function role()

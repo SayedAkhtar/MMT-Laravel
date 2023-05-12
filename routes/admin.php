@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ConfirmedQueryController;
 use App\Http\Controllers\Admin\DesignationController;
 use App\Http\Controllers\Admin\DoctorController;
+use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\FileUploadController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\HospitalController;
@@ -98,6 +99,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('specializations', SpecializationController::class);
 
     Route::resource('hospitals', HospitalController::class);
+
+    Route::resource('faq', FaqController::class);
 
     Route::resource('video-consultation', VideoConsultationController::class);
     Route::get('consultation/{id}', [VideoConsultationController::class, 'startConsultation'])->name('start-consultation');

@@ -18,3 +18,4 @@ yarn-error.log
 *.zip
 *.sql
 public/uploads
+public/js/app.js

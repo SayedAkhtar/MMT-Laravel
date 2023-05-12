@@ -13,7 +13,6 @@ use App\Http\Requests\Client\LoginAPIRequest;
 use App\Http\Requests\Client\RegisterAPIRequest;
 use App\Http\Requests\Client\ResetPasswordAPIRequest;
 use App\Http\Requests\Client\ValidateResetPasswordOtpApiRequest;
-use App\Mail\MailService;
 use App\Models\User;
 use App\Notifications\SendSMSNotification;
 use App\Repositories\UserRepository;
@@ -22,7 +21,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Nette\Schema\ValidationException;
 use Prettus\Validator\Exceptions\ValidatorException;
@@ -178,12 +176,12 @@ class AuthController extends AppBaseController
     {
         $input = $request->all();
         /** @var User $user */
-        $user = User::where('email', $input['email'])->firstOrFail();
+        $user = User::where('phone', $input['phone'])->firstOrFail();
 
         $resultOfEmail = false;
         $resultOfSMS = false;
-        $code = $this->generateCode();
-
+//        $code = $this->generateCode();
+        $code = "123456";
         if (User::FORGOT_PASSWORD_WITH['link']['email']) {
             $resultOfEmail = $this->sendEmailForResetPasswordLink($user, $code);
         }
@@ -231,10 +229,10 @@ class AuthController extends AppBaseController
 
         $data['username'] = $user->username;
         $data['message'] = 'Your Password Successfully Reset';
-        Mail::to($user->email)
-            ->send(new MailService('emails.password_reset_success',
-                'Reset Password',
-                $data));
+//        Mail::to($user->email)
+//            ->send(new MailService('emails.password_reset_success',
+//                'Reset Password',
+//                $data));
 
         return $this->successResponse('Password reset successful.');
     }
