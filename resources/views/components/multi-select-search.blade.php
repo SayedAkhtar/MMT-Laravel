@@ -1,11 +1,12 @@
 <div class="form-group">
     <label>{{ $label }} </label>
     <select class="form-control" id="{{ $name }}"
-            name="{{ $multiple? $name.'[]' : $name }}" {{ $multiple?"multiple":'' }} data-append="{{ $shouldInsert }}">
+            name="{{ $multiple? $name.'[]' : $name }}" {{ $multiple?"multiple":'' }} data-append="{{ $shouldInsert }}"
+            @if($required) required @endif>
         @forelse($selectedOptions as $option)
             <option value="{{ $option->id }}" selected>{{$option->name}}</option>
         @empty
-            <option>Select Option</option>
+            <option value="">Select Option</option>
         @endforelse
 
     </select>

@@ -9,10 +9,10 @@ use App\Http\Requests\Device\CreatePatientTestimonyAPIRequest;
 use App\Http\Requests\Device\UpdatePatientTestimonyAPIRequest;
 use App\Http\Resources\Device\PatientTestimonyCollection;
 use App\Http\Resources\Device\PatientTestimonyResource;
+use App\Models\PatientTestimony;
 use App\Repositories\PatientTestimonyRepository;
 use App\Traits\IsViewModule;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Prettus\Validator\Exceptions\ValidatorException;
 
@@ -56,8 +56,23 @@ class PatientTestimonyController extends AppBaseController
     public function store(CreatePatientTestimonyAPIRequest $request)
     {
         $input = $request->all();
-        $patientTestimony = $this->patientTestimonyRepository->create($input);
+        $includedImages = explode(',', $input['photo_names']);
+        $paths = [];
+        foreach ($request->file('images') as $file) {
+            if (in_array($file->getClientOriginalName(), $includedImages)) {
+                $paths[] = $file->store('public/patient_testimony');
+            }
 
+        }
+        $testimony = PatientTestimony::create([
+            'patient_id' => 27,
+            'images' => implode(',', $paths),
+            'doctors_id' => $input['doctor_id'],
+            'hospital_id' => $input['hospital_id'],
+            'videos' => $input['videos'],
+            'description' => ''
+        ]);
+        return redirect(route('patient-testimonies.index'))->with('success', 'Patient Testimony Images Updated');
     }
 
     /**
@@ -69,8 +84,9 @@ class PatientTestimonyController extends AppBaseController
      */
     public function show(int $id)
     {
-        $patientTestimony = $this->patientTestimonyRepository->findOrFail($id);
-
+        $testimony = $this->patientTestimonyRepository->findOrFail($id);
+//        dd($testimony->doctor);
+        return $this->module_view('edit', compact('testimony'));
     }
 
     /**
@@ -78,15 +94,32 @@ class PatientTestimonyController extends AppBaseController
      *
      * @param UpdatePatientTestimonyAPIRequest $request
      * @param int $id
-     *
-     * @return PatientTestimonyResource
      * @throws ValidatorException
      *
      */
     public function update(UpdatePatientTestimonyAPIRequest $request, int $id)
     {
         $input = $request->all();
-        $patientTestimony = $this->patientTestimonyRepository->update($input, $id);
+        $includedImages = explode(',', $input['photo_names']);
+        $paths = [];
+        try {
+            if ($request->has('images')) {
+                foreach ($request->file('images') as $file) {
+                    if (in_array($file->getClientOriginalName(), $includedImages)) {
+                        if (($key = array_search($file->getClientOriginalName(), $includedImages)) !== false) {
+                            unset($includedImages[$key]);
+                        }
+                        $paths[] = $file->store('public/patient_testimony');
+                    }
+
+                }
+            }
+            $input['images'] = implode(',', array_unique(array_merge($includedImages, $paths)));
+            $patientTestimony = $this->patientTestimonyRepository->update($input, $id);
+        } catch (Exception $e) {
+            return back()->withErrors($e->getMessage());
+        }
+        return back()->with('success', "Testimony updated");
 
     }
 
@@ -94,16 +127,18 @@ class PatientTestimonyController extends AppBaseController
      * Delete given PatientTestimony.
      *
      * @param int $id
-     *
-     * @return JsonResponse
      * @throws Exception
      *
      */
-    public function delete(int $id): JsonResponse
+    public function destroy(int $id)
     {
-        $this->patientTestimonyRepository->delete($id);
+        try {
+            $this->patientTestimonyRepository->delete($id);
+            return back()->with('success', "Successfully deleted");
+        } catch (Exception $e) {
+            return back()->withErrors($e->getMessage());
+        }
 
-        return $this->successResponse('PatientTestimony deleted successfully.');
     }
 
     /**

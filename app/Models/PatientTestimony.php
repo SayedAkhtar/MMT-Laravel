@@ -46,6 +46,11 @@ class PatientTestimony extends Model
         'updated_by' => 'integer',
     ];
 
+    public function getImagesArrayAttribute()
+    {
+        return explode(',', $this->images);
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
@@ -81,8 +86,8 @@ class PatientTestimony extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
-    public function docter()
+    public function doctor()
     {
-        return $this->hasOne(User::class, 'id', 'doctor_id');
+        return $this->hasOne(Doctor::class, 'id', 'doctor_id');
     }
 }

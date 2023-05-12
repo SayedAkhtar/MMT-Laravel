@@ -45,6 +45,20 @@ class HomeController extends Controller
                     ->where('doctors.is_active', true)
                     ->get()->toArray()]);
             }
+            if ($table == 'patient') {
+                return response()->json(["data" => User::query()
+                    ->selectRaw("id, $column as name")
+                    ->where($column, 'like', '%' . $term . '%')
+                    ->where('user_type', User::TYPE_USER)
+                    ->get()->toArray()]);
+            }
+            if ($table == 'hcf') {
+                return response()->json(["data" => User::query()
+                    ->selectRaw("id, $column as name")
+                    ->where($column, 'like', '%' . $term . '%')
+                    ->where('user_type', User::TYPE_HCF)
+                    ->get()->toArray()]);
+            }
             return response()->json(["data" => DB::table($table)
                 ->selectRaw("id, $column as name")
                 ->where($column, 'like', '%' . $term . '%')

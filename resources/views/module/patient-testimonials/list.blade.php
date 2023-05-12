@@ -36,7 +36,17 @@
                         <td>{{ $data->user->name }}</td>
                         <td>{{ $data->description }}</td>
                         <td class="text-right" colspan="">
-                            <a href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i></a>
+                            <a href="{{ route('patient-testimonies.update', ['patient_testimony' => $data->id]) }}"
+                               class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                            <form
+                                action="{{ route('patient-testimonies.destroy', ['patient_testimony' => $data->id]) }}"
+                                method="post"
+                                class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @empty

@@ -44,29 +44,44 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Add a Testimony</h3>
+            <h3 class="card-title">Edit Testimony</h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            <form action="{{ route('patient-testimonies.store') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('patient-testimonies.update', ['patient_testimony' => $testimony->id]) }}"
+                  method="post" enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
                             <x-multi-select-search label="Patient" name="patient_id" table="patient"
-                                                   :multiple="false" :required="true"/>
+                                                   :multiple="false" :required="true"
+                                                   :selectedOptions="$testimony->user"/>
                         </div>
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <x-multi-select-search label="Doctors" name="doctor_id" table="doctors"
-                                                   :multiple="false"/>
+                            @if($testimony->doctor)
+                                <x-multi-select-search label="Doctors" name="doctor_id" table="doctors"
+                                                       :multiple="false" :selectedOptions="$testimony->doctor->user"
+                                />
+                            @else
+                                <x-multi-select-search label="Doctors" name="doctor_id" table="doctors"
+                                                       :multiple="false"
+                                />
+                            @endif
                         </div>
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <x-multi-select-search label="Hospital" name="hospital_id" table="hospitals"
-                                                   :multiple="false"/>
+                            @if($testimony->hospital)
+                                <x-multi-select-search label="Hospital" name="hospital_id" table="hospitals"
+                                                       :multiple="false" :selectedOptions="$testimony->hospital"/>
+                            @else
+                                <x-multi-select-search label="Hospital" name="hospital_id" table="hospitals"
+                                                       :multiple="false"/>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -79,10 +94,9 @@
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" name="images[]" id="upload-photos"
                                            multiple>
-                                    <input type="hidden" name="photo_names"/>
+                                    <input type="hidden" name="photo_names" value="{{ $testimony->images }}"/>
                                     <label class="custom-file-label" for="exampleInputFile">Choose file</label>
                                 </div>
-
                             </div>
                         </div>
                         <div class="file-preview">
@@ -91,6 +105,20 @@
                                     <p class="text-center"> Previews will be available here</p>
                                     <div class="row" id="img-preview-container">
 
+                                        @if(!empty($testimony->images_array))
+                                            @foreach($testimony->images_array as $image_path)
+                                                <div class="col-md-4">
+                                                    <div class="img-preview-upload">
+                                                        <span class="remove-image" data-image='{{$image_path}}'>
+                                                            <img src="{{ asset('assets/img/trash-outline.svg') }}"
+                                                                 alt=""/>
+                                                        </span>
+                                                        <img src="{{ Storage::url($image_path) }}"
+                                                             class="d-block img-responsive" alt="">
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -115,8 +143,9 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label>Textarea</label>
-                            <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                            <label>Testimony Description:</label>
+                            <textarea class="form-control" rows="3" name="description"
+                                      placeholder="Enter Description">{{ $testimony->description }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -143,8 +172,9 @@
 @push('scripts')
     <script>
         var imageNames = [];
-
-
+        @if($testimony->images)
+            imageNames = '{{ $testimony->images }}'.split(',');
+        @endif
         $('#upload-photos').on('change', function (event) {
             for (var i = 0; i < $(this).get(0).files.length; ++i) {
                 imageNames.push($(this).get(0).files[i].name);

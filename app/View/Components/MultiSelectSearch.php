@@ -13,13 +13,14 @@ class MultiSelectSearch extends Component
     public bool $multiple;
     public $selectedOptions;
     public bool $shouldInsert;
+    public bool $required;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(string $name, string $label, string $table, $selectedOptions = [], bool $multiple = true, bool $shouldInsert = false)
+    public function __construct(string $name, string $label, string $table, $selectedOptions = [], bool $multiple = true, bool $shouldInsert = false, bool $required = false)
     {
         $this->name = $name;
         $this->table = $table;
@@ -34,6 +35,7 @@ class MultiSelectSearch extends Component
         }
         $this->selectedOptions = is_array($selectedOptions) ? $selectedOptions : [$selectedOptions];
         $this->shouldInsert = $shouldInsert;
+        $this->required = $required;
     }
 
     /**

@@ -22,7 +22,7 @@ class UpdatePatientTestimonyAPIRequest extends FormRequest
         return [
             'patient_id' => ['nullable', 'exists:users,id'],
             'hospital_id' => ['nullable', 'exists:hospitals,id'],
-            'doctor_id' => ['nullable', 'exists:users,id'],
+            'doctor_id' => ['nullable', 'exists:doctors,id'],
             'description' => ['nullable'],
             'images' => ['nullable'],
             'videos' => ['nullable'],
