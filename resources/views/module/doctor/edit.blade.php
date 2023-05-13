@@ -107,7 +107,7 @@
                             <x-multi-select-search label="Designations" name="designation_id"
                                                    table="designations"
                                                    :multiple="false" :selectedOptions="$doctor->designation"/>
-                            </select>
+
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -143,7 +143,7 @@
                                 <input type="text" class="form-control" data-inputmask-alias="datetime"
                                        data-inputmask-inputformat="mm/dd/yyyy" data-mask="" inputmode="numeric"
                                        name="start_of_service"
-                                       value="{{ date('m/d/yy',strtotime($doctor->start_of_service)) }}" required>
+                                       value="{{ date('m/d/Y',strtotime($doctor->start_of_service)) }}" required>
                             </div>
                             <!-- /.input group -->
                         </div>

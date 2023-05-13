@@ -38,7 +38,7 @@
                                 @endforelse
                             @endif
                         </td>
-                        <td> {{ $doctor->qualification->name }}</td>
+                        <td> {{ $doctor->qualification?->name }}</td>
                         <td class="text-right">
                             <a href=" {{ route('doctors.show', ['doctor' => $doctor->id]) }}"
                                class="btn btn-info btn-sm"><i

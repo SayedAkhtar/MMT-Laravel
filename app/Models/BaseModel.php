@@ -28,6 +28,7 @@ class BaseModel extends Model implements HasMedia
             ->height(150)
             ->optimize()
             ->sharpen(10);
+        
     }
 
     /**

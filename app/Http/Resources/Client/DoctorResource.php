@@ -43,7 +43,7 @@ class DoctorResource extends BaseAPIResource
             'name' => $this->user->name,
             'phone' => $this->user->phone,
             'email' => $this->user->email,
-            'image' => $this->getMedia('avatar')->first() ? $this->getMedia('avatar')->first()->getUrl('thumbnail') : '',
+            'image' => $this->getMedia('avatar')->first() ? $this->getMedia('avatar')->first()->getUrl() : '',
             'start_of_service' => $this->start_of_service,
             'experience' => \Carbon\Carbon::make($this->start_of_service)->diffInYears(),
             'awards' => $this->awards,
