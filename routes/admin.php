@@ -26,7 +26,8 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('dashboard', [\App\Http\Controllers\Admin\HomeController::class, 'dashboard'])->name('dashboard');
-    Route::get('profile', [\App\Http\Controllers\Admin\HomeController::class, 'profile'])->name('profile.index');
+    Route::get('settings', [\App\Http\Controllers\Admin\HomeController::class, 'settings'])->name('settings.index');
+    Route::post('settings', [\App\Http\Controllers\Admin\SettingsController::class, 'update'])->name('settings.update');
 
 //    ------------- Queries Route ----------- //
 

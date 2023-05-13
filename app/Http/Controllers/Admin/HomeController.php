@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Settings;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +31,20 @@ class HomeController extends Controller
         $user = User::find(Auth::id());
         $roles = implode(',', $user->getRoleNames()->toArray());
         return view('module/user/index', compact('user', 'roles'));
+    }
+
+    public function settings()
+    {
+        $settings = Settings::all();
+        $transformedSettings = [];
+        foreach ($settings as $setting) {
+            if (in_array($setting['name'], ['hcf_english', 'hcf_russian', 'hcf_hindi', 'hcf_arabic'])) {
+                $transformedSettings[$setting['name']] = User::where('id', $setting['value'])->first();
+            } else {
+                $transformedSettings[$setting['name']] = $setting['value'];
+            }
+        }
+        return view('module/settings/index', ['settings' => $transformedSettings]);
     }
 
     public function ajaxSearch(string $table, Request $request)

@@ -139,6 +139,9 @@ class FaqController extends Controller
 
     public function destroy($id)
     {
-        //
+        DB::table('faq_entity')->where('faq_id', $id)->delete();
+        Faq::findOrfail($id)->delete();
+
+        return back()->with('success', "Deleted Faq");
     }
 }
