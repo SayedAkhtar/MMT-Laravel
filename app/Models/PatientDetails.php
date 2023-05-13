@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
-use Illuminate\Database\Eloquent\Model as Model;
 
-class PatientDetails extends Model
+class PatientDetails extends BaseModel
 {
     use HasRecordOwnerProperties;
 

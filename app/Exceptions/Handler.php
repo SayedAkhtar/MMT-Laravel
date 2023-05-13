@@ -67,12 +67,12 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * @param Request   $request
+     * @param Request $request
      * @param Throwable $e
      *
+     * @return JsonResponse|Response|ResponseAlias
      * @throws Throwable
      *
-     * @return JsonResponse|Response|ResponseAlias
      */
     public function render($request, Throwable $e)
     {
@@ -110,13 +110,14 @@ class Handler extends ExceptionHandler
                 'Not Found',
             ), ResponseAlias::HTTP_NOT_FOUND);
         }
-
-        if ($request->expectsJson() && !in_array(get_class($e), $this->customExceptions())) {
-            return response()->json([
-                'STATUS' => ResponseAlias::HTTP_UNPROCESSABLE_ENTITY,
-                'MESSAGE' => $e->getMessage(),
-                'ERROR' => $e->getMessage(),
-            ], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
+        if (!env('APP_DEBUG')) {
+            if ($request->expectsJson() && !in_array(get_class($e), $this->customExceptions())) {
+                return response()->json([
+                    'STATUS' => ResponseAlias::HTTP_UNPROCESSABLE_ENTITY,
+                    'MESSAGE' => $e->getMessage(),
+                    'ERROR' => $e->getMessage() . ' ' . $e->getFile() . ' ' . $e->getFile(),
+                ], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
+            }
         }
 
         return parent::render($request, $e);

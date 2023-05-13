@@ -58,7 +58,7 @@
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
-                            <label for="exampleInputFile">Avatar Image</label>
+                            <label for="exampleInputFile">Image</label>
                             <div class="input-group">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="exampleInputFile" name="image">

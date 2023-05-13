@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth:sanctum', 'validate.user', 'api']], functio
     Route::get('consultations', [VideoConsultationController::class, 'index']);
     Route::post('submit-consultation', [VideoConsultationController::class, 'store']);
     Route::post('update-firebase', [UserController::class, 'updateFirebase']);
+    Route::post('update-avatar/{user}', [UserController::class, 'updateAvatar']);
 
 });
 

@@ -9,6 +9,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements HasMedia
@@ -19,6 +22,7 @@ class User extends Authenticatable implements HasMedia
     use HasRoles;
     use InteractsWithMedia;
     use HasRecordOwnerProperties;
+
 
     /**
      * @var string
@@ -129,6 +133,39 @@ class User extends Authenticatable implements HasMedia
     public function routeNotificationForTwilio()
     {
         return $this->country_code . $this->phone; // e.g "+91909945XXXX"
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('thumbnail')
+            ->width(150)
+            ->height(150)
+            ->optimize()
+            ->sharpen(10);
+    }
+
+    /**
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
+    public function attachImage(string $key, string $library, bool $isMultiple)
+    {
+        if ($isMultiple) {
+            $this->addMultipleMediaFromRequest([$key])->each(fn($fileAdder) => $fileAdder->toMediaCollection($library));
+        } else {
+            $this->addMediaFromRequest($key)->toMediaCollection($library);
+        }
+    }
+
+    public function updateImage(string $key, string $library, bool $isMultiple)
+    {
+        if ($isMultiple) {
+            $this->clearMediaCollection($library);
+            return $this->addMultipleMediaFromRequest([$key])->each(fn($fileAdder) => $fileAdder->toMediaCollection($library));
+        } else {
+            $this->media()->delete();
+            return $this->addMediaFromRequest($key)->toMediaCollection($library);
+        }
     }
 
     public function role()

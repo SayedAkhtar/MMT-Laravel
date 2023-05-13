@@ -5,12 +5,13 @@ namespace App\Http\Controllers\API\Client;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Resources\Client\HomeResource\DoctorHomeResource;
 use App\Models\Doctor;
+use App\Models\Faq;
 use App\Models\Hospital;
 use App\Models\PatientTestimony;
+use App\Models\Settings;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends AppBaseController
 {
@@ -21,11 +22,15 @@ class HomeController extends AppBaseController
 
     public function modules()
     {
-        $files = File::allFiles(public_path('/img/banners/'));
+        $banners = Settings::where('name', 'banners')->first();
+        $files = explode(',', $banners);
         $livePath = [];
-        foreach ($files as $img) {
-            $livePath[] = asset('/img/banners/' . $img->getBasename());
+        if (!empty($banners)) {
+            foreach ($files as $img) {
+                $livePath[] = env('APP_URL') . Storage::url($img);
+            }
         }
+
         $hospitals = Hospital::query()->orderByDesc('created_at')->limit(10)->get();
         $doctors = Doctor::with(['user', 'specializations'])->orderByDesc('created_at')->limit(10)->get();
         $doctors = DoctorHomeResource::collection($doctors)->resolve();
@@ -33,8 +38,18 @@ class HomeController extends AppBaseController
             ->whereNotNull('images')
             ->select(['images', 'id'])
             ->orderByDesc('created_at')->limit(10)->get();
-        foreach ($stories as $story) {
-            $data['stories'][] = ['id' => $story->id, 'thumbnail' => Arr::random($story->images)];
+        $faq = Faq::query()->select(['question', 'answer'])->limit(10)->get();
+        $processedTestimony = [];
+        if (!empty($stories)) {
+            foreach ($stories as $testimony) {
+                $images = explode(',', $testimony->images);
+                foreach ($images as $path) {
+                    $processedTestimony[] = [
+                        'type' => 'image',
+                        'value' => env('APP_URL') . Storage::url($path),
+                    ];
+                }
+            }
         }
         $processedHospitals = [];
         foreach ($hospitals as $temp) {
@@ -45,9 +60,11 @@ class HomeController extends AppBaseController
                 'address' => $temp->address,
             ];
         }
+        $data['stories'] = $processedTestimony;
         $data['hospitals'] = $processedHospitals;
         $data['doctors'] = $doctors;
         $data['banners'] = $livePath;
+        $data['faq'] = $faq->toArray();
         return $this->successResponse($data);
     }
 

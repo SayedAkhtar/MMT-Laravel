@@ -9,6 +9,7 @@ use App\Http\Requests\Client\CreateUserAPIRequest;
 use App\Http\Requests\Client\UpdateUserAPIRequest;
 use App\Http\Resources\Client\UserCollection;
 use App\Http\Resources\Client\UserResource;
+use App\Models\PatientDetails;
 use App\Repositories\UserRepository;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -98,11 +99,15 @@ class UserController extends AppBaseController
         if (isset($input['password']) && $input['old_password']) {
             $input['password'] = Hash::make($input['password']);
         }
-        $user = $this->userRepository->update($input, $id);
-        if ($user) {
-            return response()->json(["data" => $user], 200);
-        } else {
-            return response()->json(["STATUS" => "Opps!", "MESSAGE" => "Could not update user. Please try again"], 400);
+        try {
+            $user = $this->userRepository->update($input, $id);
+            if ($user) {
+                return response()->json(["data" => $user], 200);
+            } else {
+                return response()->json(["STATUS" => "Opps!", "MESSAGE" => "Could not update user. Please try again"], 400);
+            }
+        } catch (Exception $e) {
+            return response()->json(["STATUS" => "Opps!", "MESSAGE" => "Internal server error. Please try again"], 400);
         }
     }
 
@@ -182,5 +187,22 @@ class UserController extends AppBaseController
         }
         return $this->errorResponse("Internal server error");
 
+    }
+
+    public function updateAvatar(Request $request, int $id)
+    {
+        try {
+            if ($request->hasFile('avatar')) {
+                $user = PatientDetails::where('user_id', $id)->first();
+                $user->updateImage('avatar', 'avatar', false);
+            }
+            if ($user) {
+                return response()->json(["data" => $user], 200);
+            } else {
+                return response()->json(["STATUS" => "Opps!", "MESSAGE" => "Could not update user. Please try again"], 400);
+            }
+        } catch (Exception $e) {
+            return response()->json(["STATUS" => "Opps!", "MESSAGE" => "Internal server error. Please try again"], 400);
+        }
     }
 }

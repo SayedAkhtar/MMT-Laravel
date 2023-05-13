@@ -142,7 +142,7 @@ class AuthController extends AppBaseController
 
         $data = $user->toArray();
         $data['token'] = $user->createToken('Client Login')->plainTextToken;
-
+        $data['avatar'] = $user->patientDetails->hasMedia('avatar') ? $user->patientDetails->getMedia('avatar')->first()->getUrl() : '';
         $user->update([
             'login_reactive_time' => null,
             'login_retry_limit' => 0,
@@ -353,6 +353,7 @@ class AuthController extends AppBaseController
         $user = User::find(Auth::id());
         $user->getRoleNames();
         $data = $user->toArray();
+        $data['avatar'] = $user->patientDetails->hasMedia('avatar') ? $user->patientDetails->getMedia('avatar')->first()->getUrl() : '';
         return $this->loginSuccess($data);
     }
 

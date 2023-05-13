@@ -15,11 +15,10 @@ class DoctorHomeResource extends BaseAPIResource
      */
     public function toArray($request): array
     {
-
         return [
             'id' => $this->id,
             'name' => $this->user->name,
-            'avatar' => $this->getMedia('avatar')->first() ? $this->getMedia('avatar')->first()->getUrl('thumbnail') : asset('img/doctor-avatar.webp'),
+            'avatar' => $this->getMedia('avatar')->first() ? $this->getMedia('avatar')->first()->getUrl('thumbnail') : '',
             'start_of_service' => Carbon::make($this->start_of_service)->diffInYears() . " yrs of Experience",
             'designation' => $this->designation->name,
             'specialization' => $this->when($this->specializations != null, function () {

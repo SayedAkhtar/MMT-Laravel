@@ -58,7 +58,7 @@ class Hospital extends BaseModel
      */
     public function testimony()
     {
-        return $this->belongsTo(PatientTestimony::class, 'hospital_id', 'id');
+        return $this->hasMany(PatientTestimony::class, 'hospital_id', 'id');
     }
 
     /**
@@ -84,7 +84,7 @@ class Hospital extends BaseModel
     {
         return $this->belongsToMany(Doctor::class, 'doctor_hospitals');
     }
-    
+
     public function tags()
     {
         return $this->belongsToMany(Tags::class, 'hospital_tags');
