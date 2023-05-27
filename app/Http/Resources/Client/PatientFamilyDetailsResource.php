@@ -30,14 +30,14 @@ class PatientFamilyDetailsResource extends BaseAPIResource
         return [
             'id' => $this->id,
             'patient_id' => $this->patient_id,
-            'image' => asset('img/' . $avatar),
+            'avatar' => asset('img/' . $avatar),
             'name' => $this->name,
             'phone' => $this->phone,
             'relationship' => $this->relationship,
             'dob' => $this->dob,
             'gender' => $this->gender,
             'treatment_country' => $this->treatment_country,
-            'speciality' => $this->specialization->name
+            'speciality' => $this->specialization?->name
         ];
     }
 }

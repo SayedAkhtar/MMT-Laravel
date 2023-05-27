@@ -55,6 +55,7 @@ class User extends Authenticatable implements HasMedia
         'reset_password_code',
         'user_type',
         'country_code',
+        'local_auth',
     ];
 
     /**

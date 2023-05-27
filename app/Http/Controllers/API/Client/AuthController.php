@@ -13,6 +13,7 @@ use App\Http\Requests\Client\LoginAPIRequest;
 use App\Http\Requests\Client\RegisterAPIRequest;
 use App\Http\Requests\Client\ResetPasswordAPIRequest;
 use App\Http\Requests\Client\ValidateResetPasswordOtpApiRequest;
+use App\Models\Language;
 use App\Models\User;
 use App\Notifications\SendSMSNotification;
 use App\Repositories\UserRepository;
@@ -83,7 +84,13 @@ class AuthController extends AppBaseController
         $input = $request->all();
         /** @var User $user */
         $user = User::where('phone', $input['phone'])->first();
-
+        if (!empty($input['language']) && !empty($user)) {
+            $language = Language::where('locale', $input['language'])->first();
+            if (!empty($language)) {
+                $user->languages()->sync([$language->id]);
+            }
+            $user->save();
+        }
         if (empty($user)) {
             throw new LoginFailedException('User not exists.');
         }
@@ -142,7 +149,76 @@ class AuthController extends AppBaseController
 
         $data = $user->toArray();
         $data['token'] = $user->createToken('Client Login')->plainTextToken;
-        $data['avatar'] = $user->patientDetails->hasMedia('avatar') ? $user->patientDetails->getMedia('avatar')->first()->getUrl() : '';
+        if (!empty($user->patientDetails)) {
+            $data['avatar'] = $user->patientDetails->hasMedia('avatar') ? $user->patientDetails->getMedia('avatar')->first()->getUrl() : '';
+        } else {
+            $data['avatar'] = '';
+        }
+
+        $data['patient_details'] = $user->patientDetails;
+        $user->update([
+            'login_reactive_time' => null,
+            'login_retry_limit' => 0,
+        ]);
+
+        return $this->loginSuccess($data);
+    }
+
+    public function loginWithBio(Request $request): JsonResponse
+    {
+        $input = $request->all();
+        /** @var User $user */
+        $user = User::where('local_auth', $input['local_auth'])->first();
+
+        if (empty($user)) {
+            throw new LoginFailedException('User not exists.');
+        }
+
+        if ($user->login_retry_limit >= User::MAX_LOGIN_RETRY_LIMIT) {
+            $now = Carbon::now();
+            if (empty($user->login_reactive_time)) {
+                $expireTime = Carbon::now()->addMinutes(User::LOGIN_REACTIVE_TIME)->toISOString();
+                $user->update([
+                    'login_reactive_time' => $expireTime,
+                    'login_retry_limit' => $user->login_retry_limit + 1,
+                ]);
+                throw new LoginFailedException('you have exceed the number of limit.you can login after ' . User::LOGIN_REACTIVE_TIME . ' minutes.');
+            }
+
+            $limitTime = Carbon::parse($user->login_reactive_time);
+            if ($limitTime > $now) {
+                $expireTime = Carbon::now()->addMinutes(User::LOGIN_REACTIVE_TIME)->toISOString();
+                $user->update([
+                    'login_reactive_time' => $expireTime,
+                    'login_retry_limit' => $user->login_retry_limit + 1,
+                ]);
+
+                throw new LoginFailedException('you have exceed the number of limit.you can login after ' . User::LOGIN_REACTIVE_TIME . ' minutes.');
+            }
+        }
+
+        $roles = $user->getRoleNames();
+        if (!$roles->count()) {
+            throw new LoginFailedException('You have not assigned any role.');
+        }
+
+        if (User::DEFAULT_ROLE != $roles->first()) {
+            if (is_null($user->user_type)) {
+                throw new LoginFailedException('You have not assigned any user type.');
+            }
+
+            if (!in_array(User::PLATFORM['CLIENT'], User::LOGIN_ACCESS[User::USER_TYPE[$user->user_type]])) {
+                throw new LoginFailedException('you are unable to access this platform.');
+            }
+        }
+
+        $data = $user->toArray();
+        $data['token'] = $user->createToken('Client Login')->plainTextToken;
+        if (!empty($user->patientDetails)) {
+            $data['avatar'] = $user->patientDetails->hasMedia('avatar') ? $user->patientDetails->getMedia('avatar')->first()->getUrl() : '';
+        } else {
+            $data['avatar'] = '';
+        }
         $user->update([
             'login_reactive_time' => null,
             'login_retry_limit' => 0,
@@ -353,7 +429,12 @@ class AuthController extends AppBaseController
         $user = User::find(Auth::id());
         $user->getRoleNames();
         $data = $user->toArray();
-        $data['avatar'] = $user->patientDetails->hasMedia('avatar') ? $user->patientDetails->getMedia('avatar')->first()->getUrl() : '';
+        if (!empty($user->patientDetails)) {
+            $data['avatar'] = $user->patientDetails->hasMedia('avatar') ? $user->patientDetails->getMedia('avatar')->first()->getUrl() : '';
+        } else {
+            $data['avatar'] = '';
+        }
+        $data['patient_details'] = $user->patientDetails;
         return $this->loginSuccess($data);
     }
 

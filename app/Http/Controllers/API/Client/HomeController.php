@@ -12,6 +12,7 @@ use App\Models\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class HomeController extends AppBaseController
 {
@@ -86,8 +87,8 @@ class HomeController extends AppBaseController
         }
         foreach ($doctors as $doctor) {
             $result['id'] = $doctor->id;
-            $result['name'] = $doctor->user->name;
-            $result['description'] = $doctor->specializations->pluck('name')->join(', ') . ' \n ' . Carbon::make($doctor->start_of_service)->diffInYears() . " yrs of Experience";
+            $result['name'] = Str::title($doctor->user->name);
+            $result['description'] = $doctor->specializations->pluck('name')->join(', ') . "\n" . Carbon::make($doctor->start_of_service)->diffInYears() . " yrs of Experience";
             $result['logo'] = $doctor->getMedia('avatar')->first()?->getUrl() ?? 'https://via.placeholder.com/640x480.png/00eeaa?text=No%20Image';
             $result['type'] = 'doctor';
             $results[] = $result;

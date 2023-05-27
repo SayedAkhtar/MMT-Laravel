@@ -44,6 +44,7 @@ Route::put('users/{user}', [UserController::class, 'update'])
     ->name('user.update');
 Route::delete('users/{user}', [UserController::class, 'delete'])
     ->name('user.delete');
+Route::post('login-with-bio', [AuthController::class, 'loginWithBio']);
 
 Route::post('push-notifications/add-device-id', [PushNotificationController::class, 'store'])
     ->name('pushNotification.add-device');

@@ -81,6 +81,9 @@ class QueryController extends AppBaseController
                 if (empty($input['query_id'])) {
                     return $this->errorResponse('query_id is required', 422);
                 }
+                $query = Query::find($input['query_id']);
+                $query->current_step = $input['current_step'];
+                $query->save();
                 $data = (new QueryResponseService($input['query_id'], $input['current_step'], $input['response']))->execute();
             }
             DB::commit();
@@ -105,7 +108,14 @@ class QueryController extends AppBaseController
      */
     public function show(int $id, int $step)
     {
-        if ($step == QueryResponse::queryConfirmed) {
+        if ($step == QueryResponse::queryConfirmed && $id == 0) {
+            $query = Query::query()->where('is_confirmed', true)->select('confirmed_details')->latest()->first();
+            if (!empty($query->confirmed_details)) {
+                $data = json_decode($query->confirmed_details, true);
+            } else {
+                $data = [];
+            }
+        } else if ($step == QueryResponse::queryConfirmed) {
             $query = Query::query()->select('confirmed_details')->findOrFail($id);
             $data = json_decode($query->confirmed_details, true);
         } else {
@@ -121,11 +131,7 @@ class QueryController extends AppBaseController
                 $data['next_step'] = $step + 1;
             }
         }
-
-
         return $this->successResponse($data);
-
-//        return new QueryResource($query);
     }
 
     /**

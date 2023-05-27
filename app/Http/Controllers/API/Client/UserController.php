@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API\Client;
 
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Client\BulkCreateUserAPIRequest;
-use App\Http\Requests\Client\BulkUpdateUserAPIRequest;
 use App\Http\Requests\Client\CreateUserAPIRequest;
 use App\Http\Requests\Client\UpdateUserAPIRequest;
 use App\Http\Resources\Client\UserCollection;
@@ -15,7 +14,9 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class UserController extends AppBaseController
@@ -99,16 +100,31 @@ class UserController extends AppBaseController
         if (isset($input['password']) && $input['old_password']) {
             $input['password'] = Hash::make($input['password']);
         }
+        DB::beginTransaction();
         try {
             $user = $this->userRepository->update($input, $id);
-            if ($user) {
-                return response()->json(["data" => $user], 200);
+            $patient = PatientDetails::where('user_id', $user->id)->first();
+            if ($patient) {
+                $patient->update($input);
             } else {
-                return response()->json(["STATUS" => "Opps!", "MESSAGE" => "Could not update user. Please try again"], 400);
+                $input['user_id'] = $user->id;
+                PatientDetails::create($input);
+            }
+            if (!empty($user->patientDetails)) {
+                $user['avatar'] = $user->patientDetails->hasMedia('avatar') ? $user->patientDetails->getMedia('avatar')->first()->getUrl() : '';
+            } else {
+                $user['avatar'] = [];
+            }
+
+            DB::commit();
+            if ($user) {
+                return $this->successResponse($user);
             }
         } catch (Exception $e) {
-            return response()->json(["STATUS" => "Opps!", "MESSAGE" => "Internal server error. Please try again"], 400);
+            DB::rollBack();
+            Log::error($e);
         }
+        return $this->errorResponse("Could not update user. Please try again", 400);
     }
 
     /**
@@ -143,27 +159,6 @@ class UserController extends AppBaseController
         $input = $request->get('data');
         foreach ($input as $key => $userInput) {
             $users[$key] = $this->userRepository->create($userInput);
-        }
-
-        return new UserCollection($users);
-    }
-
-    /**
-     * Bulk update User's data.
-     *
-     * @param BulkUpdateUserAPIRequest $request
-     *
-     * @return UserCollection
-     * @throws ValidatorException
-     *
-     */
-    public function bulkUpdate(BulkUpdateUserAPIRequest $request): UserCollection
-    {
-        $users = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $userInput) {
-            $users[$key] = $this->userRepository->update($userInput, $userInput['id']);
         }
 
         return new UserCollection($users);
@@ -204,5 +199,10 @@ class UserController extends AppBaseController
         } catch (Exception $e) {
             return response()->json(["STATUS" => "Opps!", "MESSAGE" => "Internal server error. Please try again"], 400);
         }
+    }
+
+    public function updateBiometric(Request $request)
+    {
+        $user = Auth::user();
     }
 }
