@@ -3,18 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\Device\BulkCreateQueryAPIRequest;
-use App\Http\Requests\Device\BulkUpdateQueryAPIRequest;
 use App\Http\Requests\Device\CreateQueryAPIRequest;
 use App\Http\Requests\Device\UpdateQueryAPIRequest;
-use App\Http\Resources\Device\QueryCollection;
-use App\Http\Resources\Device\QueryResource;
+use App\Models\Accommodation;
 use App\Models\Query;
+use App\Models\QueryResponse;
+use App\Models\User;
 use App\Repositories\QueryRepository;
+use App\Services\QueryResponseService;
 use App\Traits\IsViewModule;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Prettus\Validator\Exceptions\ValidatorException;
 
@@ -48,7 +50,7 @@ class QueryController extends AppBaseController
      */
     public function index(Request $request): View
     {
-        $queries = Query::with('hospital', 'specialization', 'patient')->whereHas('patient')->get();;
+        $queries = Query::with('hospital', 'specialization', 'patient')->whereHas('patient')->get();
         return $this->module_view('/list', compact('queries'));
     }
 
@@ -57,16 +59,29 @@ class QueryController extends AppBaseController
      *
      * @param CreateQueryAPIRequest $request
      *
-     * @return QueryResource
      * @throws ValidatorException
      *
      */
-    public function store(CreateQueryAPIRequest $request): QueryResource
+    public function store(CreateQueryAPIRequest $request)
     {
-        $input = $request->all();
-        $query = $this->queryRepository->create($input);
+        DB::beginTransaction();
+        try {
+            $query = Query::findOrFail($request->query_id);
+            $result = (new QueryResponseService($request->query_id, $request->current_step, $request->response))->execute();
+            if ($result) {
+                $query->current_step = $request->current_step;
+                $query->save();
+                $tab = QueryResponse::getNextTab($request->current_step);
+                DB::commit();
+                return redirect(route('query.show', ['query' => $query->id, 'tab' => $tab]));
+            }
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            DB::rollBack();
+            dd($e->getMessage());
+        }
 
-        return new QueryResource($query);
+        return back()->withErrors('Something wrong occurred');
     }
 
     /**
@@ -77,12 +92,17 @@ class QueryController extends AppBaseController
      */
     public function show(Request $request, int $id)
     {
-        $query = $this->queryRepository->findOrFail($id);
-        $tab = $request->get('tab') ?? 'details';
+        $query = Query::findOrFail($id);
+        $first_tab = $query->type == Query::TYPE_MEDICAL_VISA ? 'upload-medical-visa' : 'details';
+        $tab = $request->get('tab') ?? $first_tab;
+
+//        if ($query->type == Query::TYPE_MEDICAL_VISA && !empty($tab)) {
+//            $tab = 'upload-medical-visa';
+//        }
         $afterOpenQuery = ['upload-medical-visa', 'upload-ticket', 'coordinator'];
-        if (in_array($tab, $afterOpenQuery) && (empty($query->activeQuery) && empty($query->activeQuery->doctor_response))) {
-            return back()->with('error', "Please upload doctor's review before proceeding");
-        }
+//        if (in_array($tab, $afterOpenQuery) && (empty($query->activeQuery) && empty($query->activeQuery->doctor_response) && ($query->type != Query::TYPE_MEDICAL_VISA))) {
+//            return back()->with('error', "Please upload doctor's review before proceeding");
+//        }
         return $this->module_view('queries-layout', compact('query', 'tab'));
     }
 
@@ -91,17 +111,54 @@ class QueryController extends AppBaseController
      *
      * @param UpdateQueryAPIRequest $request
      * @param int $id
-     *
-     * @return QueryResource
      * @throws ValidatorException
      *
      */
-    public function update(UpdateQueryAPIRequest $request, int $id): QueryResource
+    public function update(Request $request, int $id)
     {
         $input = $request->all();
+        if (!empty($input['set_payment_type'])) {
+            $query = Query::findOrFail($id);
+            $query->payment_required = $request->has('payment_required');
+            $query->save();
+            return back()->with('success', 'Payment term updated');
+        }
         $query = $this->queryRepository->update($input, $id);
 
-        return new QueryResource($query);
+        return back()->with('success', 'Query updated');
+    }
+
+    public function confirmQuery(Request $request)
+    {
+        $validated = $request->validate([
+            'query_id' => 'required',
+            'coordinator_id' => 'required',
+            'accommodation_id' => 'required',
+        ]);
+        $query = Query::findOrFail($validated['query_id']);
+
+        DB::beginTransaction();
+        try {
+            $user = User::where('users.id', $validated['coordinator_id'])
+                ->select('users.name', 'phone', 'email', 'image', 'gender', 'language.name as language')
+                ->join('language_user', 'users.id', '=', 'language_user.user_id')
+                ->join('language', 'language.id', '=', 'language_user.language_id')
+                ->first();
+            $data['coordinator'] = $user->toArray();
+            $acc = Accommodation::where('id', $validated['accommodation_id'])
+                ->with('category')
+                ->first();
+            $data['accommodation'] = $acc->select('name', 'address', 'geo_location', 'images')->first()->toArray();
+            $data['accommodation']['category'] = $acc->category->pluck('name')->toArray();
+            $query->confirmed_details = json_encode($data);
+            $query->save();
+
+            DB::commit();
+            return back()->with('success', "Query Updated Success");
+        } catch (\Exception $e) {
+            DB::rollBack();
+            dd($e);
+        }
     }
 
     /**
@@ -120,45 +177,4 @@ class QueryController extends AppBaseController
         return $this->successResponse('Query deleted successfully.');
     }
 
-    /**
-     * Bulk create Query's.
-     *
-     * @param BulkCreateQueryAPIRequest $request
-     *
-     * @return QueryCollection
-     * @throws ValidatorException
-     *
-     */
-    public function bulkStore(BulkCreateQueryAPIRequest $request): QueryCollection
-    {
-        $queries = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $queryInput) {
-            $queries[$key] = $this->queryRepository->create($queryInput);
-        }
-
-        return new QueryCollection($queries);
-    }
-
-    /**
-     * Bulk update Query's data.
-     *
-     * @param BulkUpdateQueryAPIRequest $request
-     *
-     * @return QueryCollection
-     * @throws ValidatorException
-     *
-     */
-    public function bulkUpdate(BulkUpdateQueryAPIRequest $request): QueryCollection
-    {
-        $queries = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $queryInput) {
-            $queries[$key] = $this->queryRepository->update($queryInput, $queryInput['id']);
-        }
-
-        return new QueryCollection($queries);
-    }
 }

@@ -2,9 +2,7 @@
 
 use App\Http\Controllers\Admin\AccomodationController;
 use App\Http\Controllers\Admin\AccreditationController;
-use App\Http\Controllers\Admin\ActiveQueryController;
 use App\Http\Controllers\Admin\AuthController;
-use App\Http\Controllers\Admin\ConfirmedQueryController;
 use App\Http\Controllers\Admin\DesignationController;
 use App\Http\Controllers\Admin\DoctorController;
 use App\Http\Controllers\Admin\FaqController;
@@ -46,24 +44,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::delete('queries/{query}', [QueryController::class, 'delete'])
         ->name('query.destroy')
         ->middleware(['permission:delete_query']);
+    Route::post('queries/confirm', [QueryController::class, 'confirmQuery'])
+        ->name('query.confirm');
 
-    Route::get('confirmed-queries', [ConfirmedQueryController::class, 'index'])
-        ->name('confirmed-queries.index');
-    Route::get('confirmed-queries/{confirmedQuery}', [ConfirmedQueryController::class, 'show'])
-        ->name('confirmedQuery.show');
-    Route::post('confirmed-queries', [ConfirmedQueryController::class, 'store'])
-        ->name('confirmedQuery.store');
-    Route::put('confirmed-queries/{confirmedQuery}', [ConfirmedQueryController::class, 'update'])
-        ->name('confirmedQuery.update');
-    Route::delete('confirmed-queries/{confirmedQuery}', [ConfirmedQueryController::class, 'delete'])
-        ->name('confirmedQuery.destroy');
-
-    Route::post('active-queries', [ActiveQueryController::class, 'store'])
-        ->name('activeQuery.store');
-    Route::put('active-queries/{activeQuery}', [ActiveQueryController::class, 'update'])
-        ->name('activeQuery.update');
-    Route::delete('active-queries/{activeQuery}', [ActiveQueryController::class, 'delete'])
-        ->name('activeQuery.destroy');
 
 //    ------------ End Query Routes ----------------//
 

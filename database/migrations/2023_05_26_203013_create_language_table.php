@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterTableQueriesAddMedicalVisaColumn extends Migration
+class CreateLanguageTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AlterTableQueriesAddMedicalVisaColumn extends Migration
      */
     public function up()
     {
-        Schema::table('queries', function (Blueprint $table) {
-            $table->text('medical_visa')->after('medical_report')->nullable()->default(null);
+        Schema::create('language', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->char('locale');
+            $table->timestamps();
         });
     }
 
@@ -25,6 +28,6 @@ class AlterTableQueriesAddMedicalVisaColumn extends Migration
      */
     public function down()
     {
-        Schema::dropColumns('queries', ['medical_visa']);
+        Schema::dropIfExists('language');
     }
 }

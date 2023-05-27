@@ -74,6 +74,45 @@ class HomeController extends Controller
                     ->where('user_type', User::TYPE_HCF)
                     ->get()->toArray()]);
             }
+            if ($table == 'states') {
+                return response()->json(["data" => DB::table('states')
+                    ->selectRaw("id, $column as name")
+                    ->when($request->has('country_id'), function ($q) use ($request) {
+                        if (count(explode(',', $request->country_id)) > 0) {
+                            $q->whereIn('country_id', explode(',', $request->country_id));
+                        } else {
+                            $q->where('country_id', '=', $request->country_id);
+                        }
+                    })
+                    ->where($column, 'like', '%' . $term . '%')
+                    ->when(Schema::hasColumn($table, 'is_active'), function ($q) {
+                        $q->where('is_active', true);
+                    })
+                    ->get()->toArray()]);
+            }
+            if ($table == 'cities') {
+                return response()->json(["data" => DB::table('cities')
+                    ->selectRaw("id, $column as name")
+                    ->when($request->has('country_id'), function ($q) use ($request) {
+                        if (count(explode(',', $request->country_id)) > 0) {
+                            $q->whereIn('country_id', explode(',', $request->country_id));
+                        } else {
+                            $q->where('country_id', '=', $request->country_id);
+                        }
+                    })
+                    ->when(!empty($request->state_id), function ($q) use ($request) {
+                        if (count(explode(',', $request->state_id)) > 0) {
+                            $q->whereIn('state_id', explode(',', $request->state_id));
+                        } else {
+                            $q->where('state_id', '=', $request->state_id);
+                        }
+                    })
+                    ->where($column, 'like', '%' . $term . '%')
+                    ->when(Schema::hasColumn($table, 'is_active'), function ($q) {
+                        $q->where('is_active', true);
+                    })
+                    ->get()->toArray()]);
+            }
             return response()->json(["data" => DB::table($table)
                 ->selectRaw("id, $column as name")
                 ->where($column, 'like', '%' . $term . '%')

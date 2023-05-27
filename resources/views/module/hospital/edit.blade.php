@@ -34,6 +34,211 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-sm-6">
+                        <!-- text input -->
+                        <div class="form-group">
+                            <label> Country</label>
+                            <select class="form-control" id="country_id"
+                                    name="country_id" multiple required>
+                                @if(!empty($hospital->countries))
+                                    @foreach($hospital->countries as $country)
+                                        <option value="{{ $country->id }}">
+                                            {{ $country->name }}
+                                        </option>
+                                    @endforeach
+                                @else
+                                    <option value="">Select Option</option>
+                                @endif
+
+                            </select>
+                            @push('scripts')
+                                <script>
+                                    $(document).ready(function () {
+                                        $('#country_id').select2({
+                                            theme: 'bootstrap4',
+                                            ajax: {
+                                                url: route('ajaxSearch', {'table': 'countries'}),
+                                                dataType: 'json',
+                                                delay: 500,
+                                                data: (params) => {
+                                                    return {
+                                                        term: params.term,
+                                                    }
+                                                },
+                                                processResults: (data, params) => {
+                                                    let results = [];
+                                                    if (data.data.length > 0) {
+                                                        results = data.data.map(item => {
+                                                            return {
+                                                                id: item.id,
+                                                                text: item.full_name || item.name,
+                                                            };
+                                                        });
+                                                    } else {
+                                                        const shouldInsert = false;
+                                                        if (params.term != undefined && params.term.length > 2 && shouldInsert) {
+                                                            results[0] = {
+                                                                id: params.term,
+                                                                text: params.term
+                                                            }
+                                                        }
+                                                    }
+                                                    return {
+                                                        results: results,
+                                                    }
+                                                },
+                                            },
+                                        });
+                                    });
+
+                                </script>
+                            @endpush
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <!-- text input -->
+                        <div class="form-group">
+                            <label> State</label>
+                            <select class="form-control" id="state_id" multiple
+                                    name="state_id">
+                                @if(!empty($hospital->states))
+                                    @foreach($hospital->states as $data)
+                                        <option value="{{ $data->id }}">
+                                            {{ $data->name }}
+                                        </option>
+                                    @endforeach
+                                @else
+                                    <option value="">Select Option</option>
+                                @endif
+                            </select>
+                            @push('scripts')
+                                <script>
+                                    $(document).ready(function () {
+                                        $("#country_id").on('change', function () {
+                                            $('#state_id').select2({
+                                                theme: 'bootstrap4',
+                                                ajax: {
+                                                    url: route('ajaxSearch', {'table': 'states'}),
+                                                    dataType: 'json',
+                                                    delay: 500,
+                                                    data: (params) => {
+                                                        return {
+                                                            term: params.term,
+                                                            country_id: $('#country_id').val().join(',')
+                                                        }
+                                                    },
+                                                    processResults: (data, params) => {
+                                                        let results = [];
+                                                        if (data.data.length > 0) {
+                                                            results = data.data.map(item => {
+                                                                return {
+                                                                    id: item.id,
+                                                                    text: item.full_name || item.name,
+                                                                };
+                                                            });
+                                                        } else {
+                                                            const shouldInsert = true;
+                                                            if (params.term != undefined && params.term.length > 2 && shouldInsert) {
+                                                                results[0] = {
+                                                                    id: params.term,
+                                                                    text: params.term
+                                                                }
+                                                            }
+                                                        }
+                                                        return {
+                                                            results: results,
+                                                        }
+                                                    },
+                                                },
+                                            });
+                                        });
+                                    });
+
+                                </script>
+                            @endpush
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <!-- text input -->
+                        <div class="form-group">
+                            <label> City</label>
+                            <select class="form-control" id="city_id" multiple
+                                    name="city_id">
+                                @if(!empty($hospital->cities))
+                                    @foreach($hospital->cities as $data)
+                                        <option value="{{ $data->id }}">
+                                            {{ $data->name }}
+                                        </option>
+                                    @endforeach
+                                @else
+                                    <option value="">Select Option</option>
+                                @endif
+                            </select>
+                            @push('scripts')
+                                <script>
+                                    (function () {
+                                        $(document).ready(function () {
+                                            $("#country_id").on('change', function () {
+                                                if ($('#city_id').has('select2-hidden-accessible')) {
+                                                }
+                                                INITSelect();
+                                            });
+                                            $("#state_id").on('change', function () {
+                                                if ($('#city_id').has('select2-hidden-accessible')) {
+                                                }
+                                                INITSelect();
+                                            });
+
+                                            function INITSelect() {
+                                                $('#city_id').select2({
+                                                    theme: 'bootstrap4',
+                                                    ajax: {
+                                                        url: route('ajaxSearch', {'table': 'cities'}),
+                                                        dataType: 'json',
+                                                        delay: 500,
+                                                        data: (params) => {
+                                                            return {
+                                                                term: params.term,
+                                                                country_id: $('#country_id').val().join(','),
+                                                                state_id: $('#state_id').val() != null ? $('#state_id').val().join(',') : '',
+                                                            }
+                                                        },
+                                                        processResults: (data, params) => {
+                                                            let results = [];
+                                                            if (data.data.length > 0) {
+                                                                results = data.data.map(item => {
+                                                                    return {
+                                                                        id: item.id,
+                                                                        text: item.full_name || item.name,
+                                                                    };
+                                                                });
+                                                            } else {
+                                                                const shouldInsert = true;
+                                                                if (params.term != undefined && params.term.length > 2 && shouldInsert) {
+                                                                    results[0] = {
+                                                                        id: params.term,
+                                                                        text: params.term
+                                                                    }
+                                                                }
+                                                            }
+                                                            return {
+                                                                results: results,
+                                                            }
+                                                        },
+                                                    },
+                                                });
+                                            }
+                                        });
+                                    })();
+
+
+                                </script>
+                            @endpush
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-sm-12">
                         <!-- text input -->
                         <div class="form-group">
@@ -93,7 +298,7 @@
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
-                            <label>Placement Order</label>
+                            <label>Listing Placement Order in App</label>
                             <input type="number" class="form-control" placeholder="Sponsorship order" name="order">
                         </div>
                     </div>

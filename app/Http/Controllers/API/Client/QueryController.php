@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API\Client;
 
-use App\Constants\QueryStatus;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Client\CreateQueryAPIRequest;
 use App\Http\Requests\Client\UpdateQueryAPIRequest;
@@ -14,11 +13,14 @@ use App\Models\ActiveQuery;
 use App\Models\ConfirmedQuery;
 use App\Models\Payment;
 use App\Models\Query;
+use App\Models\QueryResponse;
 use App\Repositories\QueryRepository;
+use App\Services\QueryResponseService;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class QueryController extends AppBaseController
@@ -47,13 +49,13 @@ class QueryController extends AppBaseController
      */
     public function index(Request $request): JsonResponse
     {
-        $queries = Query::with('specialization', 'activeQuery')->orderByDesc('id')->get();
+        $queries = Query::with('specialization')->orderByDesc('id')->get();
         $activeQueries = ActiveQueryResource::collection($queries)->resolve();
         $activeQueries = array_values(array_filter($activeQueries, function ($el) {
             if (count($el) > 0) return $el;
         }));
         $data['active_query'] = $activeQueries;
-        $data['all_query'] = QueryResource::collection($queries)->resolve();
+//        $data['all_query'] = QueryResource::collection($queries)->resolve();
         return $this->successResponse($data);
     }
 
@@ -66,25 +68,32 @@ class QueryController extends AppBaseController
     public function store(CreateQueryAPIRequest $request)
     {
         $input = $request->all();
+        DB::beginTransaction();
         try {
-            unset($input['medical_visa']);
-            unset($input['passport_image']);
-            if ($request->hasFile('medical_visa')) {
-                $input['medical_visa'] = $request->file('medical_visa')->store('public');
+            $data = [];
+            if ($input['current_step'] == QueryResponse::generateQuery && $input['type'] == Query::TYPE_QUERY) {
+                $query = Query::create($input);
+                $data = (new QueryResponseService($query->id, 1, $input['response']))->execute();
+            } elseif ($input['current_step'] == QueryResponse::documentForVisa && $input['type'] == Query::TYPE_MEDICAL_VISA) {
+                $query = Query::create($input);
+                $data = (new QueryResponseService($query->id, 3, $input['response']))->execute();
+            } else {
+                if (empty($input['query_id'])) {
+                    return $this->errorResponse('query_id is required', 422);
+                }
+                $data = (new QueryResponseService($input['query_id'], $input['current_step'], $input['response']))->execute();
             }
-            if ($request->hasFile('passport_image')) {
-                $input['passport_image'] = $request->file('passport_image')->store('public');
+            DB::commit();
+            return $this->successResponse($data);
+        } catch (QueryException $e) {
+            $errorCode = $e->errorInfo[1];
+            if ($errorCode == 1062) {
+                return $this->errorResponse('Steps must be unique', 422);
             }
-            $input['status'] = QueryStatus::QUERY_OPEN;
-            $input['patient_id'] = Auth::id();
-            $query = $this->queryRepository->create($input);
-            return new QueryResource($query);
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            return $this->errorResponse("Something went wrong");
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage(), 500);
         }
-
-
     }
 
     /**
@@ -94,11 +103,29 @@ class QueryController extends AppBaseController
      *
      * @return QueryResource
      */
-    public function show(int $id): QueryResource
+    public function show(int $id, int $step)
     {
-        $query = $this->queryRepository->findOrFail($id);
+        if ($step == QueryResponse::queryConfirmed) {
+            $query = Query::query()->select('confirmed_details')->findOrFail($id);
+            $data = json_decode($query->confirmed_details, true);
+        } else {
+            $query = Query::query()->select('id', 'type', 'current_step', 'payment_required')->findOrFail($id);
+            $data = $query->toArray();
+            if (!$query->payment_required && $step == 4) {
+                $step = 5;
+            }
+            $data['step_data'] = $query->getStepResponse($step);
+            if (!$query->payment_required && $step == 3) {
+                $data['next_step'] = 5;
+            } else {
+                $data['next_step'] = $step + 1;
+            }
+        }
 
-        return new QueryResource($query);
+
+        return $this->successResponse($data);
+
+//        return new QueryResource($query);
     }
 
     /**

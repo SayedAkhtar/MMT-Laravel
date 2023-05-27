@@ -1,3 +1,6 @@
+@php
+    $step_data = $query->getStepResponse(3);
+@endphp
 <div class="card card-primary">
     <div class="card-header">
         <h4 class="card-title">Uploaded documents for Visa application</h4>
@@ -7,33 +10,43 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col">
-                        <h4>Preferred Country :</h4>
-                        <p>{{ $query->activeQuery->country?? 'No Country Preferred' }}</p>
+                        <h6>Preferred Country :</h6>
+                        <h5>{{ $step_data['country']?? 'No Country Preferred' }}</h5>
                     </div>
                     <div class="col">
-                        <h4>Preferred City : </h4>
-                        <p>{{ $query->activeQuery->state?? 'No State Preferred' }}</p>
+                        <h6>Preferred City : </h6>
+                        <h5>{{ $step_data['city']?? 'No City Preferred' }}</h5>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 col-lg-6 col-xl-4">
-                <div class="card mb-2 bg-gradient-dark">
-                    <img class="card-img-top" src="{{ asset('/assets/img/team-1.jpg')}}" alt="Dist Photo 1">
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col">
-                                <h5 class="card-title text-primary text-white">Passport</h5>
-                                <p class="card-text text-white pb-2 pt-1">Passport number: 97867898788908</p>
-                            </div>
-                            <div class="col-2">
-                                <button class="btn btn-success"><i class="fas fa-download"></i></button>
+            @if(!empty($step_data['passport']))
+                <div class="col-md-3 col-sm-6 col-12">
+                    <a class="link-unstyled" href="{{ $step_data['passport'] }}" target="_blank">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-warning"><i class="far fa-copy"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Patient Passport</span>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
-            </div>
+            @endif
+            @if(!empty($step_data['attendant_passport']))
+                @foreach($step_data['attendant_passport'] as $link)
+                    <div class="col-md-3 col-sm-6 col-12">
+                        <a class="link-unstyled" href="{{ $link }}" target="_blank">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-warning"><i class="far fa-copy"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text"> {{$loop->index+1}}. Attendants Passport</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                @endforeach
+            @endif
         </div>
     </div>
 </div>

@@ -53,6 +53,31 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend w-25">
+                                    <select name="country_code" id="" class="form-select">
+                                        @foreach(\App\Constants\CountryCodes::getList() as $data)
+                                            <option value="{{ $data['dial_code'] }}"
+                                                    @if($data['code'] == 'IN') selected @endif>
+                                                {{ $data['code'] }}
+                                                ({{ $data['dial_code'] }})
+                                            </option>
+                                        @endforeach
+
+                                    </select>
+                                </div>
+                                <input type="text" class="form-control"
+                                       placeholder="Enter phone number"
+                                       pattern="[0-9]+"
+                                       name="phone">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
                             <x-form-image-input label="Profile Image" name="image" :multiple="false"/>
@@ -72,8 +97,179 @@
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
-                            <label>Country</label>
-                            <input type="text" class="form-control" placeholder="Enter name" name="country">
+                            <label> Country</label>
+                            <select class="form-control" id="country_id"
+                                    name="country_id" required>
+                                <option value="">Select Option</option>
+                            </select>
+                            @push('scripts')
+                                <script>
+                                    $(document).ready(function () {
+                                        $('#country_id').select2({
+                                            theme: 'bootstrap4',
+                                            ajax: {
+                                                url: route('ajaxSearch', {'table': 'countries'}),
+                                                dataType: 'json',
+                                                delay: 500,
+                                                data: (params) => {
+                                                    return {
+                                                        term: params.term,
+                                                    }
+                                                },
+                                                processResults: (data, params) => {
+                                                    let results = [];
+                                                    if (data.data.length > 0) {
+                                                        results = data.data.map(item => {
+                                                            return {
+                                                                id: item.id,
+                                                                text: item.full_name || item.name,
+                                                            };
+                                                        });
+                                                    } else {
+                                                        const shouldInsert = true;
+                                                        if (params.term != undefined && params.term.length > 2 && shouldInsert) {
+                                                            results[0] = {
+                                                                id: params.term,
+                                                                text: params.term
+                                                            }
+                                                        }
+                                                    }
+                                                    return {
+                                                        results: results,
+                                                    }
+                                                },
+                                            },
+                                        });
+                                    });
+
+                                </script>
+                            @endpush
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <!-- text input -->
+                        <div class="form-group">
+                            <label> State</label>
+                            <select class="form-control" id="state_id"
+                                    name="state_id" required>
+                                <option value="">Select Option</option>
+                            </select>
+                            @push('scripts')
+                                <script>
+                                    $(document).ready(function () {
+                                        $("#country_id").on('change', function () {
+                                            $('#state_id').select2({
+                                                theme: 'bootstrap4',
+                                                ajax: {
+                                                    url: route('ajaxSearch', {'table': 'states'}),
+                                                    dataType: 'json',
+                                                    delay: 500,
+                                                    data: (params) => {
+                                                        return {
+                                                            term: params.term,
+                                                            country_id: $('#country_id').val()
+                                                        }
+                                                    },
+                                                    processResults: (data, params) => {
+                                                        let results = [];
+                                                        if (data.data.length > 0) {
+                                                            results = data.data.map(item => {
+                                                                return {
+                                                                    id: item.id,
+                                                                    text: item.full_name || item.name,
+                                                                };
+                                                            });
+                                                        } else {
+                                                            const shouldInsert = true;
+                                                            if (params.term != undefined && params.term.length > 2 && shouldInsert) {
+                                                                results[0] = {
+                                                                    id: params.term,
+                                                                    text: params.term
+                                                                }
+                                                            }
+                                                        }
+                                                        return {
+                                                            results: results,
+                                                        }
+                                                    },
+                                                },
+                                            });
+                                        });
+
+                                    });
+
+                                </script>
+                            @endpush
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <!-- text input -->
+                        <div class="form-group">
+                            <label> City</label>
+                            <select class="form-control" id="city_id"
+                                    name="city_id" required>
+                                <option value="">Select Option</option>
+                            </select>
+                            @push('scripts')
+                                <script>
+                                    (function () {
+                                        $(document).ready(function () {
+                                            $("#country_id").on('change', function () {
+                                                if ($('#city_id').has('select2-hidden-accessible')) {
+                                                }
+                                                INITSelect();
+                                            });
+                                            $("#state_id").on('change', function () {
+                                                if ($('#city_id').has('select2-hidden-accessible')) {
+                                                }
+                                                INITSelect();
+                                            });
+
+                                            function INITSelect() {
+                                                $('#city_id').select2({
+                                                    theme: 'bootstrap4',
+                                                    ajax: {
+                                                        url: route('ajaxSearch', {'table': 'cities'}),
+                                                        dataType: 'json',
+                                                        delay: 500,
+                                                        data: (params) => {
+                                                            return {
+                                                                term: params.term,
+                                                                country_id: $('#country_id').val(),
+                                                                state_id: $('#state_id').val(),
+                                                            }
+                                                        },
+                                                        processResults: (data, params) => {
+                                                            let results = [];
+                                                            if (data.data.length > 0) {
+                                                                results = data.data.map(item => {
+                                                                    return {
+                                                                        id: item.id,
+                                                                        text: item.full_name || item.name,
+                                                                    };
+                                                                });
+                                                            } else {
+                                                                const shouldInsert = true;
+                                                                if (params.term != undefined && params.term.length > 2 && shouldInsert) {
+                                                                    results[0] = {
+                                                                        id: params.term,
+                                                                        text: params.term
+                                                                    }
+                                                                }
+                                                            }
+                                                            return {
+                                                                results: results,
+                                                            }
+                                                        },
+                                                    },
+                                                });
+                                            }
+                                        });
+                                    })();
+
+
+                                </script>
+                            @endpush
                         </div>
                     </div>
                     <div class="col-sm-6">

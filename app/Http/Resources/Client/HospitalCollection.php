@@ -12,10 +12,8 @@ class HospitalCollection extends ResourceCollection
      *
      * @return array
      */
-    public function toArray($request): array
+    public function toArray($request)
     {
-        return [
-            'data' => $this->collection,
-        ];
+        return $this->collection;
     }
 }

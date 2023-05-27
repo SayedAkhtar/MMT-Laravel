@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterActiveQueriesAddPaymentId extends Migration
+class CreateLanguageHcfPivotTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AlterActiveQueriesAddPaymentId extends Migration
      */
     public function up()
     {
-        Schema::table('active_queries', function (Blueprint $table) {
-            $table->foreignId('payment_id')->after('is_payment_done')->nullable()->default(null);
+        Schema::create('language_user', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id');
+            $table->foreignId('language_id');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AlterActiveQueriesAddPaymentId extends Migration
      */
     public function down()
     {
-        Schema::table('active_queries', function (Blueprint $table) {
-            $table->dropColumn(['payment_id']);
-        });
+        Schema::dropIfExists('language_hcf_pivot');
     }
 }

@@ -233,4 +233,15 @@ class User extends Authenticatable implements HasMedia
         return $this->hasOneThrough(User::class, PatientDetails::class, 'user_id', 'id', '', 'user_id');
     }
 
+    public function countryModel()
+    {
+        return $this->belongsTo(Country::class, 'country');
+    }
+
+    public function languages()
+    {
+        return $this->belongsToMany(Language::class);
+    }
+
+
 }

@@ -2,11 +2,8 @@
 
 namespace App\Models;
 
-use App\Traits\HasRecordOwnerProperties;
-
 class Query extends BaseModel
 {
-    use HasRecordOwnerProperties;
 
     /**
      * @var string
@@ -19,30 +16,20 @@ class Query extends BaseModel
     protected $fillable = [
         'patient_id',
         'patient_family_id',
-        'name',
         'specialization_id',
         'hospital_id',
         'doctor_id',
-        'medical_history',
-        'preferred_country',
-        'medical_report',
-        'passport',
-        'passport_image',
         'status',
-        'model',
-        'model_id',
-        'is_active',
-        'created_at',
-        'updated_at',
-        'added_by',
-        'updated_by',
+        'type',
+        'current_step',
+        'payment_required',
         'is_completed',
-        'completed_at',
     ];
     protected static $tabs = [
         'details',
         'doctor-review',
         'upload-medical-visa',
+        'payment-required',
         'upload-ticket',
         'coordinator',
     ];
@@ -53,51 +40,49 @@ class Query extends BaseModel
     protected $casts = [
         'patient_id' => 'integer',
         'patient_family_id' => 'integer',
-        'name' => 'string',
         'specialization_id' => 'integer',
         'hospital_id' => 'integer',
         'doctor_id' => 'integer',
-        'medical_history' => 'string',
-        'preffered_country' => 'string',
-        'medical_report' => 'string',
-        'passport' => 'string',
-        'passport_image' => 'string',
         'status' => 'string',
-        'model' => 'string',
-        'model_id' => 'integer',
-        'is_active' => 'boolean',
-        'added_by' => 'integer',
-        'updated_by' => 'integer',
+        'type' => 'integer',
+        'current_step' => 'integer',
+        'payment_required' => 'boolean',
         'is_completed' => 'boolean',
     ];
+
+    const TYPE_QUERY = 1;
+    const TYPE_MEDICAL_VISA = 2;
 
     public static function getTabs()
     {
         return self::$tabs;
     }
 
+    public function getQueryTypeAttribute(): string
+    {
+        if ($this->type == static::TYPE_QUERY) {
+            return "Medical Query";
+        } else {
+            return "Visa Query";
+        }
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
-    public function pastQueries()
+    public function responses()
     {
-        return $this->hasMany(PastQuery::class, 'query_id', 'id');
+        return $this->hasMany(QueryResponse::class, 'query_id', 'id');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function confirmedQuery()
+    public function getStepResponse(int $step): array
     {
-        return $this->hasOne(ConfirmedQuery::class, 'query_id', 'id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function activeQuery()
-    {
-        return $this->hasOne(ActiveQuery::class, 'query_id', 'id');
+        try {
+            $response = $this->responses->where('step', $step)->first()->response ?? '';
+            return json_decode($response, true) ?? [];
+        } catch (\Exception $e) {
+            throw (new \Exception("Response for the step not found"));
+        }
     }
 
     /**

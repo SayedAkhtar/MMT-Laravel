@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth:sanctum', 'validate.user', 'api']], function () {
     Route::get('home', [HomeController::class, 'modules'])->middleware('api');
-    Route::apiResource('queries', QueryController::class);
+    Route::apiResource('queries', QueryController::class)->except('show');
+    Route::get('queries/{id}/{step}', [QueryController::class, 'show'])->name('queries.show');
     Route::post('upload-patient-response', [QueryController::class, 'updatePatientResponse']);
     Route::post('query-upload-visa', [QueryController::class, 'uploadVisa']);
     Route::get('confirmed-query', [QueryController::class, 'confirmedQueryDetail']);

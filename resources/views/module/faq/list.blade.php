@@ -17,9 +17,6 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h3 class="card-title">Tests List</h3>
-            <a href="{{ route('faq.create') }}" class="btn btn-success btn-sm">
-                <i class="fa fa-plus"></i> Add Test
-            </a>
         </div>
         <!-- /.card-header -->
         <div class="card-body">

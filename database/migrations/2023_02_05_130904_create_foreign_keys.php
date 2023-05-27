@@ -21,18 +21,6 @@ class CreateForeignKeys extends Migration
             $table->foreign('query_id')->references('id')->on('queries')->onDelete('cascade');
         });
 
-        Schema::table('active_queries', function (Blueprint $table) {
-            $table->foreign('added_by')->references('id')->on('users')->onDelete('set null')->onUpdate('set null');
-            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null')->onUpdate('set null');
-        });
-
-        Schema::table('confirmed_queries', function (Blueprint $table) {
-            $table->foreign('query_id')->references('id')->on('queries')->onDelete('cascade');
-            $table->foreign('accommodation_id')->references('id')->on('accommodations')->onDelete('set null')->onUpdate('set null');
-            $table->foreign('coordinator_id')->references('id')->on('users')->onDelete('set null')->onUpdate('set null');
-            $table->foreign('added_by')->references('id')->on('users')->onDelete('set null')->onUpdate('set null');
-            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null')->onUpdate('set null');
-        });
 
         Schema::table('patient_families', function (Blueprint $table) {
             $table->foreign('patient_id')->references('id')->on('users')->onDelete('cascade');

@@ -30,6 +30,9 @@ class UpdateHospitalAPIRequest extends FormRequest
             'doctors.*' => ['sometimes'],
             'treatments.*' => ['sometimes'],
             'accreditations.*' => ['sometimes'],
+            'country_id.*' => ['sometimes'],
+            'state_id.*' => ['sometimes'],
+            'city_id.*' => ['sometimes'],
         ];
     }
 }

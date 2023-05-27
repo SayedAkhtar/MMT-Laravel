@@ -89,4 +89,19 @@ class Hospital extends BaseModel
     {
         return $this->belongsToMany(Tags::class, 'hospital_tags');
     }
+
+    public function countries()
+    {
+        return $this->belongsToMany(Country::class, 'hospital_country');
+    }
+
+    public function states()
+    {
+        return $this->belongsToMany(State::class, 'hospital_state');
+    }
+
+    public function cities()
+    {
+        return $this->belongsToMany(City::class, 'hospital_city');
+    }
 }

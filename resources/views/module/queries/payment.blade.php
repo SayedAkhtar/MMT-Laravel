@@ -1,3 +1,6 @@
+@php
+    $step_data = $query->getStepResponse(\App\Models\QueryResponse::payment);
+@endphp
 <div class="card card-secondary">
     <div class="card-header">
         <h3 class="card-title">Payment Status</h3>
@@ -9,9 +12,13 @@
     </div>
     <div class="card-body">
         <div class="form-group">
-            <form action="">
+            <form action="{{ route('query.update', ['query' => $query->id]) }}" method="post">
+                @csrf
+                @method('PUT')
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox">
+                    <input type="hidden" name="set_payment_type" value="true"/>
+                    <input class="form-check-input" type="checkbox" name="payment_required"
+                           @if($query->payment_required) checked @endif>
                     <label class="form-check-label">Is Payment required</label>
                 </div>
                 <button class="btn btn-warning">Submit</button>
@@ -22,11 +29,11 @@
 
 <div class="row mb-4">
     <div class="col-12 d-flex justify-content-between">
-        <a href="{{ route('query.show', ['query' => $query->id, 'tab' => 'upload-medical-visa']) }}" class="btn btn-info">Previous</a>
-        @if(!empty($query->activeQuery?->doctor_response))
-            <a href="{{ route('query.show', ['query' => $query->id, 'tab' => 'upload-ticket']) }}" class="btn btn-dark">Next</a>
-        @else
-            <button class="btn btn-success" type="submit" form="doctorResponseForm"> Submit & Continue</button>
-        @endif
+        <a href="{{ route('query.show', ['query' => $query->id, 'tab' => 'upload-medical-visa']) }}"
+           class="btn btn-info">Previous</a>
+        <a href="{{ route('query.show', ['query' => $query->id, 'tab' => 'upload-ticket']) }}"
+           class="btn btn-dark">Next</a>
+        {{--            <button class="btn btn-success" type="submit" form="doctorResponseForm"> Submit & Continue</button>--}}
+        {{--        @endif--}}
     </div>
 </div>

@@ -26,6 +26,8 @@ class Doctor extends BaseModel
         'faq',
         'time_slots',
         'price',
+        'state_id',
+        'city_id',
         'is_active',
         'created_at',
         'updated_at',
@@ -117,5 +119,15 @@ class Doctor extends BaseModel
     public function hospitals()
     {
         return $this->belongsToMany(Hospital::class, 'doctor_hospitals');
+    }
+
+    public function state()
+    {
+        return $this->belongsTo(State::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
     }
 }

@@ -1,3 +1,6 @@
+@php
+    $step_data = $query->getStepResponse(1);
+@endphp
 <div class="row">
     <div class="col-md-6">
         <div class="card card-primary">
@@ -12,7 +15,7 @@
             <div class="card-body">
                 <div class="form-group">
                     <label for="inputName">Specialization</label>
-                    <input type="text" id="inputName" class="form-control" value="{{ $query->specialization->name }}"
+                    <input type="text" id="inputName" class="form-control" value="{{ $query->specialization?->name }}"
                            readonly>
                 </div>
                 <div class="form-group">
@@ -66,29 +69,37 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @if(!empty($query->medical_visa))
-                        <tr>
-                            <td>Medical Visa</td>
-                            <td class="text-right py-0 align-middle">
-                                <div class="btn-group btn-group-sm">
-                                    <a href="{{ Storage::url($query->medical_visa) }}" target="_blank"
-                                       class="btn btn-info"><i
-                                            class="fas fa-eye"></i></a>
-                                </div>
-                            </td>
-                        </tr>
+                    @if(!empty($step_data['medical_report']))
+                        @foreach($step_data['medical_report']  as $link)
+                            @if(!empty($link))
+                                <tr>
+                                    <td>Medical Reports</td>
+                                    <td class="text-right py-0 align-middle">
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{{ $link }}" target="_blank"
+                                               class="btn btn-info"><i
+                                                    class="fas fa-eye"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endif
+                        @endforeach
                     @endif
-                    @if(!empty($query->passport_image))
-                        <tr>
-                            <td>Passport Image</td>
-                            <td class="text-right py-0 align-middle">
-                                <div class="btn-group btn-group-sm">
-                                    <a href="{{ Storage::url($query->passport_image) }}" target="_blank"
-                                       class="btn btn-info"><i
-                                            class="fas fa-eye"></i></a>
-                                </div>
-                            </td>
-                        </tr>
+                    @if(!empty($step_data['passport']))
+                        @foreach($step_data['passport']  as $link)
+                            @if(!empty($link))
+                                <tr>
+                                    <td>Passport Docs</td>
+                                    <td class="text-right py-0 align-middle">
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{{ $link }}" target="_blank"
+                                               class="btn btn-info"><i
+                                                    class="fas fa-eye"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endif
+                        @endforeach
                     @endif
                     </tbody>
                 </table>
@@ -97,6 +108,26 @@
         </div>
     </div>
     <div class="col-md-6">
+        <div class="card card-secondary">
+            <div class="card-header">
+                <h3 class="card-title">Patient Medical History</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                @if(!empty($step_data['history']))
+                    <div class="form-group">
+                        <textarea cols="4" class="form-control" readonly>{{ $step_data['history'] }}</textarea>
+                    </div>
+                @else
+                    <p>No medical history given</p>
+                @endif
+            </div>
+            <!-- /.card-body -->
+        </div>
         <div class="card card-secondary">
             <div class="card-header">
                 <h3 class="card-title">Doctor Info</h3>
@@ -181,6 +212,12 @@
 </div>
 <div class="row mb-4">
     <div class="col-12">
-        <a href="{{ route('query.show', ['query' => $query->id, 'tab' => 'doctor-review']) }}" class="btn btn-primary">Next</a>
+        @if($query->type == \App\Models\Query::TYPE_QUERY)
+            <a href="{{ route('query.show', ['query' => $query->id, 'tab' => 'doctor-review']) }}"
+               class="btn btn-primary">Next</a>
+        @else
+            <a href="{{ route('query.show', ['query' => $query->id, 'tab' => 'payment-required']) }}"
+               class="btn btn-primary">Next</a>
+        @endif
     </div>
 </div>

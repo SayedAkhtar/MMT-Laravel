@@ -16,9 +16,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Patient Email</th>
-                    <th>Hospital Name</th>
-                    <th>Specialization Name</th>
-                    <th>Doctor Preferred</th>
+                    <th>Query Type</th>
                     <th>Country</th>
                     <th>Status</th>
                     <th>Action</th>
@@ -29,9 +27,7 @@
                     <tr>
                         <td>{{ $data->id }}</td>
                         <td>{{ $data->patient->email }}</td>
-                        <td>{{ $data->hospital->name}}</td>
-                        <td>{{ $data->specialization->name}}</td>
-                        <td>{{ !empty($data->doctor) ? $data->doctor->name : "No Preference" }}</td>
+                        <td>{{ $data->query_type }}</td>
                         <td>{{ $data->preferred_country?? "No Preference"}}</td>
                         <td>{{ $data->status }}</td>
                         <td class="text-right">
@@ -45,9 +41,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Patient Email</th>
-                    <th>Hospital Name</th>
-                    <th>Specialization Name</th>
-                    <th>Doctor Preferred</th>
+                    <th>Query Type</th>
                     <th>Country</th>
                     <th>Status</th>
                     <th>Action</th>

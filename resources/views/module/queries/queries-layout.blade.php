@@ -66,8 +66,10 @@
     <div class="row">
         <div class="col-md-12">
             <ul id="progressbar">
-                <li @class([$tab == 'details' ? 'active':'' ])>Query Details</li>
-                <li @class([$tab == 'doctor-review' ? 'active':'' ])>Doctors Remarks</li>
+                @if($query->type == \App\Models\Query::TYPE_QUERY)
+                    <li @class([$tab == 'details' ? 'active':'' ])>Query Details</li>
+                    <li @class([$tab == 'doctor-review' ? 'active':'' ])>Doctors Remarks</li>
+                @endif
                 <li @class([$tab == 'upload-medical-visa' ? 'active':'' ])>Uploaded Medical Visa</li>
                 <li @class([$tab == 'payment-required' ? 'active':'' ])>Payment</li>
                 <li @class([$tab == 'upload-ticket' ? 'active':'' ])>Uploaded Tickets & Visa</li>
@@ -103,7 +105,6 @@
         @default
             @include('module.queries.details')
     @endswitch
-
 
 @endsection
 

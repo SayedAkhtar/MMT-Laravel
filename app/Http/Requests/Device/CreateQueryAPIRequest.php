@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Device;
 
+use App\Models\Query;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CreateQueryAPIRequest extends FormRequest
 {
@@ -20,23 +22,11 @@ class CreateQueryAPIRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'patient_id' => ['required', 'exists:users,id'],
-            'patient_family_id' => ['required', 'exists:users,id'],
-            'name' => ['string', 'required', 'unique:queries,name'],
-            'specialization_id' => ['required', 'exists:specializations,id'],
-            'hospital_id' => ['required', 'exists:hospitals,id'],
-            'doctor_id' => ['nullable', 'exists:users,id'],
-            'medical_history' => ['nullable'],
-            'preffered_country' => ['nullable', 'string'],
-            'medical_report' => ['nullable'],
-            'passport' => ['nullable', 'string'],
-            'passport_image' => ['nullable', 'string'],
-            'status' => ['string', 'required', 'unique:queries,status'],
-            'model' => ['nullable', 'string'],
-            'model_id' => ['nullable'],
-            'is_active' => ['boolean'],
-            'is_completed' => ['boolean'],
-            'completed_at' => ['nullable'],
+            'query_id' => ['nullable', 'exists:queries,id'],
+            'patient_family_id' => ['nullable', 'exists:users,id'],
+            'type' => ['required', Rule::in([Query::TYPE_QUERY, Query::TYPE_MEDICAL_VISA])],
+            'current_step' => ['required', 'integer'],
+            'response' => ['required', 'array'],
         ];
     }
 }

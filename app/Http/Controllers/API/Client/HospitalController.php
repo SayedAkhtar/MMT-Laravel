@@ -39,11 +39,11 @@ class HospitalController extends AppBaseController
      *
      * @return HospitalCollection
      */
-    public function index(Request $request): HospitalCollection
+    public function index(Request $request)
     {
         $hospitals = $this->hospitalRepository->fetch($request);
-
-        return new HospitalCollection($hospitals);
+        $collection = new HospitalCollection($hospitals);
+        return $this->successResponse($collection);
     }
 
     /**

@@ -146,6 +146,9 @@ class HospitalController extends AppBaseController
             $hospital->doctors()->sync($input['doctors'] ?? []);
             $hospital->treatments()->sync($input['treatments'] ?? []);
             $hospital->accreditation()->sync($accreditation_id);
+            $hospital->countries()->sync($input['country_id'] ?? []);
+            $hospital->states()->sync($input['state_id'] ?? []);
+            $hospital->cities()->sync($input['city_id'] ?? []);
             $hospital = $this->hospitalRepository->update($input, $id);
             DB::commit();
         } catch (\Exception $e) {

@@ -16,6 +16,12 @@
     @stack('plugin-styles')
     <link rel="stylesheet" href="{{ asset("/css/style.css") }}">
     <link rel="stylesheet" href="{{ asset("/css/app.css") }}">
+    <style>
+        .link-unstyled, .link-unstyled:link, .link-unstyled:hover {
+            color: inherit;
+            text-decoration: inherit;
+        }
+    </style>
     @stack('page-styles')
     <script src=”https://cdn.agora.io/sdk/release/AgoraRTCSDK-3.3.1.js”></script>
 

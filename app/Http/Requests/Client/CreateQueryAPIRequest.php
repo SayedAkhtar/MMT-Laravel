@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\Client;
 
+use App\Models\Query;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class CreateQueryAPIRequest extends FormRequest
 {
@@ -11,6 +14,9 @@ class CreateQueryAPIRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        $this->merge([
+            'patient_id' => Auth::id(),
+        ]);
         return true;
     }
 
@@ -20,17 +26,11 @@ class CreateQueryAPIRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'query_id' => ['nullable', 'exists:queries,id'],
             'patient_family_id' => ['nullable', 'exists:users,id'],
-            'name' => ['string', 'nullable'],
-            'medical_history' => ['nullable', 'string'],
-            'preferred_country' => ['nullable', 'string'],
-            'medical_report' => ['nullable', 'file'],
-            'passport' => ['nullable', 'file'],
-            'passport_image' => ['nullable', 'file'],
-            'model_id' => ['nullable'],
-            'is_active' => ['boolean'],
-            'is_completed' => ['boolean'],
-            'completed_at' => ['nullable'],
+            'type' => ['required', Rule::in([Query::TYPE_QUERY, Query::TYPE_MEDICAL_VISA])],
+            'current_step' => ['required', 'integer'],
+            'response' => ['required', 'array'],
         ];
     }
 }
