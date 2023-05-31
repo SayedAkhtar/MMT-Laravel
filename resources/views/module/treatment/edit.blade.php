@@ -43,8 +43,9 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label>ETD in Hospital</label>
-                            <input type="number" class="form-control" placeholder="Enter ETD in hospital"
+                            <label>Estimated Days of Stay in Hospital</label>
+                            <input type="number" class="form-control"
+                                   placeholder="Enter Estimated Days of Stay in hospital"
                                    name="days_required" value="{{ $treatment->days_required }}">
                         </div>
                     </div>
@@ -62,7 +63,8 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>EDT in India Outside hospital</label>
-                            <input type="number" class="form-control" placeholder="Enter ETD in india outside hospital"
+                            <input type="number" class="form-control"
+                                   placeholder="Enter Estimated Days of Stay in india outside hospital"
                                    name="recovery_time" value="{{ $treatment->recovery_time }}">
                         </div>
                     </div>
