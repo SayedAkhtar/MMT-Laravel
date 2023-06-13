@@ -21,8 +21,6 @@ class Doctor extends BaseModel
         'start_of_service',
         'awards',
         'description',
-        'designation_id',
-        'qualification_id',
         'faq',
         'time_slots',
         'price',
@@ -103,17 +101,17 @@ class Doctor extends BaseModel
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
-    public function qualification()
+    public function qualifications()
     {
-        return $this->hasOne(Qualification::class, 'id', 'qualification_id');
+        return $this->belongsToMany(Qualification::class,'doctor_qualification');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
-    public function designation()
+    public function designations()
     {
-        return $this->hasOne(Designation::class, 'id', 'designation_id');
+        return $this->belongsToMany(Designation::class, 'designations_doctor');
     }
 
     public function hospitals()

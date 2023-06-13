@@ -17,7 +17,7 @@ class CreateTreatmentAPIRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'is_active' => $this->request->has('is_active'),
+            'is_active' => true,
         ]);
     }
 
@@ -27,12 +27,13 @@ class CreateTreatmentAPIRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['string', 'required', 'unique:treatments,name'],
-            'price' => ['integer', 'required'],
-            'images.*' => ['nullable', 'file'],
-            'days_required' => ['integer', 'required'],
-            'recovery_time' => ['integer', 'required'],
-            'success_rate' => ['integer', 'required'],
+            'name' => ['string', 'required'],
+            'min_price' => ['integer', 'required'],
+            'max_price' => ['integer', 'nullable'],
+            'logo' => ['nullable', 'file'],
+            'days_required' => ['string', 'required'],
+            'recovery_time' => ['string', 'required'],
+            'success_rate' => ['string', 'required'],
             'hospitals.*' => ['integer', 'sometimes'],
             'doctors.*' => ['integer', 'sometimes'],
             'specializations.*' => ['integer', 'sometimes'],

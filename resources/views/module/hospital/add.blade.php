@@ -123,7 +123,7 @@
                         <div class="form-group">
                             <label> State</label>
                             <select class="form-control" id="state_id"
-                                    name="state_id">
+                                    name="state_id" multiple>
                                 @if(!empty($hospital->states))
                                     @foreach($hospital->states as $data)
                                         <option value="{{ $data->id }}">
@@ -138,8 +138,15 @@
                                 <script>
                                     $(document).ready(function () {
                                         $("#country_id").on('change', function () {
-                                            $('#state_id').attr('multiple');
-                                            $('#state_id').select2({
+                                            if ($('#state_id').hasClass('select2-hidden-accessible')) {
+                                                    $('#state_id').select2('destroy');
+                                                }
+                                                INITState();
+                                        });
+                                    });
+
+                                    function INITState(){
+                                        $('#state_id').select2({
                                                 theme: 'bootstrap4',
                                                 ajax: {
                                                     url: route('ajaxSearch', {'table': 'states'}),
@@ -175,8 +182,7 @@
                                                     },
                                                 },
                                             });
-                                        });
-                                    });
+                                    }
 
                                 </script>
                             @endpush
@@ -187,7 +193,7 @@
                         <div class="form-group">
                             <label> City</label>
                             <select class="form-control" id="city_id"
-                                    name="city_id">
+                                    name="city_id" multiple>
                                 @if(!empty($hospital->cities))
                                     @foreach($hospital->cities as $data)
                                         <option value="{{ $data->id }}">
@@ -202,14 +208,15 @@
                                 <script>
                                     (function () {
                                         $(document).ready(function () {
-                                            $("#city_id").attr('multiple');
                                             $("#country_id").on('change', function () {
-                                                if ($('#city_id').has('select2-hidden-accessible')) {
+                                                if ($('#city_id').hasClass('select2-hidden-accessible')) {
+                                                    $('#city_id').select2('destroy');
                                                 }
                                                 INITSelect();
                                             });
                                             $("#state_id").on('change', function () {
-                                                if ($('#city_id').has('select2-hidden-accessible')) {
+                                                if ($('#city_id').hasClass('select2-hidden-accessible')) {
+                                                    $('#city_id').select2('destroy');
                                                 }
                                                 INITSelect();
                                             });

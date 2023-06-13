@@ -77,6 +77,12 @@ class DoctorController extends AppBaseController
                 if (!empty($input['specialization_id'])) {
                     $result = $doctor->specializations()->sync($input['hospital_id']);
                 }
+                if (!empty($input['designation_id'])) {
+                    $result = $doctor->designations()->sync($input['designation_id']);
+                }
+                if (!empty($input['qualification_id'])) {
+                    $result = $doctor->qualifications()->sync($input['qualification_id']);
+                }
                 if ($request->hasFile('image')) {
                     $doctor->updateImage('image', 'avatar', false);
                 }
@@ -86,7 +92,7 @@ class DoctorController extends AppBaseController
             throw new Exception("Not able to create doctor at this moment");
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->withInput()->with('error', $e->getMessage());
+            return back()->withInput()->with('error', $e->getMessage(), $e->getCode(), $e, $e->getLine());
         }
     }
 

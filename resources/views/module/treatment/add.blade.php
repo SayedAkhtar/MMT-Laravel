@@ -19,13 +19,19 @@
                         <!-- text input -->
                         <div class="form-group">
                             <label>Name</label>
-                            <input type="text" class="form-control" placeholder="Enter name" name="name">
+                            <input type="text" class="form-control" placeholder="Enter name" @old('name') name="name">
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label>Price</label>
-                            <input type="number" class="form-control" placeholder="Enter price" name="price">
+                            <label>Min Price</label>
+                            <input type="number" class="form-control" placeholder="Enter Min price" @old('min_price') name="min_price" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Max Price</label>
+                            <input type="number" class="form-control" placeholder="Enter Max price" @old('max_price') name="max_price">
                         </div>
                     </div>
                 </div>
@@ -33,13 +39,21 @@
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
-                            <x-form-image-input label="Logo" name="images" multiple="true"/>
+                            <div>
+                                <label for="exampleInputFile">Treatment Logo</label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="exampleInputFile" name="logo">
+                                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Estimated Days of Stay in Hospital</label>
-                            <input type="number" class="form-control"
+                            <input type="text" class="form-control" @old('days_required')
                                    placeholder="Enter Estimated Days of Stay in hospital"
                                    name="days_required">
                         </div>
@@ -50,7 +64,7 @@
                         <!-- text input -->
                         <div class="form-group">
                             <label>Treatment Success rate</label>
-                            <input type="number" max=100 class="form-control"
+                            <input type="text" max=100 class="form-control" @old('success_rate')
                                    placeholder="Enter success rate (percentage)"
                                    name="success_rate">
                         </div>
@@ -58,7 +72,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Estimated Days of Stay in India Outside hospital</label>
-                            <input type="number" class="form-control"
+                            <input type="text" class="form-control" @old('recovery_time')
                                    placeholder="Enter Estimated Days of Stay in india outside hospital"
                                    name="recovery_time">
                         </div>

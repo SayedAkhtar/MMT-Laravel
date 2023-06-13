@@ -9,7 +9,7 @@ use App\Repositories\TreatmentRepository;
 use App\Traits\IsViewModule;
 use Illuminate\Http\Request;
 use Prettus\Validator\Exceptions\ValidatorException;
-
+use Illuminate\Support\Str;
 class TreatmentController extends AppBaseController
 {
     use IsViewModule;
@@ -50,11 +50,11 @@ class TreatmentController extends AppBaseController
      */
     public function store(CreateTreatmentAPIRequest $request)
     {
-        $input = $request->except('images');
-        $treatment = $this->treatmentRepository->create($input);
-        if ($request->hasFile('images')) {
-            $treatment->attachImage('images', 'treatment', true);
+        $input = $request->except('logo');
+        if ($request->hasFile('logo')) {
+            $input['logo'] = $request->file('logo')->storeAs('public', Str::slug($input['name']) .'.'. $request->file('logo')->getClientOriginalExtension());
         }
+        $treatment = $this->treatmentRepository->create($input);
         if ($request->has('hospitals')) {
             $treatment->hospitals()->attach($request->get('hospitals'));
         }
@@ -79,14 +79,6 @@ class TreatmentController extends AppBaseController
         foreach ($treatment->doctors as &$data) {
             $data->name = $data->user->name;
         }
-        $temp = [];
-        if (!empty($treatment->getMedia('treatment'))) {
-
-            foreach ($treatment->getMedia('treatment') as $obj) {
-                $temp[] = $obj->getUrl('thumbnail');
-            }
-        }
-        $treatment->images = $temp;
         return $this->module_view('edit', compact('treatment'));
     }
 
@@ -102,11 +94,11 @@ class TreatmentController extends AppBaseController
      */
     public function update(UpdateTreatmentAPIRequest $request, int $id)
     {
-        $input = $request->except('images');
-        $treatment = $this->treatmentRepository->update($input, $id);
-        if ($request->hasFile('images')) {
-            $result = $treatment->updateImage('images', 'treatment', true);
+        $input = $request->except('logo');
+        if ($request->hasFile('logo')) {
+            $input['logo'] = $request->file('logo')->storeAs('public', Str::slug($input['name']) .'.'. $request->file('logo')->getClientOriginalExtension());
         }
+        $treatment = $this->treatmentRepository->update($input, $id);
         if ($request->has('hospitals')) {
             $treatment->hospitals()->sync($request->get('hospitals'));
         }

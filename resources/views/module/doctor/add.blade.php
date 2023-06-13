@@ -19,13 +19,14 @@
                         <!-- text input -->
                         <div class="form-group">
                             <label>Name</label>
-                            <input type="text" class="form-control" placeholder="Enter name" name="name" required>
+                            <input type="text" class="form-control" placeholder="Enter name" name="name" @old('name') required>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" class="form-control" placeholder="Enter email" name="email" required>
+                            <input type="email" class="form-control" @old('email')
+                            placeholder="Enter email" name="email" required>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -36,30 +37,7 @@
                                     <select name="country_code" id="" class="form-select">
                                         @foreach(\App\Constants\CountryCodes::getList() as $data)
                                             <option value="{{ $data['dial_code'] }}"
-                                                    @if($data['code'] == 'IN') selected @endif>
-                                                {{ $data['code'] }}
-                                                ({{ $data['dial_code'] }})
-                                            </option>
-                                        @endforeach
-
-                                    </select>
-                                </div>
-                                <input type="text" class="form-control"
-                                       placeholder="Enter phone number"
-                                       pattern="[0-9]+"
-                                       name="phone">
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Phone Number</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend w-25">
-                                    <select name="country_code" id="" class="form-select">
-                                        @foreach(\App\Constants\CountryCodes::getList() as $data)
-                                            <option value="{{ $data['dial_code'] }}"
+                                                @if(!empty(old('country_code')) && old('country_code') == $data['dial_code']) selected @endif
                                                     @if($data['code'] == 'IN') selected @endif>
                                                 {{ $data['code'] }}
                                                 ({{ $data['dial_code'] }})
@@ -88,9 +66,9 @@
                             <label>Gender</label>
                             <select class="form-control" name="gender">
                                 <option>Select Option</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
+                                <option value="male" @if(!empty(old('gender')) && old('gender') == 'male') selected @endif >Male</option>
+                                <option value="female" @if(!empty(old('gender')) && old('gender') == 'female') selected @endif>Female</option>
+                                <option value="other" @if(!empty(old('gender')) && old('gender') == 'other') selected @endif>Other</option>
                             </select>
                         </div>
                     </div>
@@ -276,21 +254,21 @@
                         <!-- text input -->
                         <div class="form-group">
                             <x-multi-select-search label="Designation" name="designation_id" table="designations"
-                                                   :multiple="false" :required="true"/>
+                                                   :multiple="true" :required="true"/>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <x-multi-select-search label="Qualification" name="qualification_id"
                                                    table="qualifications"
-                                                   :multiple="false" :required="true"/>
+                                                   :multiple="true" :required="true"/>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
                             <label>Awards</label>
-                            <input type="text" class="form-control" placeholder="Enter name" name="awards">
+                            <input type="text" class="form-control" placeholder="Enter name" name="awards" @old('awards') >
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -310,27 +288,26 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <x-multi-select-search label="Hospitals" name="hospital_id" table="hospitals"
-                                                   multiple="true" :required="true"/>
+                                                   :multiple="true" :required="true"/>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <x-multi-select-search label="Specializations" name="specialization_id"
                                                    table="specializations"
-                                                   multiple="true" :required="true"/>
+                                                   :multiple="true" :required="true"/>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    {{-- <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
                             <livewire:time-slots-component/>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Consultation Price: </label>
-                            <input type="number" class="form-control" placeholder="Enter price in Dollars" name="price"
-                                   required>
+                            <input type="number" class="form-control" placeholder="Enter price in Dollars" name="price" @old('price')>
                         </div>
                     </div>
                     <div class="col-sm-12">

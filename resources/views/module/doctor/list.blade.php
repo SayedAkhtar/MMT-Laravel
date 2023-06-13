@@ -28,7 +28,7 @@
                 @foreach($doctors as $doctor)
                     <tr>
                         <td>{{ $doctor->user->name }}</td>
-                        <td>{{ $doctor->designation->name }}
+                        <td>{{ $doctor->designations->pluck('name')->join(' | ') }}
                         </td>
                         <td>
                             @if(!empty($doctor->time_slots))

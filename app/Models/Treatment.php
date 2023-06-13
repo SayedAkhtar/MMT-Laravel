@@ -23,8 +23,9 @@ class Treatment extends BaseModel implements HasMedia
      */
     protected $fillable = [
         'name',
-        'price',
-        'images',
+        'min_price',
+        'max_price',
+        'logo',
         'days_required',
         'recovery_time',
         'success_rate',
@@ -42,11 +43,11 @@ class Treatment extends BaseModel implements HasMedia
      */
     protected $casts = [
         'name' => 'string',
-        'price' => 'integer',
-        'images' => 'json',
-        'days_required' => 'integer',
-        'recovery_time' => 'integer',
-        'success_rate' => 'integer',
+        'min_price' => 'integer',
+        'logo' => 'string',
+        'days_required' => 'string',
+        'recovery_time' => 'string',
+        'success_rate' => 'string',
         'covered' => 'string',
         'not_covered' => 'string',
         'is_active' => 'boolean',

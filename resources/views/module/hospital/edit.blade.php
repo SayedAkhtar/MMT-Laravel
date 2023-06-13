@@ -42,7 +42,7 @@
                                     name="country_id" multiple required>
                                 @if(!empty($hospital->countries))
                                     @foreach($hospital->countries as $country)
-                                        <option value="{{ $country->id }}">
+                                        <option value="{{ $country->id }}" selected>
                                             {{ $country->name }}
                                         </option>
                                     @endforeach
@@ -103,7 +103,7 @@
                                     name="state_id">
                                 @if(!empty($hospital->states))
                                     @foreach($hospital->states as $data)
-                                        <option value="{{ $data->id }}">
+                                        <option value="{{ $data->id }}" selected>
                                             {{ $data->name }}
                                         </option>
                                     @endforeach
@@ -114,8 +114,16 @@
                             @push('scripts')
                                 <script>
                                     $(document).ready(function () {
+                                        INITState();
                                         $("#country_id").on('change', function () {
-                                            $('#state_id').select2({
+                                            if ($('#state_id').has('select2-hidden-accessible')) {
+                                                    $('#state_id').select2('destroy');
+                                                }
+                                                INITState();
+                                        });
+                                    });
+                                    function INITState(){
+                                        $('#state_id').select2({
                                                 theme: 'bootstrap4',
                                                 ajax: {
                                                     url: route('ajaxSearch', {'table': 'states'}),
@@ -151,9 +159,7 @@
                                                     },
                                                 },
                                             });
-                                        });
-                                    });
-
+                                    }
                                 </script>
                             @endpush
                         </div>
@@ -166,7 +172,7 @@
                                     name="city_id">
                                 @if(!empty($hospital->cities))
                                     @foreach($hospital->cities as $data)
-                                        <option value="{{ $data->id }}">
+                                        <option value="{{ $data->id }}" selected>
                                             {{ $data->name }}
                                         </option>
                                     @endforeach
@@ -178,13 +184,16 @@
                                 <script>
                                     (function () {
                                         $(document).ready(function () {
+                                            INITSelect();
                                             $("#country_id").on('change', function () {
                                                 if ($('#city_id').has('select2-hidden-accessible')) {
+                                                    $('#city_id').select2('destroy');
                                                 }
                                                 INITSelect();
                                             });
                                             $("#state_id").on('change', function () {
                                                 if ($('#city_id').has('select2-hidden-accessible')) {
+                                                    $('#city_id').select2('destroy');
                                                 }
                                                 INITSelect();
                                             });

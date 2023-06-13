@@ -71,6 +71,7 @@ class HospitalController extends AppBaseController
     public function store(CreateHospitalAPIRequest $request)
     {
         $input = $request->all();
+        DB::beginTransaction();
         try {
             $hospital = $this->hospitalRepository->create($input);
             $accreditation_id = [];
@@ -87,16 +88,21 @@ class HospitalController extends AppBaseController
             if ($request->hasFile('logo')) {
                 $hospital->attachImage('logo', 'logo', false);
             }
-            if ($input['doctors']) {
+            if (!empty($input['doctors']) && $input['doctors']) {
                 $result = $hospital->doctors()->attach($input['doctors']);
             }
-            if ($input['treatments']) {
+            if (!empty($input['treatments']) && $input['treatments']) {
                 $result = $hospital->treatments()->attach($input['treatments']);
             }
-            if ($accreditation_id) {
+            if (!empty($accreditation_id) && $accreditation_id) {
                 $result = $hospital->accreditation()->attach($accreditation_id);
             }
+            $hospital->countries()->sync($input['country_id'] ?? []);
+            $hospital->states()->sync($input['state_id'] ?? []);
+            $hospital->cities()->sync($input['city_id'] ?? []);
+            DB::commit();
         } catch (\Exception $e) {
+            DB::rollBack();
             return back()->withInput()->with('error', $e->getMessage());
         }
         return redirect(route('hospitals.index'))->with('success', "Hospital added successfully");

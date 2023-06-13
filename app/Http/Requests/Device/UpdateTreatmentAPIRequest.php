@@ -20,12 +20,13 @@ class UpdateTreatmentAPIRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['string', 'required', 'unique:treatments,name,' . $this->route('treatment')],
-            'price' => ['integer', 'required'],
-            'images.*' => ['nullable', 'file'],
-            'days_required' => ['integer', 'required'],
-            'recovery_time' => ['integer', 'required'],
-            'success_rate' => ['integer', 'required'],
+            'name' => ['string', 'required'],
+            'min_price' => ['integer', 'required'],
+            'max_price' => ['integer', 'sometimes'],
+            'logo' => ['nullable', 'file'],
+            'days_required' => ['string', 'required'],
+            'recovery_time' => ['string', 'required'],
+            'success_rate' => ['string', 'required'],
             'hospitals.*' => ['integer', 'sometimes'],
             'doctors.*' => ['integer', 'sometimes'],
             'specializations.*' => ['integer', 'sometimes'],
