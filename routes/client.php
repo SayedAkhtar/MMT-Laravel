@@ -78,3 +78,5 @@ Route::post('resend-otp', [AuthController::class, 'resendOtp'])
 Route::post('check-otp', [AuthController::class, 'validateOtp']);
 Route::put('reset-password', [AuthController::class, 'resetPassword'])
     ->name('reset.password');
+
+Route::get('countries', [HomeController::class, 'getCountries']);

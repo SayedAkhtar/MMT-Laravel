@@ -26,6 +26,7 @@ use Illuminate\Support\Str;
 use Nette\Schema\ValidationException;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Spatie\Permission\Models\Role;
+use App\Http\Resources\Client\UserResource;
 
 class AuthController extends AppBaseController
 {
@@ -148,6 +149,7 @@ class AuthController extends AppBaseController
         }
 
         $data = $user->toArray();
+        
         $data['token'] = $user->createToken('Client Login')->plainTextToken;
         if (!empty($user->patientDetails)) {
             $data['avatar'] = $user->patientDetails->hasMedia('avatar') ? $user->patientDetails->getMedia('avatar')->first()->getUrl() : '';
@@ -211,7 +213,7 @@ class AuthController extends AppBaseController
                 throw new LoginFailedException('you are unable to access this platform.');
             }
         }
-
+        
         $data = $user->toArray();
         $data['token'] = $user->createToken('Client Login')->plainTextToken;
         if (!empty($user->patientDetails)) {

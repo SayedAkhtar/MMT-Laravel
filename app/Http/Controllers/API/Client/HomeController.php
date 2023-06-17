@@ -95,4 +95,9 @@ class HomeController extends AppBaseController
         }
         return $this->successResponse($results);
     }
+
+    public function getCountries(){
+        $countries = \App\Models\Country::all();
+        return $this->successResponse($countries);
+    }
 }

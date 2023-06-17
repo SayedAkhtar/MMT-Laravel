@@ -41,11 +41,11 @@ class PatientFamilyDetailsController extends AppBaseController
      *
      * @return PatientFamilyDetailsCollection
      */
-    public function index(Request $request): PatientFamilyDetailsCollection
+    public function index(Request $request)
     {
         $patientFamilyDetails = User::find(Auth::id())->patientFamilyDetails;
 
-        return new PatientFamilyDetailsCollection($patientFamilyDetails);
+        return $this->successResponse(PatientFamilyDetailsResource::collection($patientFamilyDetails)) ;
     }
 
     /**
@@ -57,12 +57,12 @@ class PatientFamilyDetailsController extends AppBaseController
      * @throws ValidatorException
      *
      */
-    public function store(CreatePatientFamilyDetailsAPIRequest $request): PatientFamilyDetailsResource
+    public function store(CreatePatientFamilyDetailsAPIRequest $request)
     {
         $input = $request->all();
         $patientFamilyDetails = $this->patientFamilyDetailsRepository->create($input);
 
-        return new PatientFamilyDetailsResource($patientFamilyDetails);
+        return $this->successResponse(PatientFamilyDetailsResource::collection($patientFamilyDetails)) ;
     }
 
     /**
@@ -72,11 +72,11 @@ class PatientFamilyDetailsController extends AppBaseController
      *
      * @return PatientFamilyDetailsResource
      */
-    public function show(int $id): PatientFamilyDetailsResource
+    public function show(int $id)
     {
         $patientFamilyDetails = $this->patientFamilyDetailsRepository->findOrFail($id);
 
-        return new PatientFamilyDetailsResource($patientFamilyDetails);
+        return $this->successResponse(PatientFamilyDetailsResource::collection($patientFamilyDetails));
     }
 
     /**
@@ -89,12 +89,12 @@ class PatientFamilyDetailsController extends AppBaseController
      * @throws ValidatorException
      *
      */
-    public function update(UpdatePatientFamilyDetailsAPIRequest $request, int $id): PatientFamilyDetailsResource
+    public function update(UpdatePatientFamilyDetailsAPIRequest $request, int $id)
     {
         $input = $request->all();
         $patientFamilyDetails = $this->patientFamilyDetailsRepository->update($input, $id);
 
-        return new PatientFamilyDetailsResource($patientFamilyDetails);
+        return $this->successResponse(PatientFamilyDetailsResource::collection($patientFamilyDetails));
     }
 
     /**
@@ -106,52 +106,11 @@ class PatientFamilyDetailsController extends AppBaseController
      * @throws Exception
      *
      */
-    public function delete(int $id): JsonResponse
+    public function destroy(int $id)
     {
         $this->patientFamilyDetailsRepository->delete($id);
 
-        return $this->successResponse('PatientFamilyDetails deleted successfully.');
+        return $this->successResponse('Patient Family Details deleted successfully.');
     }
 
-    /**
-     * Bulk create PatientFamilyDetails's.
-     *
-     * @param BulkCreatePatientFamilyDetailsAPIRequest $request
-     *
-     * @return PatientFamilyDetailsCollection
-     * @throws ValidatorException
-     *
-     */
-    public function bulkStore(BulkCreatePatientFamilyDetailsAPIRequest $request): PatientFamilyDetailsCollection
-    {
-        $patientFamilyDetails = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $patientFamilyDetailsInput) {
-            $patientFamilyDetails[$key] = $this->patientFamilyDetailsRepository->create($patientFamilyDetailsInput);
-        }
-
-        return new PatientFamilyDetailsCollection($patientFamilyDetails);
-    }
-
-    /**
-     * Bulk update PatientFamilyDetails's data.
-     *
-     * @param BulkUpdatePatientFamilyDetailsAPIRequest $request
-     *
-     * @return PatientFamilyDetailsCollection
-     * @throws ValidatorException
-     *
-     */
-    public function bulkUpdate(BulkUpdatePatientFamilyDetailsAPIRequest $request): PatientFamilyDetailsCollection
-    {
-        $patientFamilyDetails = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $patientFamilyDetailsInput) {
-            $patientFamilyDetails[$key] = $this->patientFamilyDetailsRepository->update($patientFamilyDetailsInput, $patientFamilyDetailsInput['id']);
-        }
-
-        return new PatientFamilyDetailsCollection($patientFamilyDetails);
-    }
 }

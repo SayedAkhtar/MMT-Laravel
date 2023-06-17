@@ -35,7 +35,7 @@ class UserResource extends BaseAPIResource
             'updated_by' => $this->updated_by,
             'image' => $this->image,
             'gender' => $this->gender,
-            'country' => $this->country,
+            'country' => $this->countryModel?->name,
             'dob' => $this->dob,
             'login_reactive_time' => $this->login_reactive_time,
             'login_retry_limit' => $this->login_retry_limit,

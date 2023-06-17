@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
+use App\Traits\OnlyActive;
 use Illuminate\Database\Eloquent\Model as Model;
 
 class PatientFamilyDetails extends Model
 {
-    use HasRecordOwnerProperties;
+    use HasRecordOwnerProperties, OnlyActive;
 
     /**
      * @var string

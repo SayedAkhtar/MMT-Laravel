@@ -8,6 +8,7 @@ use App\Http\Requests\Client\CreateUserAPIRequest;
 use App\Http\Requests\Client\UpdateUserAPIRequest;
 use App\Http\Resources\Client\UserCollection;
 use App\Http\Resources\Client\UserResource;
+use App\Models\Country;
 use App\Models\PatientDetails;
 use App\Repositories\UserRepository;
 use Exception;
@@ -102,6 +103,9 @@ class UserController extends AppBaseController
         }
         DB::beginTransaction();
         try {
+            if(!empty('country_id')){
+                $input['country'] = Country::where('name', $input['country_id'])->first()->id;
+            }
             $user = $this->userRepository->update($input, $id);
             $patient = PatientDetails::where('user_id', $user->id)->first();
             if ($patient) {
@@ -110,6 +114,7 @@ class UserController extends AppBaseController
                 $input['user_id'] = $user->id;
                 PatientDetails::create($input);
             }
+            // $user = new UserResource($user);
             if (!empty($user->patientDetails)) {
                 $user['avatar'] = $user->patientDetails->hasMedia('avatar') ? $user->patientDetails->getMedia('avatar')->first()->getUrl() : '';
             } else {

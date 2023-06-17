@@ -4,6 +4,7 @@ namespace App\Http\Resources\Client;
 
 use App\Http\Resources\BaseAPIResource;
 use Illuminate\Http\Request;
+use Laravolt\Avatar\Avatar;
 
 class PatientFamilyDetailsResource extends BaseAPIResource
 {
@@ -26,11 +27,11 @@ class PatientFamilyDetailsResource extends BaseAPIResource
         } else {
             $avatar = $female[rand(0, 1)];
         }
-
+        ; 
         return [
             'id' => $this->id,
             'patient_id' => $this->patient_id,
-            'avatar' => asset('img/' . $avatar),
+            'avatar' => (new Avatar())->create($this->name)->setShape('square')->setDimension(100)->toGravatar(),
             'name' => $this->name,
             'phone' => $this->phone,
             'relationship' => $this->relationship,
