@@ -83,6 +83,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('specializations', SpecializationController::class);
 
     Route::resource('hospitals', HospitalController::class);
+    Route::post('hospitals/{hospital}/gallery/add', [HospitalController::class, 'addGallery'])
+        ->name('hospitals.gallery.add');
 
     Route::resource('faq', FaqController::class);
 

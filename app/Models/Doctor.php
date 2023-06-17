@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
+use App\Traits\OnlyActive;
 
 class Doctor extends BaseModel
 {
-    use HasRecordOwnerProperties;
+    use HasRecordOwnerProperties, OnlyActive;
 
     /**
      * @var string

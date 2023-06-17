@@ -184,4 +184,15 @@ class HospitalController extends AppBaseController
 
     }
 
+    public function addGallery(Hospital $hospital, Request $request)
+    {
+        try{
+            if ($request->hasFile('file')) {
+                $hospital->attachImage('file', 'gallery', false);
+            }
+        }catch(\Exception $e){
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
 }

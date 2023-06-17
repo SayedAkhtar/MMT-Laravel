@@ -17,10 +17,10 @@ class DoctorHomeResource extends BaseAPIResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->user->name,
+            'name' => $this->user?->name,
             'avatar' => $this->getMedia('avatar')->first() ? $this->getMedia('avatar')->first()->getUrl('thumbnail') : '',
             'start_of_service' => Carbon::make($this->start_of_service)->diffInYears() . " yrs of Experience",
-            'designation' => $this->designation->name,
+            'designation' => $this->designations->pluck('name')->join(', '),
             'specialization' => $this->when($this->specializations != null, function () {
                 return $this->specializations->pluck('name')->join(', ');
             }),

@@ -7,16 +7,23 @@ use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Device\CreateDoctorAPIRequest;
 use App\Http\Requests\Device\UpdateDoctorAPIRequest;
 use App\Http\Resources\Device\DoctorCollection;
+use App\Models\City;
+use App\Models\Designation;
 use App\Models\Doctor;
+use App\Models\Qualification;
+use App\Models\Specialization;
+use App\Models\State;
 use App\Models\User;
 use App\Repositories\DoctorRepository;
 use App\Traits\IsViewModule;
+use Illiminate\Support\Facades\Validator;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator as FacadesValidator;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class DoctorController extends AppBaseController
@@ -61,10 +68,18 @@ class DoctorController extends AppBaseController
             return view('module.doctor.add');
         }
         $rules = (new CreateDoctorAPIRequest)->rules();
+       
+        $validator =  FacadesValidator::make($request->all(), $rules);
+        if($validator->fails()){
+            return back()->withInput()->withErrors($validator);
+        }
         $request->validate($rules);
         $input = $request->all();
         $input['user_type'] = User::TYPE_DOCTOR;
+        // dd($input);
         DB::beginTransaction();
+        
+        $this->findOrCreate($input);
         try {
             $input['password'] = Hash::make('no-password');
             $user = User::create($input);
@@ -75,7 +90,7 @@ class DoctorController extends AppBaseController
                     $result = $doctor->hospitals()->sync($input['hospital_id']);
                 }
                 if (!empty($input['specialization_id'])) {
-                    $result = $doctor->specializations()->sync($input['hospital_id']);
+                    $result = $doctor->specializations()->sync($input['specialization_id']);
                 }
                 if (!empty($input['designation_id'])) {
                     $result = $doctor->designations()->sync($input['designation_id']);
@@ -121,20 +136,21 @@ class DoctorController extends AppBaseController
     {
         $validated = $request->validate([
             'name' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
+            'email' => 'nullable | email',
+            'phone' => 'nullable',
             'image' => ['nullable', 'file'],
             'start_of_service' => ['required'],
             'awards' => ['nullable'],
             'description' => ['nullable'],
-            'designation_id' => ['required', 'string'],
-            'qualification_id' => ['required', 'exists:qualifications,id'],
+            'designation_id.*' => ['required'],
+            'qualification_id.*' => ['required'],
             'faq' => ['nullable'],
             'time_slots' => ['nullable', "string"],
             'is_active' => ['boolean'],
         ]);
         $input = $request->except('image');
         DB::beginTransaction();
+        $this->findOrCreate($input);
         try {
             $doctor = $this->doctorRepository->update($input, $id);
             $doctor->user->update(['name' => $validated['name'], 'email' => $validated['email'], 'phone' => $validated['phone']]);
@@ -143,6 +159,12 @@ class DoctorController extends AppBaseController
             }
             if (!empty($input['specialization_id'])) {
                 $result = $doctor->specializations()->sync($input['specialization_id']);
+            }
+            if (!empty($input['designation_id'])) {
+                $result = $doctor->designations()->sync($input['designation_id']);
+            }
+            if (!empty($input['qualification_id'])) {
+                $result = $doctor->qualifications()->sync($input['qualification_id']);
             }
             if ($request->hasFile('image')) {
                 $doctor->updateImage('image', 'avatar', false);
@@ -179,6 +201,38 @@ class DoctorController extends AppBaseController
             return $this->errorResponse("Something went wrong");
         }
         return $this->successResponse('Doctor deleted successfully.');
+    }
+
+    private function findOrCreate(&$input){
+        if(!empty($input['state_id']) && intval($input['state_id']) == 0){
+            $data = State::create(['name' => $input['state_id'], 'country_id' => $input['country_id']]);
+            $input['state_id'] = $data->id; 
+        }
+        if(!empty($input['city_id']) && intval($input['city_id']) == 0){
+            $data = City::create(['name' => $input['city_id'], 
+                                    'country_id' => $input['country_id'], 
+                                    'state_id' => $input['state_id']]);
+            $input['city_id'] = $data->id; 
+        }
+        foreach($input['designation_id'] as $key => $designation){
+            if(intval($designation) == 0){
+                $data = Designation::create(['name' => $designation]);
+                $input['designation_id'][$key] = $data->id; 
+            }
+        }
+        foreach($input['qualification_id'] as $key => $qualification){
+            if(intval($qualification) == 0){
+                $data = Qualification::create(['name' => $qualification]);
+                $input['qualification_id'][$key] = $data->id; 
+            }
+        }
+        foreach($input['specialization_id'] as $key => $specialization){
+            if(intval($specialization) == 0){
+                $data = Specialization::create(['name' => $specialization]);
+                $input['specialization_id'][$key] = $data->id; 
+            }
+        }
+        return $input;
     }
 
 }

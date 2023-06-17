@@ -53,7 +53,7 @@ class DoctorController extends AppBaseController
             $doctors = $this->doctorRepository->fetch($request);
         }
         if (!empty($doctors)) {
-            return new DoctorCollection($doctors);
+            return $this->successResponse((DoctorResource::collection($doctors))->resolve()) ;
         } else {
             return $this->errorResponse("No doctors found", 404);
         }
@@ -83,11 +83,11 @@ class DoctorController extends AppBaseController
      *
      * @return DoctorResource
      */
-    public function show(int $id): DoctorResource
+    public function show(int $id)
     {
         $doctor = $this->doctorRepository->findOrFail($id);
 
-        return new DoctorResource($doctor);
+        return $this->successResponse(DoctorResource::make($doctor)->resolve())  ;
     }
 
     /**

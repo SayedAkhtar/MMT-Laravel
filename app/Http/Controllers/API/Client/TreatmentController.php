@@ -39,11 +39,11 @@ class TreatmentController extends AppBaseController
      *
      * @return TreatmentCollection
      */
-    public function index(Request $request): TreatmentCollection
+    public function index(Request $request)
     {
         $treatments = $this->treatmentRepository->fetch($request);
 
-        return new TreatmentCollection($treatments);
+        return $this->successResponse((TreatmentResource::collection($treatments)));
     }
 
     /**

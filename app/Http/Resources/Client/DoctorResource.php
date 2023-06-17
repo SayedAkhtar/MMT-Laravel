@@ -26,7 +26,7 @@ class DoctorResource extends BaseAPIResource
                 $hospital[] = ['id' => $e->id, 'name' => $e->name];
             }
         }
-        $time_slot = json_decode($this->time_slots, true);
+        $time_slot = !empty($this->time_slots)?json_decode($this->time_slots, true):[];
         $data = [];
         if (!empty($time_slot)) {
             foreach ($time_slot as $key => $value) {
@@ -38,23 +38,26 @@ class DoctorResource extends BaseAPIResource
                 }
             }
         }
-        return [
-            'id' => $this->id,
-            'name' => $this->user->name,
-            'phone' => $this->user->phone,
-            'email' => $this->user->email,
-            'image' => $this->getMedia('avatar')->first() ? $this->getMedia('avatar')->first()->getUrl() : '',
-            'start_of_service' => $this->start_of_service,
-            'experience' => \Carbon\Carbon::make($this->start_of_service)->diffInYears(),
-            'awards' => $this->awards,
-            'description' => $this->description,
-            'designation' => $this->designation->name,
-            'qualification' => $this->qualification->name,
-            'faq' => $this->faq,
-            'time_slots' => $data,
-            'specialization' => $this->specializations->pluck('name')->join(', '),
-            'hospitals' => $hospital,
-            'price' => (int)$this->price,
-        ];
+        if($this->is_active == 1){
+            return [
+                'id' => $this->id,
+                'name' => $this->user->name,
+                'phone' => $this->user->phone,
+                'email' => $this->user->email,
+                'image' => $this->getMedia('avatar')->first() ? $this->getMedia('avatar')->first()->getUrl() : '',
+                'start_of_service' => $this->start_of_service,
+                'experience' => \Carbon\Carbon::make($this->start_of_service)->diffInYears(),
+                'awards' => array_filter(explode('|', $this->awards), function($element){if(!empty($element)){return trim($element);}}),
+                'description' => $this->description,
+                'designation' => $this->designations->pluck('name'),
+                'qualification' => $this->qualifications->pluck('name'),
+                'faq' => $this->faq,
+                'time_slots' => $data,
+                'specialization' => $this->specializations->pluck('name'),
+                'hospitals' => $hospital,
+                'price' => (int)$this->price,
+            ];
+        }
+        
     }
 }

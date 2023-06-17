@@ -26,7 +26,7 @@
                         <div class="form-group">
                             <label>Email</label>
                             <input type="email" class="form-control" @old('email')
-                            placeholder="Enter email" name="email" required>
+                            placeholder="Enter email" name="email">
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -48,7 +48,6 @@
                                 </div>
                                 <input type="text" class="form-control"
                                        placeholder="Enter phone number"
-                                       pattern="[0-9]+"
                                        name="phone">
                             </div>
 
@@ -77,7 +76,7 @@
                         <div class="form-group">
                             <label> Country</label>
                             <select class="form-control" id="country_id"
-                                    name="country_id" required>
+                                    name="country_id">
                                 <option value="">Select Option</option>
                             </select>
                             @push('scripts')
@@ -129,7 +128,7 @@
                         <div class="form-group">
                             <label> State</label>
                             <select class="form-control" id="state_id"
-                                    name="state_id" required>
+                                    name="state_id">
                                 <option value="">Select Option</option>
                             </select>
                             @push('scripts')
@@ -158,7 +157,7 @@
                                                                 };
                                                             });
                                                         } else {
-                                                            const shouldInsert = true;
+                                                            const shouldInsert = false;
                                                             if (params.term != undefined && params.term.length > 2 && shouldInsert) {
                                                                 results[0] = {
                                                                     id: params.term,
@@ -185,7 +184,7 @@
                         <div class="form-group">
                             <label> City</label>
                             <select class="form-control" id="city_id"
-                                    name="city_id" required>
+                                    name="city_id" >
                                 <option value="">Select Option</option>
                             </select>
                             @push('scripts')
@@ -227,7 +226,7 @@
                                                                     };
                                                                 });
                                                             } else {
-                                                                const shouldInsert = true;
+                                                                const shouldInsert = false;
                                                                 if (params.term != undefined && params.term.length > 2 && shouldInsert) {
                                                                     results[0] = {
                                                                         id: params.term,
@@ -254,14 +253,14 @@
                         <!-- text input -->
                         <div class="form-group">
                             <x-multi-select-search label="Designation" name="designation_id" table="designations"
-                                                   :multiple="true" :required="true"/>
+                                                   :multiple="true" :required="true" :shouldInsert="true"/>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <x-multi-select-search label="Qualification" name="qualification_id"
                                                    table="qualifications"
-                                                   :multiple="true" :required="true"/>
+                                                   :multiple="true" :required="true" :shouldInsert="true" />
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -288,14 +287,14 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <x-multi-select-search label="Hospitals" name="hospital_id" table="hospitals"
-                                                   :multiple="true" :required="true"/>
+                                                   :multiple="true"/>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <x-multi-select-search label="Specializations" name="specialization_id"
                                                    table="specializations"
-                                                   :multiple="true" :required="true"/>
+                                                   :multiple="true" :required="true" :shouldInsert="true" />
                         </div>
                     </div>
                     {{-- <div class="col-sm-6">
@@ -307,7 +306,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Consultation Price: </label>
-                            <input type="number" class="form-control" placeholder="Enter price in Dollars" name="price" @old('price')>
+                            <input type="number" class="form-control" placeholder="Enter price in Dollars" name="price" @old('price') value="0">
                         </div>
                     </div>
                     <div class="col-sm-12">

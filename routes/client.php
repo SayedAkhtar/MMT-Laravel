@@ -7,6 +7,7 @@ use App\Http\Controllers\API\Client\HomeController;
 use App\Http\Controllers\API\Client\HospitalController;
 use App\Http\Controllers\API\Client\PushNotificationController;
 use App\Http\Controllers\API\Client\QueryController;
+use App\Http\Controllers\API\Client\TreatmentController;
 use App\Http\Controllers\API\Client\UserController;
 use App\Http\Controllers\API\Client\VideoConsultationController;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,7 @@ Route::group(['middleware' => ['auth:sanctum', 'validate.user', 'api']], functio
     Route::post('submit-consultation', [VideoConsultationController::class, 'store']);
     Route::post('update-firebase', [UserController::class, 'updateFirebase']);
     Route::post('update-avatar/{user}', [UserController::class, 'updateAvatar']);
+    Route::apiResource('treatments', TreatmentController::class)->only(['index', 'show']);
 
 });
 
