@@ -49,7 +49,7 @@
                                 </div>
                                 <input type="text" class="form-control"
                                        placeholder="Enter phone number"
-                                       pattern="[0-9]+"
+                                       
                                        name="phone" value="{{ $doctor->user->phone }}">
                             </div>
 
@@ -92,9 +92,10 @@
                             <label> Country</label>
                             <select class="form-control" id="country_id"
                                     name="country" required>
+                                    
                                 @if(!empty($doctor->user->countryModel))
                                     <option
-                                        value="{{ $doctor->user->countryModel->id }}">{{ $doctor->user->countryModel->name }}</option>
+                                        value="{{ $doctor->user->countryModel->id }}" selected>{{ $doctor->user->countryModel->name }}</option>
                                 @else
                                     <option value="">Select Option</option>
                                 @endif
@@ -285,14 +286,14 @@
                         <div class="form-group">
                             <x-multi-select-search label="Qualification" name="qualification_id"
                                                    table="qualifications"
-                                                   :multiple="false" :selectedOptions="$doctor->qualification"/>
+                                                   :multiple="true" :selectedOptions="$doctor->qualifications"/>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <x-multi-select-search label="Designations" name="designation_id"
                                                    table="designations"
-                                                   :multiple="false" :selectedOptions="$doctor->designation"/>
+                                                   :multiple="true" :selectedOptions="$doctor->designations"/>
 
                         </div>
                     </div>

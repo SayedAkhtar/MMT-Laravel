@@ -79,7 +79,7 @@ class User extends Authenticatable implements HasMedia
         'updated_by' => 'integer',
         'image' => 'string',
         'gender' => 'string',
-        'country' => 'string',
+        'country' => 'integer',
         'dob' => 'date',
         'login_reactive_time' => 'datetime',
         'login_retry_limit' => 'integer',

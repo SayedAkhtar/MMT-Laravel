@@ -15,6 +15,7 @@ use App\Models\Specialization;
 use App\Models\State;
 use App\Models\User;
 use App\Repositories\DoctorRepository;
+use App\Repositories\UserRepository;
 use App\Traits\IsViewModule;
 use Illiminate\Support\Facades\Validator;
 use Exception;
@@ -68,9 +69,9 @@ class DoctorController extends AppBaseController
             return view('module.doctor.add');
         }
         $rules = (new CreateDoctorAPIRequest)->rules();
-       
+
         $validator =  FacadesValidator::make($request->all(), $rules);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return back()->withInput()->withErrors($validator);
         }
         $request->validate($rules);
@@ -78,7 +79,7 @@ class DoctorController extends AppBaseController
         $input['user_type'] = User::TYPE_DOCTOR;
         // dd($input);
         DB::beginTransaction();
-        
+
         $this->findOrCreate($input);
         try {
             $input['password'] = Hash::make('no-password');
@@ -119,7 +120,7 @@ class DoctorController extends AppBaseController
      */
     public function show(int $id)
     {
-        $doctor = Doctor::with('hospitals', 'qualification', 'designation', 'user')->findOrFail($id);
+        $doctor = Doctor::with('hospitals', 'qualifications', 'designations', 'user')->findOrFail($id);
         return $this->module_view('edit', compact('doctor'));
     }
 
@@ -153,7 +154,12 @@ class DoctorController extends AppBaseController
         $this->findOrCreate($input);
         try {
             $doctor = $this->doctorRepository->update($input, $id);
-            $doctor->user->update(['name' => $validated['name'], 'email' => $validated['email'], 'phone' => $validated['phone']]);
+            $doctor->user->update([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'],
+                'country' => $input['country']
+            ]);
             if (!empty($input['hospital_id'])) {
                 $result = $doctor->hospitals()->sync($input['hospital_id']);
             }
@@ -203,36 +209,38 @@ class DoctorController extends AppBaseController
         return $this->successResponse('Doctor deleted successfully.');
     }
 
-    private function findOrCreate(&$input){
-        if(!empty($input['state_id']) && intval($input['state_id']) == 0){
+    private function findOrCreate(&$input)
+    {
+        if (!empty($input['state_id']) && intval($input['state_id']) == 0) {
             $data = State::create(['name' => $input['state_id'], 'country_id' => $input['country_id']]);
-            $input['state_id'] = $data->id; 
+            $input['state_id'] = $data->id;
         }
-        if(!empty($input['city_id']) && intval($input['city_id']) == 0){
-            $data = City::create(['name' => $input['city_id'], 
-                                    'country_id' => $input['country_id'], 
-                                    'state_id' => $input['state_id']]);
-            $input['city_id'] = $data->id; 
+        if (!empty($input['city_id']) && intval($input['city_id']) == 0) {
+            $data = City::create([
+                'name' => $input['city_id'],
+                'country_id' => $input['country_id'],
+                'state_id' => $input['state_id']
+            ]);
+            $input['city_id'] = $data->id;
         }
-        foreach($input['designation_id'] as $key => $designation){
-            if(intval($designation) == 0){
+        foreach ($input['designation_id'] as $key => $designation) {
+            if (intval($designation) == 0) {
                 $data = Designation::create(['name' => $designation]);
-                $input['designation_id'][$key] = $data->id; 
+                $input['designation_id'][$key] = $data->id;
             }
         }
-        foreach($input['qualification_id'] as $key => $qualification){
-            if(intval($qualification) == 0){
+        foreach ($input['qualification_id'] as $key => $qualification) {
+            if (intval($qualification) == 0) {
                 $data = Qualification::create(['name' => $qualification]);
-                $input['qualification_id'][$key] = $data->id; 
+                $input['qualification_id'][$key] = $data->id;
             }
         }
-        foreach($input['specialization_id'] as $key => $specialization){
-            if(intval($specialization) == 0){
+        foreach ($input['specialization_id'] as $key => $specialization) {
+            if (intval($specialization) == 0) {
                 $data = Specialization::create(['name' => $specialization]);
-                $input['specialization_id'][$key] = $data->id; 
+                $input['specialization_id'][$key] = $data->id;
             }
         }
         return $input;
     }
-
 }
