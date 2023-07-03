@@ -34,4 +34,5 @@ class SendSMSNotification extends Notification
         return (new TwilioSmsMessage())
             ->content("Your {$code} account was approved!");
     }
+
 }

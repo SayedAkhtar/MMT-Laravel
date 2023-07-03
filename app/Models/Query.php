@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Auth;
+
 class Query extends BaseModel
 {
 
@@ -52,6 +54,15 @@ class Query extends BaseModel
 
     const TYPE_QUERY = 1;
     const TYPE_MEDICAL_VISA = 2;
+
+    // public function newQuery($excludeDeleted = true) {
+    //     // if(Auth::user()->user_type != User::TYPE_ADMIN || Auth::user()->user_type != User::TYPE_HCF){
+    //     //     return parent::newQuery($excludeDeleted)
+    //     //     ->where('patient_id', '=', Auth::id());
+    //     // }
+        
+    // }
+
 
     public static function getTabs()
     {

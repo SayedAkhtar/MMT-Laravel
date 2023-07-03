@@ -103,7 +103,7 @@ class UserController extends AppBaseController
         }
         DB::beginTransaction();
         try {
-            if(!empty('country_id')){
+            if(!empty($input['country_id'])){
                 $input['country'] = Country::where('name', $input['country_id'])->first()->id;
             }
             $user = $this->userRepository->update($input, $id);

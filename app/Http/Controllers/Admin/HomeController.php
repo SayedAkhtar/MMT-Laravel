@@ -128,11 +128,17 @@ class HomeController extends Controller
             return response()->json(["data" => DB::table($table)
                 ->selectRaw("id, $column as name")
                 ->where($column, 'like', '%' . $term . '%')
+                ->when(($request->has('patient_id') && !empty($request->patient_id)), function ($q) use ($request, $table) {
+                    if(Schema::hasColumn($table, 'patient_id')) {
+                        $q->where('patient_id', $request->patient_id);
+                    }
+                })
                 ->when(Schema::hasColumn($table, 'is_active'), function ($q) {
                     $q->where('is_active', true);
                 })
                 ->get()->toArray()]);
         } catch (\Exception $e) {
+            dump($e->getMessage());
         }
         return response()->json(["data" => []])->status(404);
     }

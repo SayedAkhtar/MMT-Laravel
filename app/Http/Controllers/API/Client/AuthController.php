@@ -2,31 +2,34 @@
 
 namespace App\Http\Controllers\API\Client;
 
-use App\Exceptions\ChangePasswordFailureException;
-use App\Exceptions\FailureResponseException;
-use App\Exceptions\LoginFailedException;
-use App\Exceptions\LoginUnAuthorizeException;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\Client\ChangePasswordApiRequest;
-use App\Http\Requests\Client\ForgotPasswordAPIRequest;
-use App\Http\Requests\Client\LoginAPIRequest;
-use App\Http\Requests\Client\RegisterAPIRequest;
-use App\Http\Requests\Client\ResetPasswordAPIRequest;
-use App\Http\Requests\Client\ValidateResetPasswordOtpApiRequest;
-use App\Models\Language;
 use App\Models\User;
-use App\Notifications\SendSMSNotification;
-use App\Repositories\UserRepository;
-use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
+use App\Models\Language;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Craftsys\Msg91\Facade\Msg91;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Log;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use Laravolt\Avatar\Facade as Avatar;
 use Nette\Schema\ValidationException;
+use App\Exceptions\LoginFailedException;
+use App\Notifications\SendSMSNotification;
+use App\Http\Controllers\AppBaseController;
+use App\Exceptions\FailureResponseException;
+use App\Exceptions\LoginUnAuthorizeException;
+use App\Http\Requests\Client\LoginAPIRequest;
+use App\Http\Requests\Client\RegisterAPIRequest;
+use App\Exceptions\ChangePasswordFailureException;
 use Prettus\Validator\Exceptions\ValidatorException;
-use Spatie\Permission\Models\Role;
-use App\Http\Resources\Client\UserResource;
+use App\Http\Requests\Client\ResetPasswordAPIRequest;
+use App\Http\Requests\Client\ChangePasswordApiRequest;
+use App\Http\Requests\Client\ForgotPasswordAPIRequest;
+use App\Http\Requests\Client\ValidateResetPasswordOtpApiRequest;
 
 class AuthController extends AppBaseController
 {
@@ -59,15 +62,41 @@ class AuthController extends AppBaseController
         $input['user_type'] = User::TYPE_USER;
 
         /** @var User $user */
-        $user = $this->userRepository->create($input);
-        $data['username'] = $user->username;
+        try {
+            DB::beginTransaction();
+            $user = $this->userRepository->create($input);
+            $data['username'] = $user->username;
 
-        $userRole = Role::find($input['role']);
-        $user->assignRole($userRole);
-        $user->markEmailAsVerified();
-        $user->otp = rand(4, 4);
-        $data = $user->toArray();
-        $data['token'] = $user->createToken('Client Login')->plainTextToken;
+            $userRole = Role::find($input['role']);
+            $user->assignRole($userRole);
+            $user->markEmailAsVerified();
+            $user->otp = rand(6,6);
+            $t = Avatar::create($user->name)->toBase64();
+            $user->patientDetails()->create();
+            $user->patientDetails->addMediaFromBase64($t)->toMediaCollection('avatar');
+            $data['avatar'] = $user->patientDetails->getMedia('avatar')->first()->getUrl();
+            $user->is_active = false;
+            $user->save();
+            DB::commit();
+            if(sendMsg91OTP($user->country_code . $user->phone, $user->otp) != 'success'){
+                throw new \Exception("Cannot Send OTP. Please try again in some time", 100);
+            }
+            // $data = $user->toArray();
+            // $data['token'] = $user->createToken('Client Login')->plainTextToken;
+            // $user->patientDetails()->create();
+            // $t = Avatar::create($user->name)->toBase64();
+            // $user->patientDetails->addMediaFromBase64($t)->toMediaCollection('avatar');
+            // $data['avatar'] = $user->patientDetails->getMedia('avatar')->first()->getUrl();
+
+        } 
+        catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            if($e->getCode() == 100){
+                return $this->errorResponse($e->getMessage());
+            }
+            return $this->errorResponse("Cannot Create User. Please try again in some time");
+        }
 
         return $this->successResponse($data);
     }
@@ -96,13 +125,13 @@ class AuthController extends AppBaseController
             throw new LoginFailedException('User not exists.');
         }
 
-        if (!$user->email_verified_at) {
+        if (!$user->is_active) {
             throw new LoginUnAuthorizeException('Your account is not verified.');
         }
 
-        if (!$user->is_active) {
-            throw new LoginUnAuthorizeException('Your account is deactivated. please contact your administrator.');
-        }
+        // if (!$user->is_active) {
+        //     throw new LoginUnAuthorizeException('Your account is deactivated. please contact your administrator.');
+        // }
 
         if ($user->login_retry_limit >= User::MAX_LOGIN_RETRY_LIMIT) {
             $now = Carbon::now();
@@ -149,7 +178,7 @@ class AuthController extends AppBaseController
         }
 
         $data = $user->toArray();
-        
+
         $data['token'] = $user->createToken('Client Login')->plainTextToken;
         if (!empty($user->patientDetails)) {
             $data['avatar'] = $user->patientDetails->hasMedia('avatar') ? $user->patientDetails->getMedia('avatar')->first()->getUrl() : '';
@@ -213,7 +242,7 @@ class AuthController extends AppBaseController
                 throw new LoginFailedException('you are unable to access this platform.');
             }
         }
-        
+
         $data = $user->toArray();
         $data['token'] = $user->createToken('Client Login')->plainTextToken;
         if (!empty($user->patientDetails)) {
@@ -258,8 +287,8 @@ class AuthController extends AppBaseController
 
         $resultOfEmail = false;
         $resultOfSMS = false;
-//        $code = $this->generateCode();
-        $code = "123456";
+        //        $code = $this->generateCode();
+        $code = rand(6, 6);
         if (User::FORGOT_PASSWORD_WITH['link']['email']) {
             $resultOfEmail = $this->sendEmailForResetPasswordLink($user, $code);
         }
@@ -307,10 +336,10 @@ class AuthController extends AppBaseController
 
         $data['username'] = $user->username;
         $data['message'] = 'Your Password Successfully Reset';
-//        Mail::to($user->email)
-//            ->send(new MailService('emails.password_reset_success',
-//                'Reset Password',
-//                $data));
+        //        Mail::to($user->email)
+        //            ->send(new MailService('emails.password_reset_success',
+        //                'Reset Password',
+        //                $data));
 
         return $this->successResponse('Password reset successful.');
     }
@@ -355,10 +384,11 @@ class AuthController extends AppBaseController
         $data['code'] = $code;
         $data['expireTime'] = User::FORGOT_PASSWORD_WITH['expire_time'];
         $data['message'] = 'Please use below code to reset your password.';
-//        Mail::to($user->email)
-//            ->send(new MailService('emails.ResetPassword',
-//                'Reset Password',
-//                $data));
+        Msg91::send($user->phone, $data['message'] . ' ' . $data['code']);
+        //        Mail::to($user->email)
+        //            ->send(new MailService('emails.ResetPassword',
+        //                'Reset Password',
+        //                $data));
 
         return true;
     }
@@ -378,9 +408,8 @@ class AuthController extends AppBaseController
         ]);
 
         // sms send code
-        $user->notify(new SendSMSNotification());
-
-        return true;
+        return sendMsg91OTP($user->country_code . $user->phone, $code) == 'success' ? true : false;
+        // $res = Msg91::otp()->to($user->phone)->template('648ae47fd6fc057a7101bb53')->send();
     }
 
     /**
@@ -440,7 +469,7 @@ class AuthController extends AppBaseController
         return $this->loginSuccess($data);
     }
 
-    public function resendOtp()
+    public function resendOtp(Request $request)
     {
         $user = User::find(Auth::id());
         $phone = $user->phone;
@@ -449,13 +478,34 @@ class AuthController extends AppBaseController
     public function validateOtp(Request $request)
     {
         $request->validate([
-            'otp' => 'required|numeric|min:4',
-            'phone' => 'required| exists:users,phone'
+            'otp' => 'required|numeric|min:6',
+            'phone' => 'required| exists:users,phone',
+            'type' => 'required|in:register,forgot_password'
         ]);
         try {
             $user = User::where('phone', $request->phone)->first();
-            if ($user->otp == $request->input('otp')) {
-                return $this->successResponse('Otp Verified');
+            if ($request->type == 'register') {
+                if ($user->otp == $request->input('otp')) {
+                    $user->is_active = 1;
+                    $user->save();
+                    $data = $user->toArray();
+                    $data['token'] = $user->createToken('Client Login')->plainTextToken;
+                    $data['avatar'] = $user->patientDetails->getMedia('avatar')->first()->getUrl();
+                    
+                    return $this->successResponse($data);
+                }
+                $user->patientDetails->delete();
+                $user->delete();
+            }
+            if ($request->type == 'forgot_password' && !empty($request->password)) {
+                if ($user->reset_password_code == $request->input('otp')) {
+                    $user->reset_password_code = null;
+                    $user->reset_password_expire_time = null;
+                    $user->password = Hash::make($request->password);
+                    $user->save();
+                    $data = $user->toArray();
+                    return $this->successResponse($data);
+                }
             }
         } catch (ValidationException $e) {
             return $this->errorResponse($e->getMessage());
@@ -464,6 +514,5 @@ class AuthController extends AppBaseController
             return $this->errorResponse("Internal server error " . $e->getMessage());
         }
         return $this->errorResponse("User Not found", 404);
-
     }
 }

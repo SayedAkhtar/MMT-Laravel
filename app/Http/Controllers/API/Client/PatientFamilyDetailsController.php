@@ -62,7 +62,7 @@ class PatientFamilyDetailsController extends AppBaseController
         $input = $request->all();
         $patientFamilyDetails = $this->patientFamilyDetailsRepository->create($input);
 
-        return $this->successResponse(PatientFamilyDetailsResource::collection($patientFamilyDetails)) ;
+        return $this->successResponse(new PatientFamilyDetailsResource($patientFamilyDetails)) ;
     }
 
     /**

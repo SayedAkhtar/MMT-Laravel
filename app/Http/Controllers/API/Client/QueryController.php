@@ -49,7 +49,7 @@ class QueryController extends AppBaseController
      */
     public function index(Request $request): JsonResponse
     {
-        $queries = Query::with('specialization')->orderByDesc('id')->get();
+        $queries = Query::with('specialization')->where('patient_id', Auth::id())->orderByDesc('id')->get();
         $activeQueries = ActiveQueryResource::collection($queries)->resolve();
         $activeQueries = array_values(array_filter($activeQueries, function ($el) {
             if (count($el) > 0) return $el;
@@ -108,18 +108,19 @@ class QueryController extends AppBaseController
      */
     public function show(int $id, int $step)
     {
+        $query = Query::query()->where('patient_id', Auth::id());
         if ($step == QueryResponse::queryConfirmed && $id == 0) {
-            $query = Query::query()->where('is_confirmed', true)->select('confirmed_details')->latest()->first();
+            $query = $query->where('is_confirmed', true)->select('confirmed_details')->latest()->first();
             if (!empty($query->confirmed_details)) {
                 $data = json_decode($query->confirmed_details, true);
             } else {
                 $data = [];
             }
         } else if ($step == QueryResponse::queryConfirmed) {
-            $query = Query::query()->select('confirmed_details')->findOrFail($id);
+            $query = $query->select('confirmed_details')->findOrFail($id);
             $data = json_decode($query->confirmed_details, true);
         } else {
-            $query = Query::query()->select('id', 'type', 'current_step', 'payment_required')->findOrFail($id);
+            $query = $query->select('id', 'type', 'current_step', 'payment_required')->findOrFail($id);
             $data = $query->toArray();
             if (!$query->payment_required && $step == 4) {
                 $step = 5;
