@@ -1,5 +1,6 @@
 @php
     $step_data = $query->getStepResponse(\App\Models\QueryResponse::payment);
+    $completed = $query->is_confirmed || ($query->current_step > 4);
 @endphp
 <div class="card card-secondary">
     <div class="card-header">
@@ -18,10 +19,10 @@
                 <div class="form-check">
                     <input type="hidden" name="set_payment_type" value="true"/>
                     <input class="form-check-input" type="checkbox" name="payment_required"
-                           @if($query->payment_required) checked @endif>
+                           @if($query->payment_required) checked @endif @if ($completed) disabled @endif />
                     <label class="form-check-label">Is Payment required</label>
                 </div>
-                <button class="btn btn-warning">Submit</button>
+                <button class="btn btn-warning" @if ($completed) disabled @endif>Submit</button>
             </form>
         </div>
     </div>
