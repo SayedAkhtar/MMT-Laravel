@@ -88,8 +88,10 @@ if (!function_exists('google_map_validate')) {
 if (!function_exists('sendMsg91OTP')) {
     function sendMsg91OTP($mobile, $code)
     {
+        $mobile = trim($mobile, '+');
         $client = new \GuzzleHttp\Client();
         $url = "https://control.msg91.com/api/v5/otp?template_id=648ae47fd6fc057a7101bb53&mobile=$mobile&otp=$code";
+        dump($url);
         try {
             $response = $client->request('POST', $url, [
                 'headers' => [
@@ -102,7 +104,6 @@ if (!function_exists('sendMsg91OTP')) {
             Log::error($e->getMessage());
             return "failed";
         }
-
         return json_decode($response->getBody(), true)['type'];
     }
 }

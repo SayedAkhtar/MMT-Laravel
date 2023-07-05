@@ -70,17 +70,18 @@ class AuthController extends AppBaseController
             $userRole = Role::find($input['role']);
             $user->assignRole($userRole);
             $user->markEmailAsVerified();
-            $user->otp = rand(6,6);
+            $user->otp = rand(100000,999999);
             $t = Avatar::create($user->name)->toBase64();
             $user->patientDetails()->create();
             $user->patientDetails->addMediaFromBase64($t)->toMediaCollection('avatar');
             $data['avatar'] = $user->patientDetails->getMedia('avatar')->first()->getUrl();
             $user->is_active = false;
             $user->save();
-            DB::commit();
             if(sendMsg91OTP($user->country_code . $user->phone, $user->otp) != 'success'){
                 throw new \Exception("Cannot Send OTP. Please try again in some time", 100);
             }
+            DB::commit();
+            
             // $data = $user->toArray();
             // $data['token'] = $user->createToken('Client Login')->plainTextToken;
             // $user->patientDetails()->create();
@@ -288,7 +289,7 @@ class AuthController extends AppBaseController
         $resultOfEmail = false;
         $resultOfSMS = false;
         //        $code = $this->generateCode();
-        $code = rand(6, 6);
+        $code = rand(100000, 999999);
         if (User::FORGOT_PASSWORD_WITH['link']['email']) {
             $resultOfEmail = $this->sendEmailForResetPasswordLink($user, $code);
         }

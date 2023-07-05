@@ -67,7 +67,5 @@ return [
         'redirect' => env('GITHUB_REDIRECT'),
     ],
 
-    "msg91" => [
-        'key' => env("Msg91_KEY"),
-    ],
+    "msg91" => env("Msg91_KEY"),
 ];
