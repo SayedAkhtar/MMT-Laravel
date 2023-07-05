@@ -51,7 +51,7 @@ class QueryController extends AppBaseController
     public function index(Request $request): View
     {
         $queries = Query::with('hospital', 'specialization', 'patient')->whereHas('patient')->get();
-        dump($queries);
+        // dump($queries);
         return $this->module_view('/list', compact('queries'));
     }
 

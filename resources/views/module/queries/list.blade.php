@@ -15,7 +15,7 @@
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Patient Email</th>
+                    <th>Patient Phone</th>
                     <th>Query Type</th>
                     <th>Country</th>
                     <th>Status</th>
@@ -26,7 +26,7 @@
                 @foreach($queries as $data)
                     <tr>
                         <td>{{ $data->id }}</td>
-                        <td>{{ $data->patient->email }}</td>
+                        <td>{{ $data->patient->phone }}</td>
                         <td>{{ $data->query_type }}</td>
                         <td>{{ $data->preferred_country?? "No Preference"}}</td>
                         <td>{{ $data->status }}</td>
@@ -37,16 +37,6 @@
                     </tr>
                 @endforeach
                 </tbody>
-                <tfoot>
-                <tr>
-                    <th>ID</th>
-                    <th>Patient Email</th>
-                    <th>Query Type</th>
-                    <th>Country</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-                </tfoot>
             </table>
         </div>
         <!-- /.card-body -->

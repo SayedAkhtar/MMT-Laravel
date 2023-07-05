@@ -76,7 +76,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
-        \Log::error($e->getTraceAsString());
+        // \Log::error($e->getTraceAsString());
         if ($e instanceof ModelNotFoundException && $request->expectsJson()) {
             return response()->json(ResponseUtil::generateError(
                 'RECORD_NOT_FOUND',
