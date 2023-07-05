@@ -73,7 +73,7 @@ class AuthController extends AppBaseController
             $user->otp = rand(100000,999999);
             $t = Avatar::create($user->name)->toBase64();
             $user->patientDetails()->create();
-            $user->patientDetails->addMediaFromBase64($t)->toMediaCollection('avatar');
+            $user->patientDetails->addMediaFromBase64($t)->usingFileName(Str::random(30).'.png')->toMediaCollection('avatar');
             $data['avatar'] = $user->patientDetails->getMedia('avatar')->first()->getUrl();
             $user->is_active = false;
             $user->save();
