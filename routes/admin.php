@@ -167,3 +167,4 @@ Route::get('ajax-search/{table}', [HomeController::class, 'ajaxSearch'])->name('
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy'])->name('privacyPolicy');

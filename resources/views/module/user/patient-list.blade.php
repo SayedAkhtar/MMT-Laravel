@@ -38,7 +38,7 @@
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $data->user->name }}</td>
                         <td>{{ $data->user->phone }}</td>
-                        <td>{{ $data->specialization->name }}</td>
+                        <td>{{ $data->specialization?->name }}</td>
                         <td>{{ $data->treatment_country }}</td>
                         <td><span>{{ $data->is_active?'Active' : 'False'  }}</span></td>
                         <td class="text-right">

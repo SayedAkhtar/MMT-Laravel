@@ -96,15 +96,22 @@ class QueryController extends AppBaseController
         $query = Query::findOrFail($id);
         $first_tab = $query->type == Query::TYPE_MEDICAL_VISA ? 'upload-medical-visa' : 'details';
         $tab = $request->get('tab') ?? $first_tab;
-
+        $data = [];
+        if($tab == "coordinator" && !empty($query->confirmed_details)){
+            $confirmed_values = json_decode($query->confirmed_details, true);
+            $data['selected_coordinator'] = !empty($confirmed_values['coordinator']) ? $confirmed_values['coordinator'] : [];
+            $data['selected_hotel'] = !empty($confirmed_values['accommodation']) ? $confirmed_values['accommodation'] : [];
+            $data['selected_cab'] = !empty($confirmed_values['cab']) ? $confirmed_values['cab'] : [];
+            
+        }
 //        if ($query->type == Query::TYPE_MEDICAL_VISA && !empty($tab)) {
 //            $tab = 'upload-medical-visa';
 //        }
         $afterOpenQuery = ['upload-medical-visa', 'upload-ticket', 'coordinator'];
 //        if (in_array($tab, $afterOpenQuery) && (empty($query->activeQuery) && empty($query->activeQuery->doctor_response) && ($query->type != Query::TYPE_MEDICAL_VISA))) {
 //            return back()->with('error', "Please upload doctor's review before proceeding");
-//        }
-        return $this->module_view('queries-layout', compact('query', 'tab'));
+//        } 
+        return $this->module_view('queries-layout', compact('query', 'tab', 'data'));
     }
 
     /**
@@ -151,6 +158,7 @@ class QueryController extends AppBaseController
                 ->first();
             $data['accommodation'] = $acc->select('name', 'address', 'geo_location', 'images')->first()->toArray();
             $data['accommodation']['category'] = $acc->category->pluck('name')->toArray();
+            $data['cab'] = $request->has('cab') ? $request->input('cab') : [];
             $query->confirmed_details = json_encode($data);
             $query->save();
 

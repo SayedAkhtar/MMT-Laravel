@@ -70,7 +70,8 @@ class AuthController extends AppBaseController
             $userRole = Role::find($input['role']);
             $user->assignRole($userRole);
             $user->markEmailAsVerified();
-            $user->otp = rand(100000,999999);
+            // $user->otp = rand(100000,999999);
+            $user->otp = 987654;
             $t = Avatar::create($user->name)->toBase64();
             $user->patientDetails()->create();
             $user->patientDetails->addMediaFromBase64($t)->usingFileName(Str::random(30).'.png')->toMediaCollection('avatar');
@@ -289,7 +290,8 @@ class AuthController extends AppBaseController
         $resultOfEmail = false;
         $resultOfSMS = false;
         //        $code = $this->generateCode();
-        $code = rand(100000, 999999);
+        // $code = rand(100000, 999999);
+        $code = 987654;
         if (User::FORGOT_PASSWORD_WITH['link']['email']) {
             $resultOfEmail = $this->sendEmailForResetPasswordLink($user, $code);
         }

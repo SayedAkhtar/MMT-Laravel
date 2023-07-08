@@ -181,7 +181,7 @@ class User extends Authenticatable implements HasMedia
 
     public function confirmedQuery()
     {
-        return $this->hasMany(ConfirmedQuery::class, 'coordinator_id', 'id');
+        return $this->hasMany(Query::class, 'coordinator_id', 'id');
     }
 
     public function patientQuery()

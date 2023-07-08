@@ -141,7 +141,7 @@ class UserController extends AppBaseController
 
     public function listModerators()
     {
-        $moderators = User::where('user_type', User::TYPE_HCF)->get();
+        $moderators = User::where('user_type', User::TYPE_HCF)->with('confirmedQuery')->get();
         foreach ($moderators as &$mod) {
             $mod->confirmed_queries = $mod->confirmedQuery->count();
             $mod->completed_queries = 0;

@@ -142,4 +142,8 @@ class HomeController extends Controller
         }
         return response()->json(["data" => []])->status(404);
     }
+
+    public function privacyPolicy(){
+        return view('module.settings.privacy-policy');
+    }
 }
