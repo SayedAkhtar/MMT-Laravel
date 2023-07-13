@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
         // $this->call(RoleSeeder::class);
         // $this->call(DefaultUserSeeder::class);
         // $this->call(AssignPermissionsToRoleSeeder::class);
-        $this->seedTreatments();
+        // $this->seedTreatments();
+        $this->call(DoctorSeederFromCSV::class);
     }
 
     public function seedTreatments()
