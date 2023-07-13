@@ -3,7 +3,8 @@
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     width: 100%;
     height: 100vh;
     margin: 0;
@@ -108,7 +109,7 @@ a {
     box-shadow: var(--navigation-box-shadow);
 }
 
-.nav-link + .nav-link {
+.nav-link+.nav-link {
     margin-top: 32px;
 }
 
@@ -242,6 +243,7 @@ a {
 
 .message p {
     width: 100%;
+    min-width: 100px;
 }
 
 .message-image--img {
@@ -406,7 +408,8 @@ a {
     z-index: 10;
 }
 
-.btn-mute, .btn-camera {
+.btn-mute,
+.btn-camera {
     width: 32px;
     height: 32px;
     border-radius: 4px;
@@ -586,7 +589,23 @@ a {
     cursor: pointer;
     display: none;
 }
+.loader{
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
 
+.loader img{
+    width: 60px;
+    height: 60px;
+}
 </style>
 <template>
     <link href="https://fonts.googleapis.com/css?family=DM+Sans:400,500,700&display=swap" rel="stylesheet">
@@ -600,8 +619,8 @@ a {
                     </div>
                     <a href="#" class="name-tag">Patient</a>
                     <img v-if="this.patientJoined === false"
-                         src="https://images.unsplash.com/photo-1566821582776-92b13ab46bb4?ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60"
-                         alt="participant">
+                        src="https://images.unsplash.com/photo-1566821582776-92b13ab46bb4?ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60"
+                        alt="participant">
                 </div>
                 <div class="video-participant remote-user" id="local-video">
                     <div class="participant-actions">
@@ -610,8 +629,8 @@ a {
                     </div>
                     <a href="#" class="name-tag">Doctor</a>
                     <img v-if="this.localVideoStream == null"
-                         src="https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80"
-                         alt="participant">
+                        src="https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80"
+                        alt="participant">
 
                 </div>
             </div>
@@ -622,31 +641,32 @@ a {
                 <button class="video-action-button endcall">Leave</button>
                 <button class="expand-btn" @click="toggleChatWindow">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                         class="feather feather-message-circle">
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-message-circle">
                         <path
-                            d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                            d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
                     </svg>
                 </button>
             </div>
         </div>
         <div class="right-side" :class="showChat">
             <div class="chat-container">
+                <div class="loader">
+                    <img src="/img/loader.gif" alt="">
+                </div>
                 <div class="chat-area">
-                    <div v-for="message in Object.entries(this.messages)" :key="message[0]"
-                         class="message-wrapper"
-                         :class="{ reverse: message[1].from !== 1}">
+                    <div v-for="message in Object.entries(this.messages)" :key="message[0]" class="message-wrapper"
+                        :class="{ reverse: message[1].from !== 1 }">
                         <div class="message-content">
                             <p class="name">{{ message[1].from != 1 ? 'Doctor' : 'Patient' }}</p>
                             <div class="message">
-                                <p class="message-text" v-if="message[1].type === 'text'">{{
-                                        message[1].message
-                                    }}</p>
+                                <p class="message-text" v-if="message[1].type === 'text'"><span
+                                        style="word-wrap: break-word;">{{
+                                            message[1].message
+                                        }}</span></p>
                                 <span class="message-image" v-if="message[1].type === 'image'">
                                     <a :href="message[1].message">
-                                        <img class="message-image--img"
-                                             :src="message[1].message"
-                                             alt="">
+                                        <img class="message-image--img" :src="message[1].message" alt="">
                                     </a>
                                 </span>
                                 <span v-if="message[1].type === 'file'">{{ message[1].message }}</span>
@@ -656,22 +676,23 @@ a {
                 </div>
                 <div class="chat-typing-area-wrapper">
                     <div class="chat-typing-area">
-                        <input type="text" placeholder="Type your meesage..." class="chat-input">
-                        <button class="send-button">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                 stroke-linejoin="round" class="feather feather-file-plus">
+                        <input type="text" placeholder="Type your meesage..." class="chat-input" v-model="message">
+                        <button class="send-button" @click="uploadFile">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-file-plus">
                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                 <polyline points="14 2 14 8 20 8"></polyline>
                                 <line x1="12" y1="18" x2="12" y2="12"></line>
                                 <line x1="9" y1="15" x2="15" y2="15"></line>
                             </svg>
                         </button>
-                        <button class="send-button">
+                        <input type="file" id="uploadFile" style="display: none;" />
+                        <button class="send-button" @click="sendMessage" id="submit">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
-                                 stroke-linecap="round" stroke-linejoin="round" class="feather feather-send"
-                                 viewBox="0 0 24 24">
-                                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                                stroke-linecap="round" stroke-linejoin="round" class="feather feather-send"
+                                viewBox="0 0 24 24">
+                                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
                             </svg>
                         </button>
                     </div>
@@ -679,8 +700,13 @@ a {
             </div>
             <button class="expand-btn hide-chat" @click="toggleChatWindow">
                 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="15px" height="15px"
-                     viewBox="0 0 122.878 122.88" enable-background="new 0 0 122.878 122.88" xml:space="preserve"><g><path d="M1.426,8.313c-1.901-1.901-1.901-4.984,0-6.886c1.901-1.902,4.984-1.902,6.886,0l53.127,53.127l53.127-53.127 c1.901-1.902,4.984-1.902,6.887,0c1.901,1.901,1.901,4.985,0,6.886L68.324,61.439l53.128,53.128c1.901,1.901,1.901,4.984,0,6.886 c-1.902,1.902-4.985,1.902-6.887,0L61.438,68.326L8.312,121.453c-1.901,1.902-4.984,1.902-6.886,0 c-1.901-1.901-1.901-4.984,0-6.886l53.127-53.128L1.426,8.313L1.426,8.313z"/></g></svg>
+                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="15px" height="15px"
+                    viewBox="0 0 122.878 122.88" enable-background="new 0 0 122.878 122.88" xml:space="preserve">
+                    <g>
+                        <path
+                            d="M1.426,8.313c-1.901-1.901-1.901-4.984,0-6.886c1.901-1.902,4.984-1.902,6.886,0l53.127,53.127l53.127-53.127 c1.901-1.902,4.984-1.902,6.887,0c1.901,1.901,1.901,4.985,0,6.886L68.324,61.439l53.128,53.128c1.901,1.901,1.901,4.984,0,6.886 c-1.902,1.902-4.985,1.902-6.887,0L61.438,68.326L8.312,121.453c-1.901,1.902-4.984,1.902-6.886,0 c-1.901-1.901-1.901-4.984,0-6.886l53.127-53.128L1.426,8.313L1.426,8.313z" />
+                    </g>
+                </svg>
             </button>
         </div>
     </div>
@@ -693,19 +719,10 @@ a {
                         Incoming Call From <strong>{{ incomingCaller }}</strong>
                     </p>
                     <div class="btn-group" role="group">
-                        <button
-                            type="button"
-                            class="btn btn-danger"
-                            data-dismiss="modal"
-                            @click="declineCall"
-                        >
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" @click="declineCall">
                             Decline
                         </button>
-                        <button
-                            type="button"
-                            class="btn btn-success ml-5"
-                            @click="acceptCall"
-                        >
+                        <button type="button" class="btn btn-success ml-5" @click="acceptCall">
                             Accept
                         </button>
                     </div>
@@ -722,11 +739,7 @@ a {
                 <button type="button" class="btn btn-info" @click="handleAudioToggle">
                     {{ mutedAudio ? "Unmute" : "Mute" }}
                 </button>
-                <button
-                    type="button"
-                    class="btn btn-primary mx-4"
-                    @click="handleVideoToggle"
-                >
+                <button type="button" class="btn btn-primary mx-4" @click="handleVideoToggle">
                     {{ mutedVideo ? "ShowVideo" : "HideVideo" }}
                 </button>
                 <button type="button" class="btn btn-danger" @click="endCall">
@@ -739,10 +752,11 @@ a {
 
 <script>
 import AgoraRTC from "agora-rtc-sdk-ng";
-import {markRaw} from "vue";
-import {initializeApp} from "firebase/app";
-import {useDatabaseList} from "vuefire";
-import {getDatabase, ref, onValue, child, get} from 'firebase/database';
+import { markRaw } from "vue";
+import { initializeApp } from "firebase/app";
+import { useDatabaseList } from "vuefire";
+import { getDatabase, ref, onValue, child, get, set, push } from 'firebase/database';
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export const firebaseConfig = {
     apiKey: "AIzaSyB3zpdPFZHof19ydzy6XYqSYEoafYvKIi8",
@@ -777,6 +791,8 @@ export default {
             showChat: "",
             firebaseApp: null,
             messages: [],
+            message: "",
+            messageType: "text",
         };
     },
     computed: {
@@ -796,6 +812,12 @@ export default {
             }
         }).catch((error) => {
             console.error(error);
+        });
+        onValue(messagesRef, (snapshot) => {
+            if (snapshot.exists()) {
+                this.messages = snapshot.val();
+            }
+            this.messageScrollBottom();
         });
 
     },
@@ -835,7 +857,7 @@ export default {
             });
 
             // listen to incomming call
-            this.userOnlineChannel.listen("MakeAgoraCall", ({data}) => {
+            this.userOnlineChannel.listen("MakeAgoraCall", ({ data }) => {
                 if (parseInt(data.userToCall) === parseInt(this.authuserid)) {
                     const callerIndex = this.onlineUsers.findIndex(
                         (user) => user.id === data.from
@@ -909,7 +931,7 @@ export default {
          * Agora Events and Listeners
          */
         initializeAgora() {
-            this.client = markRaw(AgoraRTC.createClient({mode: "rtc", codec: "h264"}));
+            this.client = markRaw(AgoraRTC.createClient({ mode: "rtc", codec: "h264" }));
             this.client.on('user-published', this.handleUserPublished)
             this.client.on('user-unpublished', this.handleUserLeft)
             console.log(this.client);
@@ -1015,7 +1037,50 @@ export default {
             } else {
                 this.showChat = "show";
             }
+        },
+        sendMessage() {
+            this.console.log(this.message);
+            const messagesRef = ref(db, 'messages/' + this.channelName)
+            const newMessageRef = push(messagesRef);
+            set(newMessageRef, {
+                from: 4,
+                message: this.message,
+                type: "text",
+            });
+        },
+        uploadFile() {
+            const storage = getStorage();
+            document.querySelector("#uploadFile").click();
+            document.querySelector("#uploadFile").onchange = () => {
+                if (document.querySelector("#uploadFile").files.length > 0) {
+                    document.querySelector("#submit").disabled = false;
+                    let file = document.querySelector("#uploadFile").files[0];
+                    let type = file.type.split('/')[0] == 'image' ? 'image' : 'file';
+                    let path = "messages/" + this.channelName + '/' + file.name;
+                    const fileRef = storageRef(storage, path);
+                    document.querySelector('.loader').style.display = 'flex';
+                    uploadBytes(fileRef, file).then((snapshot) => {
+                        console.log('Uploaded a blob or file!');
+                        getDownloadURL(fileRef).then((url) => {
+                            console.log(url);
+                            const messagesRef = ref(db, 'messages/' + this.channelName)
+                            const newMessageRef = push(messagesRef);
+                            set(newMessageRef, {
+                                from: 4,
+                                message: url,
+                                type: type,
+                            });
+                            document.querySelector('.loader').style.display = 'none';
+                        });
+                    });
+                }
+            }
+        },
+        messageScrollBottom() {
+            var t = document.querySelector('.chat-area');
+            t.scrollTo(0, t.scrollHeight);
         }
+
     },
 };
 </script>
