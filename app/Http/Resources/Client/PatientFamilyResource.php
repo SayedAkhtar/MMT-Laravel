@@ -21,13 +21,13 @@ class PatientFamilyResource extends BaseAPIResource
 
         return [
             'id' => $this->id,
-            'patient_id' => $this->patient_id,
-            'family_id' => $this->family_id,
+            'name' => $this->name,
+            'phone' => $this->phone,
+            'relationship' => $this->relationship,
+            'dob' => $this->dob,
+            'gender' => $this->gender,
+            'treatment_country' => $this->treatment_country,
             'is_active' => $this->is_active,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'added_by' => $this->added_by,
-            'updated_by' => $this->updated_by,
         ];
     }
 }

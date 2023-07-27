@@ -27,7 +27,7 @@ class UpdateUserAPIRequest extends FormRequest
             'phone' => ['nullable', 'integer'],
             'is_active' => ['boolean'],
             'image' => ['nullable', 'string'],
-            'gender' => ['required',],
+            'gender' => ['nullable'],
             'country' => ['nullable', 'string'],
             'treatment_country' => ['nullable', 'string'],
             'dob' => ['nullable', 'date'],

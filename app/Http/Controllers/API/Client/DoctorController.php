@@ -14,6 +14,7 @@ use App\Repositories\DoctorRepository;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class DoctorController extends AppBaseController
@@ -45,15 +46,36 @@ class DoctorController extends AppBaseController
             $doctors = Doctor::with('hospitals', function ($q) use ($request) {
                 $q->where('hospitals.id', $request->input('hospital_id'));
             })->get();
+        } else if ($request->has('specialization_id') && $request->has('video_consultation')) {
+            $doctors = Doctor::whereHas('specializations', function ($q) use ($request) {
+                return $q->where('specializations.id', $request->input('specialization_id'));
+            })
+                ->whereNotNull('time_slots')
+                ->get();
         } else if ($request->has('specialization_id')) {
             $doctors = Doctor::whereHas('specializations', function ($q) use ($request) {
                 return $q->where('specializations.id', $request->input('specialization_id'));
             })->get();
-        } else {
+        } else if($request->has('ajax_search')){
+            $raw_sql = "select doctors.id as id, concat(users.name,' ',IFNULL(specializations.name, ''),' ', IFNULL(hospitals.name, '')) search_field 
+            from doctors
+            join users on users.id = doctors.user_id
+            left join doctor_specializations ds on ds.doctor_id = doctors.id
+            left join specializations on ds.specialization_id = specializations.id
+            left join doctor_hospitals dh on dh.doctor_id = doctors.id
+            left join hospitals on hospitals.id = dh.hospital_id
+            where concat(users.name,' ',IFNULL(specializations.name, ''),' ', IFNULL(hospitals.name, '')) like ?";
+            $result = collect(DB::select($raw_sql, ['%'.$request->input('ajax_search').'%']))->pluck('id')->all();
+            $doctors = Doctor::with('user', 'qualifications', 'designations')->whereIn('id', $result)->get();
+        } 
+        else {
+            if(!$request->has('limit')){
+                $request['limit'] = 10;
+            }
             $doctors = $this->doctorRepository->fetch($request);
         }
         if (!empty($doctors)) {
-            return $this->successResponse((DoctorResource::collection($doctors))->resolve()) ;
+            return $this->successResponse((DoctorResource::collection($doctors))->resolve());
         } else {
             return $this->errorResponse("No doctors found", 404);
         }
@@ -87,7 +109,7 @@ class DoctorController extends AppBaseController
     {
         $doctor = $this->doctorRepository->findOrFail($id);
 
-        return $this->successResponse(DoctorResource::make($doctor)->resolve())  ;
+        return $this->successResponse(DoctorResource::make($doctor)->resolve());
     }
 
     /**

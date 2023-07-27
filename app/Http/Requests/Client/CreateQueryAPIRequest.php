@@ -26,7 +26,7 @@ class CreateQueryAPIRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'query_id' => ['nullable', 'exists:queries,id'],
+            'query_id' => ['nullable'],
             'patient_family_id' => ['nullable', 'exists:users,id'],
             'type' => ['required', Rule::in([Query::TYPE_QUERY, Query::TYPE_MEDICAL_VISA])],
             'current_step' => ['required', 'integer'],

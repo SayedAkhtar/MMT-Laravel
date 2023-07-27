@@ -7,12 +7,16 @@ use App\Http\Requests\Client\BulkCreatePatientFamilyAPIRequest;
 use App\Http\Requests\Client\BulkUpdatePatientFamilyAPIRequest;
 use App\Http\Requests\Client\CreatePatientFamilyAPIRequest;
 use App\Http\Requests\Client\UpdatePatientFamilyAPIRequest;
+use App\Http\Resources\Client\PatientDetailsResource;
 use App\Http\Resources\Client\PatientFamilyCollection;
 use App\Http\Resources\Client\PatientFamilyResource;
+use App\Models\PatientFamilyDetails;
+use App\Models\User;
 use App\Repositories\PatientFamilyRepository;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class PatientFamilyController extends AppBaseController
@@ -39,11 +43,11 @@ class PatientFamilyController extends AppBaseController
      *
      * @return PatientFamilyCollection
      */
-    public function index(Request $request): PatientFamilyCollection
+    public function index(Request $request)
     {
-        $patientFamilies = $this->patientFamilyRepository->fetch($request);
-
-        return new PatientFamilyCollection($patientFamilies);
+        $user = User::with('patientFamilyDetails')->find(Auth::id());
+        $patientFamilies = $user->patientFamilyDetails;
+        return $this->successResponse(PatientFamilyResource::collection($patientFamilies));
     }
 
     /**
@@ -57,9 +61,9 @@ class PatientFamilyController extends AppBaseController
     public function store(CreatePatientFamilyAPIRequest $request)
     {
         $input = $request->all();
-        $patientFamily = $this->patientFamilyRepository->create($input);
-//
-//        return new PatientFamilyResource($patientFamily);
+        $input['patient_id'] = Auth::id(); 
+        $family = PatientFamilyDetails::create($input);
+       return $this->successResponse($family);
     }
 
     /**
@@ -103,52 +107,10 @@ class PatientFamilyController extends AppBaseController
      * @throws Exception
      *
      */
-    public function delete(int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
-        $this->patientFamilyRepository->delete($id);
-
+        PatientFamilyDetails::find($id)->delete();
         return $this->successResponse('PatientFamily deleted successfully.');
     }
 
-    /**
-     * Bulk create PatientFamily's.
-     *
-     * @param BulkCreatePatientFamilyAPIRequest $request
-     *
-     * @return PatientFamilyCollection
-     * @throws ValidatorException
-     *
-     */
-    public function bulkStore(BulkCreatePatientFamilyAPIRequest $request): PatientFamilyCollection
-    {
-        $patientFamilies = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $patientFamilyInput) {
-            $patientFamilies[$key] = $this->patientFamilyRepository->create($patientFamilyInput);
-        }
-
-        return new PatientFamilyCollection($patientFamilies);
-    }
-
-    /**
-     * Bulk update PatientFamily's data.
-     *
-     * @param BulkUpdatePatientFamilyAPIRequest $request
-     *
-     * @return PatientFamilyCollection
-     * @throws ValidatorException
-     *
-     */
-    public function bulkUpdate(BulkUpdatePatientFamilyAPIRequest $request): PatientFamilyCollection
-    {
-        $patientFamilies = collect();
-
-        $input = $request->get('data');
-        foreach ($input as $key => $patientFamilyInput) {
-            $patientFamilies[$key] = $this->patientFamilyRepository->update($patientFamilyInput, $patientFamilyInput['id']);
-        }
-
-        return new PatientFamilyCollection($patientFamilies);
-    }
 }

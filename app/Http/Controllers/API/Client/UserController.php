@@ -9,7 +9,9 @@ use App\Http\Requests\Client\UpdateUserAPIRequest;
 use App\Http\Resources\Client\UserCollection;
 use App\Http\Resources\Client\UserResource;
 use App\Models\Country;
+use App\Models\Language;
 use App\Models\PatientDetails;
+use App\Models\User;
 use App\Repositories\UserRepository;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -101,12 +103,16 @@ class UserController extends AppBaseController
         if (isset($input['password']) && $input['old_password']) {
             $input['password'] = Hash::make($input['password']);
         }
+        if (!empty($input['gender'])) {
+            unset($input['gender']);
+        }
         DB::beginTransaction();
         try {
-            if(!empty($input['country_id'])){
-                $input['country'] = Country::where('name', $input['country_id'])->first()->id;
+            if (!empty($input['country'])) {
+                $input['country'] = Country::where('name', $input['country'])->first()->id;
             }
-            $user = $this->userRepository->update($input, $id);
+            $user = User::find($id);
+            $user->update($input);
             $patient = PatientDetails::where('user_id', $user->id)->first();
             if ($patient) {
                 $patient->update($input);
@@ -186,7 +192,6 @@ class UserController extends AppBaseController
             return $this->errorResponse($e->getMessage());
         }
         return $this->errorResponse("Internal server error");
-
     }
 
     public function updateAvatar(Request $request, int $id)
@@ -197,11 +202,27 @@ class UserController extends AppBaseController
                 $user->updateImage('avatar', 'avatar', false);
             }
             if ($user) {
-                return response()->json(["data" => $user], 200);
+                return response()->json(["DATA" => $user], 200);
             } else {
                 return response()->json(["STATUS" => "Opps!", "MESSAGE" => "Could not update user. Please try again"], 400);
             }
         } catch (Exception $e) {
+            return response()->json(["STATUS" => "Opps!", "MESSAGE" => "Internal server error. Please try again"], 400);
+        }
+    }
+
+    public function updateLanguage(Request $request)
+    {
+        try {
+            if ($request->has('language')) {
+                $user = User::find(Auth::id());
+                $language = Language::where('locale', $request->language)->first();
+                if (!empty($language)) {
+                    $user->languages()->sync([$language->id]);
+                }
+            }
+            return response()->json(["DATA" => $user], 201);
+        } catch (\Exception $e) {
             return response()->json(["STATUS" => "Opps!", "MESSAGE" => "Internal server error. Please try again"], 400);
         }
     }

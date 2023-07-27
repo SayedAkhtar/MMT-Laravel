@@ -802,7 +802,7 @@ export default {
     mounted() {
         // this.initUserOnlineChannel();
         // this.initUserOnlineListeners();
-        // this.placeCall();
+        this.placeCall();
         const messagesRef = ref(db, 'messages/' + this.channelName)
         get(child(ref(db), 'messages/' + this.channelName)).then((snapshot) => {
             if (snapshot.exists()) {

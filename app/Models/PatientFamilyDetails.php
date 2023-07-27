@@ -25,14 +25,7 @@ class PatientFamilyDetails extends Model
         'relationship',
         'dob',
         'gender',
-        'geo_location',
         'treatment_country',
-        'speciality',
-        'is_active',
-        'created_at',
-        'updated_at',
-        'added_by',
-        'updated_by',
     ];
 
     /**

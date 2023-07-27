@@ -38,6 +38,7 @@ class HospitalResource extends BaseAPIResource
             }
         }
         $banners = [];
+        $banners[] = $this->getMedia('logo')->first()?->getUrl();
         if (!empty($this->getMedia('gallery'))) {
             foreach ($this->getMedia('gallery') as $image) {
                 $banners[] = $image->getUrl('banner');

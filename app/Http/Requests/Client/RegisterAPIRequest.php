@@ -14,6 +14,13 @@ class RegisterAPIRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'gender' => strtolower($this->gender),
+        ]);
+    }
+
     /**
      * @return array
      */
@@ -28,7 +35,7 @@ class RegisterAPIRequest extends FormRequest
             'email_verified_at' => ['nullable'],
             'is_active' => ['boolean'],
             'image' => ['nullable', 'string'],
-            'gender' => ['required', 'in:male, female, other'],
+            'gender' => ['required', 'in:male,female,other'],
             'country_code' => ['required', 'string'],
             'country' => ['nullable', 'string'],
             'dob' => ['nullable', 'date'],

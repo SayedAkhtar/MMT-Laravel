@@ -14,6 +14,12 @@ class CreatePatientFamilyAPIRequest extends FormRequest
         return true;
     }
 
+    public function prepareForValidation(){
+        $this->merge([
+            'is_active' => true,
+        ]);
+    }
+
     /**
      * @return array
      */
@@ -21,7 +27,12 @@ class CreatePatientFamilyAPIRequest extends FormRequest
     {
         return [
             'patient_id' => ['nullable', 'exists:users,id'],
-            'family_id' => ['nullable', 'exists:patient_family_details,id'],
+            'name' => ['required'],
+            'dob' => ['required'],
+            'gender' => ['required'],
+            'phone' => ['required'],
+            'relationship' => ['required'],
+            'treatment_country' => ['required'],
             'is_active' => ['boolean'],
         ];
     }
