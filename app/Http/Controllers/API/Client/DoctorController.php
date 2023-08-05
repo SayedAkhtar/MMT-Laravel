@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Client;
 
+use App\Constants\Constants;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Client\BulkCreateDoctorAPIRequest;
 use App\Http\Requests\Client\BulkUpdateDoctorAPIRequest;
@@ -10,11 +11,14 @@ use App\Http\Requests\Client\UpdateDoctorAPIRequest;
 use App\Http\Resources\Client\DoctorCollection;
 use App\Http\Resources\Client\DoctorResource;
 use App\Models\Doctor;
+use App\Models\VideoConsultation;
 use App\Repositories\DoctorRepository;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use PHPUnit\TextUI\XmlConfiguration\Constant;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class DoctorController extends AppBaseController
@@ -45,17 +49,17 @@ class DoctorController extends AppBaseController
         if ($request->has('hospital_id')) {
             $doctors = Doctor::with('hospitals', function ($q) use ($request) {
                 $q->where('hospitals.id', $request->input('hospital_id'));
-            })->get();
+            });
         } else if ($request->has('specialization_id') && $request->has('video_consultation')) {
             $doctors = Doctor::whereHas('specializations', function ($q) use ($request) {
                 return $q->where('specializations.id', $request->input('specialization_id'));
             })
-                ->whereNotNull('time_slots')
-                ->get();
+                ->whereNotNull('time_slots');
+                
         } else if ($request->has('specialization_id')) {
             $doctors = Doctor::whereHas('specializations', function ($q) use ($request) {
                 return $q->where('specializations.id', $request->input('specialization_id'));
-            })->get();
+            });
         } else if($request->has('ajax_search')){
             $raw_sql = "select doctors.id as id, concat(users.name,' ',IFNULL(specializations.name, ''),' ', IFNULL(hospitals.name, '')) search_field 
             from doctors
@@ -66,13 +70,24 @@ class DoctorController extends AppBaseController
             left join hospitals on hospitals.id = dh.hospital_id
             where concat(users.name,' ',IFNULL(specializations.name, ''),' ', IFNULL(hospitals.name, '')) like ?";
             $result = collect(DB::select($raw_sql, ['%'.$request->input('ajax_search').'%']))->pluck('id')->all();
-            $doctors = Doctor::with('user', 'qualifications', 'designations')->whereIn('id', $result)->get();
-        } 
+            $doctors = Doctor::with('user', 'qualifications', 'designations')->where('is_active', true)->whereIn('id', $result);
+        }
+        else if($request->has('popular')){
+            $doctor_id = VideoConsultation::select('doctor_id')->distinct()->get()->pluck('doctor_id');
+            $doctors = Doctor::with('user', 'qualifications', 'designations')->where('is_active', true)->whereIn('id', $doctor_id);
+        }
         else {
-            if(!$request->has('limit')){
-                $request['limit'] = 10;
+            $doctors = Doctor::query();
+        }
+        try{
+            if($request->has('page')){
+                $page = $request->input('page');
+                $doctors = $doctors->skip(($page-1) * Constants::API_PAGINATION);
             }
-            $doctors = $this->doctorRepository->fetch($request);
+            $doctors = $doctors->take(Constants::API_PAGINATION)->get();
+        }catch(\Exception $e){
+            Log::error($e->getMessage());
+            return $this->errorResponse("Something Broke!", 500);
         }
         if (!empty($doctors)) {
             return $this->successResponse((DoctorResource::collection($doctors))->resolve());

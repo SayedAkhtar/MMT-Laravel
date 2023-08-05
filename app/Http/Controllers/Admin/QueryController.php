@@ -50,8 +50,8 @@ class QueryController extends AppBaseController
      */
     public function index(Request $request): View
     {
-        $queries = Query::with('hospital', 'specialization', 'patient')->whereHas('patient')->get();
-        // dump($queries);
+        $queries = Query::with('hospital', 'specialization', 'patient')->whereHas('patient')->orderByDesc('updated_at')->get();
+
         return $this->module_view('/list', compact('queries'));
     }
 
@@ -93,7 +93,7 @@ class QueryController extends AppBaseController
      */
     public function show(Request $request, int $id)
     {
-        $query = Query::findOrFail($id);
+        $query = Query::with(['patient', 'patientFamily', 'specialization', 'doctor'])->findOrFail($id);
         $first_tab = $query->type == Query::TYPE_MEDICAL_VISA ? 'upload-medical-visa' : 'details';
         $tab = $request->get('tab') ?? $first_tab;
         $data = [];
@@ -149,8 +149,8 @@ class QueryController extends AppBaseController
         try {
             $user = User::where('users.id', $validated['coordinator_id'])
                 ->select('users.name', 'phone', 'email', 'image', 'gender', 'language.name as language')
-                ->join('language_user', 'users.id', '=', 'language_user.user_id')
-                ->join('language', 'language.id', '=', 'language_user.language_id')
+                ->leftjoin('language_user', 'users.id', '=', 'language_user.user_id')
+                ->leftjoin('language', 'language.id', '=', 'language_user.language_id')
                 ->first();
             $data['coordinator'] = $user->toArray();
             $acc = Accommodation::where('id', $validated['accommodation_id'])

@@ -22,8 +22,8 @@ class CreateDoctorAPIRequest extends FormRequest
         return [
             'awards' => ['nullable'],
             'description' => ['nullable'],
-            'designation_id.*' => ['nullable'],
-            'qualification_id.*' => ['nullable'],
+            'designation_id.*' => ['required'],
+            'qualification_id.*' => ['required'],
             'faq' => ['nullable'],
             'time_slots' => ['nullable'],
             'start_of_service' => ['required'],

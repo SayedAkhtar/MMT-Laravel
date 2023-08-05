@@ -42,7 +42,6 @@ class QueryController extends AppBaseController
     public function index(Request $request): QueryCollection
     {
         $queries = $this->queryRepository->fetch($request);
-
         return new QueryCollection($queries);
     }
 

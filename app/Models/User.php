@@ -131,6 +131,11 @@ class User extends Authenticatable implements HasMedia
         'Admin' => [self::PLATFORM['DEVICE']],
     ];
 
+    public function routeNotificationForFcm()
+    {
+        return $this->firebase_token;
+    }
+
     public function routeNotificationForTwilio()
     {
         return $this->country_code . $this->phone; // e.g "+91909945XXXX"

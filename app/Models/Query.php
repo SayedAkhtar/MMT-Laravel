@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 
 class Query extends BaseModel
 {
+    use Notifiable;
 
     /**
      * @var string
@@ -36,6 +39,10 @@ class Query extends BaseModel
         'coordinator',
     ];
 
+    protected $with = [
+        'patient'
+    ];
+
     /**
      * @var string[]
      */
@@ -63,6 +70,10 @@ class Query extends BaseModel
         
     // }
 
+    public function routeNotificationForFcm()
+    {
+        return $this->patient->firebase_token;
+    }
 
     public static function getTabs()
     {
@@ -76,6 +87,10 @@ class Query extends BaseModel
         } else {
             return "Visa Query";
         }
+    }
+
+    public function getQueryHashAttribute():string{
+        return "MMT-".(implode('-',str_split(Carbon::make($this->created_at)->timestamp, 5)))."-".str_pad($this->id, 3, "0", STR_PAD_LEFT);
     }
 
     /**
@@ -110,7 +125,7 @@ class Query extends BaseModel
      */
     public function patientFamily()
     {
-        return $this->hasOne(User::class, 'id', 'patient_family_id');
+        return $this->hasOne(PatientFamilyDetails::class, 'id', 'patient_family_id');
     }
 
     /**

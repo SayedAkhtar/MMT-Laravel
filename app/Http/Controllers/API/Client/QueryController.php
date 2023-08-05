@@ -49,7 +49,7 @@ class QueryController extends AppBaseController
      */
     public function index(Request $request): JsonResponse
     {
-        $queries = Query::with('specialization')->where('patient_id', Auth::id())->orderByDesc('id')->get();
+        $queries = Query::with('specialization')->where('patient_id', Auth::id())->orderByDesc('updated_at')->get();
         $activeQueries = ActiveQueryResource::collection($queries)->resolve();
         $activeQueries = array_values(array_filter($activeQueries, function ($el) {
             if (count($el) > 0) return $el;

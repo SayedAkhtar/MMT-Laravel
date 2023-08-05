@@ -24,7 +24,7 @@ class ActiveQueryResource extends BaseAPIResource
         $response = "";
         switch ($this->type) {
             case 1:
-                $response = $this->current_step != 1 ? $this->getStepResponse(2)['doctor'] : "No doctor's received yet";
+                $response = $this->current_step != 1 ? $this->getStepResponse(2)['doctor'] : "Your query is under review. Please check back for update.";
                 $total_step = $this->payment_required ? 5 : 4;
                 break;
             case 2:
@@ -36,6 +36,7 @@ class ActiveQueryResource extends BaseAPIResource
         }
         $data = [
             'id' => $this->id,
+            'query_hash' => $this->query_hash,
             'specialization' => $this->specialization->name ?? "No Specialization Selected",
             'doctor_response' => $response,
             'payment_required' => (bool)$this->payment_required,

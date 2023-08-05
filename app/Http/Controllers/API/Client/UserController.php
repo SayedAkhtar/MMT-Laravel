@@ -103,7 +103,7 @@ class UserController extends AppBaseController
         if (isset($input['password']) && $input['old_password']) {
             $input['password'] = Hash::make($input['password']);
         }
-        if (!empty($input['gender'])) {
+        if (empty($input['gender'])) {
             unset($input['gender']);
         }
         DB::beginTransaction();
@@ -198,11 +198,12 @@ class UserController extends AppBaseController
     {
         try {
             if ($request->hasFile('avatar')) {
-                $user = PatientDetails::where('user_id', $id)->first();
-                $user->updateImage('avatar', 'avatar', false);
+                $patient = PatientDetails::with('user')->where('user_id', $id)->first();
+                $patient->updateImage('avatar', 'avatar', false);
+                $user = $patient->user;
             }
             if ($user) {
-                return response()->json(["DATA" => $user], 200);
+                return new UserResource($user);
             } else {
                 return response()->json(["STATUS" => "Opps!", "MESSAGE" => "Could not update user. Please try again"], 400);
             }

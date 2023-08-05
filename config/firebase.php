@@ -1,7 +1,6 @@
 <?php
 
 declare(strict_types=1);
-
 return [
     /*
      * ------------------------------------------------------------------------
@@ -47,14 +46,14 @@ return [
              *
              */
             'credentials' => [
-                'file' => env('FIREBASE_CREDENTIALS', env('GOOGLE_APPLICATION_CREDENTIALS')),
+                'file' => dirname( __DIR__ ).'/mmt-firebase-admin-v3.json',
 
                 /*
                  * If you want to prevent the auto discovery of credentials, set the
                  * following parameter to false. If you disable it, you must
                  * provide a credentials file.
                  */
-                'auto_discovery' => true,
+                'auto_discovery' => false,
             ],
 
             /*

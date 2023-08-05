@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "mymedtrip-app",
+  "private_key_id": "c54c1d9b1b9478f8eb683ccbb5a8afaa60b7c360",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCYecjwSbIWT3FL\nGMNnR8l+K+bAqgxhGwLjmOkffyTiXMlSyQmz/dWrE4NxkaZYPxLLvQGJ5fn5iB3N\nE3idsaxnpfWZbZWCwyzCmubceJnZlFf6r61KSN+caorzO11i8i7z+/smUc7G8Y+L\nw0GiDVsb3iVGZh+tv2KELhXzQj8YfuWjHLbKJo9jUZrIDtVCBUY7ZTUHAlqiTKZ+\nZYT5nEeJGtJMUEUHunYR4PIgn5rFn5MRSgADsnWm5WALtMJllDLNgH9fA1AnXiOX\neMSSUvnuxYkBy7RSpS0mOaPqdRnrXduF/an9YR1Cx8veHza7fZHH9yFf+Cds1GzM\nU7gOvRSxAgMBAAECggEABIJFcOWdAI/k18WpsZor2TFPJ49fwldcJILXEflei9sW\nkP4k7U+qS97N2kPmWWG0GpZCP2OvmrNtviy/OlqQsJf1xU26SB2hazfNb+OZGRgL\n6fvb8gBprGRyK3Mr9csXnFttN9rfdH6cMhPaEwK2GQLes1A9y5OHREVgnMrutriu\nM0lIMxhbRRPAn5GhgmLkYYo3A1ewgL1OASTgRzDtiQm6iPnbr2eqRG1RRTEcVBr2\nf6jg508AqNMMR1YjJmrA3Oq/4YGjIE/o4iERu+5nh+PnifwXdtwNeAwtU3t7NcFS\nHM3KCvNW4tgR+jK3Wz5shTcZB91EuP3umPizbn40KQKBgQDXXRAz2mN/mm4YUg+E\nWftqjMBpBxS56HxaTtTmMCt6MZ0kf0Ysr10+5oqCNTTvWHAQBhExQAS30Hgr7ehJ\nlPy7cbk5w//kLQjAKpi3C3Pydeg2WENeFH7wH5LG2MUEqTSS+CF5FFb3EpGiEd7k\naZgGYjHbc9BWKKQdlOInDgBl2wKBgQC1PvvveAKu5t8O1d1beML0Md4Nk8giH0m6\nB45RonIG8I3Z09s/A6UeUsG8/uqZ1FAxEA9BZedW048ja/Goj1l6C0Bt/iXydQuF\ngCrWLdInqhQV6ceNEZCp2+ZaE241U4cWmxUk7I5EBH5xW51gECRz7qvg3/aZwIkh\nqBTIUzZjYwKBgHSbyjMZU3h7CJOYkxhJlG0Lyv7TO7CxpetL9dCxUkk2ZeymETwO\ns8FkGKkJ4CCcVQkID/UHwcY5VWgLyBNXXUSs/eq+KmbEz5ElP00VIXGtz87lGYzu\nMhEYN2P9aSft6i6NtaoWjkP3RO1pGbO5TPxf3LkDS1HrbXkq7QzScvqzAoGAcZbs\nq/MJs3XL2+9a0IYJoKNUKCwzJHd5bFZp8m2diw3dyOPGp2JwbGWvN/SHMStnqqgG\n95SW/MqQDcIL7PkSObOtiIHcZGzIcL2Xmy2SZPtppSYjwxx8DohbgJ5m1pLnudot\n0TtUGfq7B+5D3j2fquys2b1jPo71IpvFkprcHkMCgYEAh7XBQwadXWQvH/+oUA1Q\nnOUheL9Js/snyTymbfeleEbvf/4+y5MuPKiqM8NeQXzG5N2rZgB/IhJV1s60Bl1U\nSyAVgyZ/edYveT4P5sJhzgLrUMZAusf+V8qNGT4jFnx17Pf+t+pr6dF3ntEpHlbd\nVK0KX7YqrGSz1ypWb0nuzi8=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-3rv1e@mymedtrip-app.iam.gserviceaccount.com",
+  "client_id": "102313695561550031868",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-3rv1e%40mymedtrip-app.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

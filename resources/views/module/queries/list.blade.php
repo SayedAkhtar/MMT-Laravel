@@ -25,7 +25,7 @@
                 <tbody>
                 @foreach($queries as $data)
                     <tr>
-                        <td>{{ $data->id }}</td>
+                        <td>{{ $data->query_hash }}</td>
                         <td>{{ $data->patient->phone }}</td>
                         <td>{{ $data->query_type }}</td>
                         <td>{{ $data->preferred_country?? "No Preference"}}</td>
@@ -128,7 +128,7 @@
             "paging": true,
             "lengthChange": false,
             "searching": false,
-            "ordering": true,
+            "ordering": false,
             "info": true,
             "autoWidth": false,
             "responsive": true,

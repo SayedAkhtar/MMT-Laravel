@@ -10,20 +10,8 @@ class TreatmentRepository extends BaseRepository
      * @var string[]
      */
     protected $fieldSearchable = [
-        'id',
-        'name',
+        'name' => 'like',
         'price',
-        'images',
-        'days_required',
-        'recovery_time',
-        'success_rate',
-        'covered',
-        'not_covered',
-        'is_active',
-        'created_at',
-        'updated_at',
-        'added_by',
-        'updated_by',
     ];
 
     /**
@@ -49,4 +37,5 @@ class TreatmentRepository extends BaseRepository
     {
         return ['addedByUser', 'updatedByUser', 'hospitals', 'doctors', 'specializations'];
     }
+
 }

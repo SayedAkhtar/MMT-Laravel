@@ -31,8 +31,8 @@ class DoctorResource extends BaseAPIResource
         if (!empty($time_slot)) {
             foreach ($time_slot as $key => $value) {
                 foreach ($value as $v) {
-                    $data[] = [
-                        "name" => Str::headline($key) . " " . $v,
+                    $data[Str::headline($key)][] = [
+                        "time" => $v,
                         "utc" => Carbon::parse($key . " " . $v)->getTimestamp()
                     ];
                 }

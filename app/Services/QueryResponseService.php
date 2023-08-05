@@ -2,7 +2,14 @@
 
 namespace App\Services;
 
+// use App\Constants\NotificationStrings;
+
+use App\Constants\NotificationStrings;
 use App\Models\QueryResponse;
+use App\Notifications\FirebaseNotification;
+use Google\Cloud\Storage\Notification;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class QueryResponseService
@@ -77,11 +84,19 @@ class QueryResponseService
         if (empty($validated_input)) {
             throw (new \Exception("Response cannot be empty"));
         }
-        return QueryResponse::create([
+        $query = QueryResponse::create([
             'query_id' => $this->query_id,
             'step' => $this->step_no,
             'response' => json_encode($validated_input)
         ]);
+        try{
+            $ns = (new NotificationStrings('en'))->get('DOCTOR_RESPONSE');
+            $query->parentQuery->notify(new FirebaseNotification($ns['title'], $ns['body']));
+        }catch(\Exception $e){
+            Log::error($e->getMessage());
+        }
+        
+        return $query;
     }
 
     /**

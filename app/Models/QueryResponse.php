@@ -71,4 +71,8 @@ class QueryResponse extends Model
         }
     }
 
+    public function parentQuery(){
+        return $this->hasOne(Query::class, 'id', 'query_id');
+    }
+
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Client;
 
+use App\Constants\Constants;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Client\BulkCreateTreatmentAPIRequest;
 use App\Http\Requests\Client\BulkUpdateTreatmentAPIRequest;
@@ -9,6 +10,7 @@ use App\Http\Requests\Client\CreateTreatmentAPIRequest;
 use App\Http\Requests\Client\UpdateTreatmentAPIRequest;
 use App\Http\Resources\Client\TreatmentCollection;
 use App\Http\Resources\Client\TreatmentResource;
+use App\Models\Treatment;
 use App\Repositories\TreatmentRepository;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -41,7 +43,13 @@ class TreatmentController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $treatments = $this->treatmentRepository->fetch($request);
+        $treatments = Treatment::query()
+                        ->when($request->has('search'), function($q)use($request){
+                            $q->where('name', 'like', '%'.$request->input('search').'%');
+                        })
+                        ->skip(($request->input('page', 1) - 1) * Constants::API_PAGINATION)
+                        ->take(Constants::API_PAGINATION + 10)
+                        ->get();
 
         return $this->successResponse((TreatmentResource::collection($treatments)));
     }

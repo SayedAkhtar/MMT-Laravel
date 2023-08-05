@@ -7,6 +7,7 @@ use App\Repositories\Criteria\JSONApiFilterCriteria;
 use App\Repositories\Criteria\JSONApiIncludeCriteria;
 use App\Repositories\Criteria\JSONApiSortingCriteria;
 use Illuminate\Pagination\Paginator;
+use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Eloquent\BaseRepository as PrettusBaseRepository;
 
 abstract class BaseRepository extends PrettusBaseRepository
@@ -31,6 +32,7 @@ abstract class BaseRepository extends PrettusBaseRepository
         $this->pushCriteria(app(JSONApiFilterCriteria::class));
         $this->pushCriteria(app(JSONApiAllowedFieldsCriteria::class));
         $this->pushCriteria(app(JSONApiIncludeCriteria::class));
+        $this->pushCriteria(app(RequestCriteria::class));
 
         Paginator::currentPageResolver(function () {
             return request()->input('page.number', 1);

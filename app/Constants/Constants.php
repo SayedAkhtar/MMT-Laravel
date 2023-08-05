@@ -10,5 +10,6 @@ class Constants
         'Male',
     ];
 
+    const API_PAGINATION = 15;
 
 }
