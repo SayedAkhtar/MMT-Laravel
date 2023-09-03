@@ -53,6 +53,8 @@ body.dark .mic {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-mic-off' viewBox='0 0 24 24'%3E%3Cpath d='M1 1l22 22M9 9v3a3 3 0 005.12 2.12M15 9.34V4a3 3 0 00-5.94-.6'/%3E%3Cpath d='M17 16.95A7 7 0 015 12v-2m14 0v2a7 7 0 01-.11 1.23M12 19v4M8 23h8'/%3E%3C/svg%3E%0A");
 }
 
+
+
 body.dark .camera {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-camera-off' viewBox='0 0 24 24'%3E%3Cpath d='M1 1l22 22M21 21H3a2 2 0 01-2-2V8a2 2 0 012-2h3m3-3h6l2 3h4a2 2 0 012 2v9.34m-7.72-2.06a4 4 0 11-5.56-5.56'/%3E%3C/svg%3E%0A");
 }
@@ -402,7 +404,7 @@ a {
 
 .participant-actions {
     position: absolute;
-    display: flex;
+    display: none;
     left: 12px;
     top: 12px;
     z-index: 10;
@@ -450,7 +452,10 @@ a {
     cursor: pointer;
     outline: none;
     background-color: var(--button-bg);
+    position: relative;
 }
+
+
 
 .video-action-button.mic {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%232c303a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-mic-off' viewBox='0 0 24 24'%3E%3Cpath d='M1 1l22 22M9 9v3a3 3 0 005.12 2.12M15 9.34V4a3 3 0 00-5.94-.6'/%3E%3Cpath d='M17 16.95A7 7 0 015 12v-2m14 0v2a7 7 0 01-.11 1.23M12 19v4M8 23h8'/%3E%3C/svg%3E%0A");
@@ -636,9 +641,8 @@ a {
                 </div>
             </div>
             <div class="video-call-actions">
-                <button class="video-action-button mic" @click="handleAudioToggle"></button>
-                <button class="video-action-button camera" @click="handleVideoToggle"></button>
-                <button class="video-action-button maximize"></button>
+                <button class="video-action-button mic" :style="{ 'background-color': this.mutedAudio ? 'lightgrey': 'white' }"  @click="handleAudioToggle"></button>
+                <button class="video-action-button camera" :style="{ 'background-color': this.mutedVideo ? 'lightgrey': 'white' }" @click="handleVideoToggle"></button>
                 <button class="video-action-button endcall">Leave</button>
                 <button class="expand-btn" @click="toggleChatWindow">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -677,7 +681,7 @@ a {
                 </div>
                 <div class="chat-typing-area-wrapper">
                     <div class="chat-typing-area">
-                        <input type="text" placeholder="Type your meesage..." class="chat-input" v-model="message">
+                        <input type="text" placeholder="Type your meesage..." class="chat-input" v-model="message" @keydown.enter="sendMessage">
                         <button class="send-button" @click="uploadFile">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -689,7 +693,7 @@ a {
                             </svg>
                         </button>
                         <input type="file" id="uploadFile" style="display: none;" />
-                        <button class="send-button" @click="sendMessage" @keyup.enter="sendMessage" id="submit">
+                        <button class="send-button" @click="sendMessage"  id="submit">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" class="feather feather-send"
                                 viewBox="0 0 24 24">
@@ -1000,6 +1004,7 @@ export default {
             this.localVideoStream = await AgoraRTC.createCameraVideoTrack();
             await this.localVideoStream.play('local-video');
             await this.client.publish(this.localVideoStream);
+            await this.client.publish(this.localAudioStream);
         },
 
         endCall() {
@@ -1016,23 +1021,27 @@ export default {
         },
 
         handleAudioToggle() {
-            if (this.mutedAudio) {
-                this.localStream.unmuteAudio();
-                this.mutedAudio = false;
-            } else {
-                this.localStream.muteAudio();
-                this.mutedAudio = true;
-            }
+            this.mutedAudio = !this.mutedAudio
+            this.localAudioStream.setMuted(this.mutedAudio);
+            // if (this.mutedAudio) {
+                
+            //     this.mutedAudio = false;
+            // } else {
+            //     this.localAudioStream.muteAudio();
+            //     this.mutedAudio = true;
+            // }
         },
 
         handleVideoToggle() {
-            if (this.mutedVideo) {
-                this.localStream.unmuteVideo();
-                this.mutedVideo = false;
-            } else {
-                this.localStream.muteVideo();
-                this.mutedVideo = true;
-            }
+            this.mutedVideo = !this.mutedVideo
+            this.localVideoStream.setMuted(this.mutedAudio);
+            // if (this.mutedVideo) {
+            //     this.localVideoStream.unmuteVideo();
+            //     this.mutedVideo = false;
+            // } else {
+            //     this.localVideoStream.muteVideo();
+            //     this.mutedVideo = true;
+            // }
         },
 
         async subscribe(user, mediaType) {
@@ -1100,7 +1109,7 @@ export default {
         messageScrollBottom() {
             var t = document.querySelector('.chat-area');
             t.scrollTo({
-                top: t.scrollHeight + 200,
+                top: t.scrollHeight + 500,
                 left: 0,
                 behavior: 'smooth'
             });
