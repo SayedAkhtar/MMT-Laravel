@@ -16,52 +16,39 @@
 @section('content')
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h3 class="card-title">Consultation List</h3>
-            {{--            <a href="{{ route('tests.create') }}" class="btn btn-success btn-sm">--}}
-            {{--                <i class="fa fa-plus"></i> Add Test--}}
-            {{--            </a>--}}
+            <h3 class="card-title">Notifications Sent</h3>
+            <a href="{{ route('notification.create') }}" class="btn btn-success btn-sm">
+                <i class="fa fa-plus"></i> Send Notification
+            </a>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
             <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th></th>
-                    <th>Consultation ID</th>
-                    <th>Doctor</th>
-                    <th>Patient</th>
+                    <th>User</th>
+                    <th>Title</th>
+                    <th>Body</th>
                     <th>Status</th>
-                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                @forelse($consultation as $data)
+                @forelse($notifications as $data)
                     <tr>
-                        <td>{{ $loop->index + 1 }}</td>
-                        <td>TELE-{{ $data->id }}</td>
-                        <td>{{ $data->doctor->user->name }}</td>
-                        <td>{{ $data->patient->user->name }}</td>
-                        <td><span>{{ $data->is_active?'Active' : 'False'  }}</span></td>
+                        <td>{{ $data->user_id }}</td>
+                        <td>
+                            {{ $data->notification_title }}
+                        </td>
+                        <td><span>{{ $data->notification_body  }}</span></td>
                         <td class="text-right">
-                            <a href="{{ route('video-consultation.show', ['video_consultation' => $data->id]) }}"
-                               class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                            <a href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i></a>
+                            {{ $data->status ? 'Success' : 'Fail'}}
                         </td>
                     </tr>
                 @empty
                 @endforelse
 
                 </tbody>
-                <tfoot>
-                <tr>
-                    <th></th>
-                    <th>Consultation ID</th>
-                    <th>Doctor</th>
-                    <th>Patient</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-                </tfoot>
+                
             </table>
         </div>
         <!-- /.card-body -->

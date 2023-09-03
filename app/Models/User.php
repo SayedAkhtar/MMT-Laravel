@@ -129,6 +129,7 @@ class User extends Authenticatable implements HasMedia
     public const LOGIN_ACCESS = [
         'User' => [self::PLATFORM['CLIENT']],
         'Admin' => [self::PLATFORM['DEVICE']],
+        'HCF' => [self::PLATFORM['CLIENT']],
     ];
 
     public function routeNotificationForFcm()

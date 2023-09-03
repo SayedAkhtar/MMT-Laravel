@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Client;
 
+use App\Constants\Constants;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Client\CreateHospitalAPIRequest;
 use App\Http\Requests\Client\UpdateHospitalAPIRequest;
@@ -41,7 +42,16 @@ class HospitalController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $hospitals = $this->hospitalRepository->fetch($request);
+        // $hospitals = $this->hospitalRepository->fetch($request);
+        $hospitals = Hospital::with('queries', 'testimony', 'treatments', 'accreditation', 'doctors')
+                            ->when($request->has('query'), function($q) use($request){
+                                $q->where('name', 'like', '%'.$request->input('query').'%');
+                            })
+                            ->when($request->has('page'), function($q) use($request){
+                                $q->skip(($request->input('page', 0) - 1) * Constants::API_PAGINATION);
+                            })
+                            ->take(Constants::API_PAGINATION)
+                            ->get();
         $collection = new HospitalCollection($hospitals);
         return $this->successResponse($collection);
     }

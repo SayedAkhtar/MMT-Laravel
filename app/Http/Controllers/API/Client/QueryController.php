@@ -21,6 +21,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class QueryController extends AppBaseController
@@ -108,17 +109,19 @@ class QueryController extends AppBaseController
      */
     public function show(int $id, int $step)
     {
-        $query = Query::query()->where('patient_id', Auth::id());
+        $query = Query::query()->with('responses')->where('patient_id', Auth::id());
         if ($step == QueryResponse::queryConfirmed && $id == 0) {
-            $query = $query->where('is_confirmed', true)->select('confirmed_details')->latest()->first();
+            $query = $query->where('confirmed_details', '!=', null)->select('confirmed_details', 'status')->latest()->first();
             if (!empty($query->confirmed_details)) {
                 $data = json_decode($query->confirmed_details, true);
+                $data['status'] = json_decode($query->status, true);
             } else {
                 $data = [];
             }
         } else if ($step == QueryResponse::queryConfirmed) {
-            $query = $query->select('confirmed_details')->findOrFail($id);
+            $query = $query->select('confirmed_details', 'status')->findOrFail($id);
             $data = json_decode($query->confirmed_details, true);
+            $data['status'] =  json_decode($query->status, true);
         } else {
             $query = $query->select('id', 'type', 'current_step', 'payment_required')->findOrFail($id);
             $data = $query->toArray();
@@ -132,6 +135,8 @@ class QueryController extends AppBaseController
                 $data['next_step'] = $step + 1;
             }
         }
+        $data['editable_steps'] = $query->responses->pluck('step')->toArray();
+        unset($data['responses']);
         return $this->successResponse($data);
     }
 
@@ -201,9 +206,10 @@ class QueryController extends AppBaseController
 
     public function transactionSuccess(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'query_id' => 'required',
             'r_payment_id' => 'required',
+            'response' => 'sometimes',
             'amount' => 'required',
         ]);
         try {
@@ -215,10 +221,9 @@ class QueryController extends AppBaseController
                 'amount' => $request->input('amount'),
                 'json_response' => $request->input('response'),
             ]);
-            $query = ActiveQuery::where('query_id', $request->input('query_id'))->first();
-            $query->is_payment_done = true;
-            $query->is_payment_id = $payment->id;
+            (new QueryResponseService($request->input('query_id'), QueryResponse::payment, $validated))->execute();
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return $this->errorResponse("Opps! Something went wrong. If the amount was deducted then the payment will get reversed in 3-5 business days.", 500);
         }
         return $this->successResponse('Your payment is verified');

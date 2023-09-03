@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Query;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
 use Illuminate\Support\Facades\Schema;
-
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,5 +28,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+        $newQuery = Query::where('current_step', 1)->count();
+        View::share('newQueryCount', $newQuery);
     }
 }

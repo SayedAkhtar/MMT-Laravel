@@ -30,7 +30,7 @@ class UpdateUserAPIRequest extends FormRequest
             'gender' => ['nullable'],
             'country' => ['nullable', 'string'],
             'treatment_country' => ['nullable', 'string'],
-            'dob' => ['nullable', 'date'],
+            'dob' => ['nullable'],
             'user_type' => [Rule::in([User::TYPE_USER])],
         ];
     }

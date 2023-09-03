@@ -321,12 +321,8 @@ class AuthController extends AppBaseController
     {
         $input = $request->all();
         /** @var User $user */
-        $user = User::where('reset_password_code', $input['code'])->first();
-        if ($user && $user->reset_password_expire_time) {
-            if (Carbon::now()->isAfter($user->reset_password_expire_time)) {
-                return $this->errorResponse('Your reset password link is expired on invalid.');
-            }
-        } else {
+        $user = User::where('phone', $input['phone'])->first();
+        if(!$user){
             return $this->errorResponse('Invalid Code.');
         }
 

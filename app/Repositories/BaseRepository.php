@@ -59,6 +59,7 @@ abstract class BaseRepository extends PrettusBaseRepository
             $this->skip($request->get('skip'));
         }
 
+
         return $this->get();
     }
 }

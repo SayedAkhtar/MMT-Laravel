@@ -9,8 +9,11 @@ use App\Models\QueryResponse;
 use App\Notifications\FirebaseNotification;
 use Google\Cloud\Storage\Notification;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
+use Kreait\Laravel\Firebase\Facades\Firebase;
 
 class QueryResponseService
 {
@@ -72,9 +75,30 @@ class QueryResponseService
      */
     private function processStepTwo(): QueryResponse
     {
+        $folderPath = 'query_docs/';
+        $url = "";
+        $notify = !empty($this->response['notify']);
+        if (!empty($this->response['proforma_invoice'])) {
+            $file = $this->response['proforma_invoice'];
+            if (!is_string($file)) {
+                $fileName = uniqid() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+                $storage = Firebase::storage();
+                $storageClient = $storage->getStorageClient();
+                $bucket = $storage->getBucket();
+                $object = $bucket->upload(
+                    fopen($file->getPathname(), 'r'),
+                    ['name' => $folderPath . $fileName, 'predefinedAcl' => 'publicRead',], // Upload to the specified folder
+                );
+                $url = "https://storage.googleapis.com/{$bucket->name()}/{$folderPath}{$fileName}";
+            }else{
+                $url = $file;
+            }
+        }
         $validated_input = Validator::validate($this->response, QueryResponse::stepTwoFields);
-        $query = QueryResponse::where(['query_id' => $this->query_id, 'step' => $this->step_no])->first();
-        if ($query != null) {
+        $validated_input['proforma_invoice'] = $url;
+        $validated_input['document_required'] = $validated_input['document_required'] == "1";
+        $query = QueryResponse::where(['query_id' => $this->query_id, 'step' => $this->step_no])->latest()->first();
+        if ($query != null && !empty($validated_input['patient'])) {
             $query->response = json_encode($validated_input);
             if (!$query->save()) {
                 throw (new \Exception("Database error"));
@@ -89,13 +113,13 @@ class QueryResponseService
             'step' => $this->step_no,
             'response' => json_encode($validated_input)
         ]);
-        try{
+        try {
             $ns = (new NotificationStrings('en'))->get('DOCTOR_RESPONSE');
             $query->parentQuery->notify(new FirebaseNotification($ns['title'], $ns['body']));
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
-        
+
         return $query;
     }
 
@@ -180,5 +204,4 @@ class QueryResponseService
             'response' => json_encode($validated_input)
         ]);
     }
-
 }

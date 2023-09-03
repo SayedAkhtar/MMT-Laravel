@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="{{ url('/') }}" class="brand-link">
         <img src="{{ asset('/img/logo.png') }}" alt="AdminLTE Logo" class="brand-image" style="opacity: .8">
         <span class="brand-text font-weight-light"> Admin</span>
     </a>
@@ -24,7 +24,7 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ url('/') }}" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Home
@@ -264,7 +264,7 @@
                     </a>
                 </li>
 
-                <li class="nav-header">Queries</li>
+                <li class="nav-header">Queries @if($newQueryCount > 0)<span class="badge bg-danger">{{$newQueryCount}} NEW</span>@endif </li>
                 <li class="nav-item">
                     <a href="{{ route('queries.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-calendar-alt"></i> All Queries
@@ -282,6 +282,11 @@
                 {{--                </li>--}}
 
                 <li class="nav-header">Settings</li>
+                <li class="nav-item">
+                    <a href="{{ route('notification.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-calendar-alt"></i> Notifications Sent
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="{{ route('settings.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-calendar-alt"></i>

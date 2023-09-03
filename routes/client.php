@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\Client\AuthController;
 use App\Http\Controllers\API\Client\DoctorController;
 use App\Http\Controllers\API\Client\FileUploadController;
+use App\Http\Controllers\API\Client\HcfController;
 use App\Http\Controllers\API\Client\HomeController;
 use App\Http\Controllers\API\Client\HospitalController;
 use App\Http\Controllers\API\Client\PatientFamilyController;
@@ -30,7 +31,13 @@ Route::group(['middleware' => ['auth:sanctum', 'validate.user', 'api']], functio
     Route::post('update-avatar/{user}', [UserController::class, 'updateAvatar']);
     Route::post('update-language', [UserController::class, 'updateLanguage']);
     // Route::post('family', [PatientFamilyController::class, 'store']);
+    Route::post('trigger-support-call', [PushNotificationController::class,'callHcf'])->name('placeHcfCall');
 
+    Route::prefix('hcf')->group(function(){
+        Route::get('patients', [HcfController::class, 'index']);
+        Route::post('update-status/{query}', [HcfController::class, 'update']);
+        Route::get('all-status/{query}', [HcfController::class, 'show']);
+    });
 });
 
 Route::get('home', [HomeController::class, 'modules'])->middleware('api');
@@ -85,3 +92,4 @@ Route::put('reset-password', [AuthController::class, 'resetPassword'])
     ->name('reset.password');
 
 Route::get('countries', [HomeController::class, 'getCountries']);
+

@@ -3,12 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Doctor;
+use App\Models\Hospital;
+use App\Models\PatientDetails;
+use App\Models\Query;
+use App\Models\QueryResponse;
 use App\Models\Settings;
+use App\Models\Specialization;
 use App\Models\User;
+use App\Models\VideoConsultation;
+use App\Notifications\FirebaseNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification;
 use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 
 
@@ -25,7 +35,28 @@ class HomeController extends Controller
 
     public function dashboard()
     {
-        $chart_options = [
+        $total_hospitals = Hospital::count();
+        $total_doctors = Doctor::count();
+        $open_queries = Query::where('is_completed', 0)->where('current_step', 1)->count();
+        $active_queries = Query::where('is_completed', 0)->where('current_step', '>', 1)->count();
+        $confirmed_queries = Query::query()->where('confirmed_details', '!=', null)->count();
+        $closed_queries = Query::where('is_completed', 1)->count();
+        $teleconsultation = VideoConsultation::where('payment_status', 'completed')->count();
+        $active_teleconsultation = VideoConsultation::where('payment_status', 'completed')->where('is_active', 1)->where('is_completed', 0)->count();
+        $specializations = Specialization::count();
+        $ticket_confirmation = QueryResponse::where('step', 5)
+                                ->whereNotNull('response')
+                                ->get()
+                                ->each(function($response){
+                                    $r = json_decode($response, true);
+                                    if(!empty($r['tickets'])){
+                                        return true;
+                                    }
+                                })->count();
+        $last_queries = Query::latest()->take(10)->get();
+        $new_users = User::where('user_type', User::TYPE_USER)->whereDate('created_at', '>', date('d-m-Y', strtotime('-3 months')))->get()->count();
+        // $vil_count
+        $user_chart_options = [
             'chart_title' => 'Users by months',
             'report_type' => 'group_by_date',
             'model' => 'App\Models\User',
@@ -33,9 +64,51 @@ class HomeController extends Controller
             'group_by_period' => 'month',
             'chart_type' => 'bar',
         ];
-        $chart1 = new LaravelChart($chart_options);
+        $user_chart = new LaravelChart($user_chart_options);
+        $city_query_count = ['Not Specified' => 0];
+        $country_query_count = ['Not Specified' => 0];
+        //->whereMonth('created_at', '>', date('m', strtotime('-3 month')))
+        $query = Query::with('responses')->get();
+        foreach($query as $q){
+            $v = $q->responses->where('step', 3)->first();
+            if(!empty($v['response'])){
+                $res = json_decode($v['response'], true);
+                if(empty($city_query_count[$res['city']])){
+                    $city_query_count[$res['city']] = 1;
+                }else{
+                    $city_query_count[$res['city']] = $city_query_count[$res['city']]+1;
+                }
+                if(empty($country_query_count[$res['country']])){
+                    $country_query_count[$res['country']] = 1;
+                }else{
+                     $country_query_count[$res['country']] = $country_query_count[$res['country']]+1;
+                }
+            }else{
+                $city_query_count['Not Specified'] = $city_query_count['Not Specified']+1;
+                $country_query_count['Not Specified'] = $country_query_count['Not Specified']+1;
+            }
+        }
 
-        return view('dashboard', compact('chart1'));
+        $doctor_teleconsultation_count = 0;
+        $language_query_count = [];
+        $language_query = Query::with(['patient' => function($q){
+                                    $q->with('languages');
+                                }])
+                                ->get();
+        foreach($language_query as $q){
+            if(!empty($q->patient->languages)){
+                foreach($q->patient->languages as $language){
+                    if(empty($language_query_count[$language->name])){
+                        $language_query_count[$language->name] = 1;
+                    }else{
+                        $language_query_count[$language->name] = $language_query_count[$language->name]+1;
+                    }
+                }
+            }
+        }
+        $chart_data = json_encode(['cityQueryCount' => $city_query_count, 'countryQueryCount' => $country_query_count, 'languageQueryCount' => $language_query_count]);
+
+        return view('dashboard', compact('user_chart','chart_data', 'total_hospitals', 'total_doctors', 'open_queries', 'active_queries', 'confirmed_queries', 'closed_queries', 'teleconsultation', 'active_teleconsultation', 'specializations', 'ticket_confirmation', 'last_queries', 'new_users'));
     }
 
     public function profile()
@@ -145,5 +218,18 @@ class HomeController extends Controller
 
     public function privacyPolicy(){
         return view('module.settings.privacy-policy');
+    }
+
+    public function sendNotifications(String $channelName){
+        $messaging = app('firebase.messaging');
+        $consultation = VideoConsultation::where('channel_name', $channelName)->first();
+        $user = PatientDetails::with('user')->where('id', $consultation->patient_id)->first()->user;
+        $user->notify(new FirebaseNotification("Message Notification", "You have recieved message from teleconsultaion MMT-".$consultation->id, "", ['click_action' => 'messages', 'page_action' => 'active_chat']));
+        // $notification = Notification::create("New Title", "New Body");
+        // $message = CloudMessage::withTarget('token', $device_tokens);
+        // $message->withNotification($notification);
+        // $report = $messaging->send($message);
+        // dump($report);
+        return response(201);
     }
 }

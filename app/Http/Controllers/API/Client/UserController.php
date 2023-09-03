@@ -13,6 +13,7 @@ use App\Models\Language;
 use App\Models\PatientDetails;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -110,6 +111,9 @@ class UserController extends AppBaseController
         try {
             if (!empty($input['country'])) {
                 $input['country'] = Country::where('name', $input['country'])->first()->id;
+            }
+            if(!empty($input['dob'])){
+                $input['dob'] =  \Carbon\Carbon::createFromFormat('d/m/Y', $input['dob']);
             }
             $user = User::find($id);
             $user->update($input);

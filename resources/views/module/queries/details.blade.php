@@ -15,22 +15,14 @@ $step_data = $query->getStepResponse(1);
             <div class="card-body">
                 <dl class="row">
                     <dt class="col-sm-4 text-bold">Query Opened For : </dt>
-                    <dd class="col-sm-8">{{ !empty($query->patientFamily) ? 'For Someone' : 'For Himself' }}</dd>
+                    <dd class="col-sm-8">{{ $query->query_for == 2 ? 'For Someone' : 'For Himself' }}</dd>
                     @if(!empty($query->specialization))
                     <dt class="col-sm-4">Specialization :</dt>
                     <dd class="col-sm-8">{{ $query->specialization->name }}</dd>
                     @endif
-                    @if(!empty($query->patientFamily))
+                    @if(!empty($query->patient_name))
                     <dt class="col-sm-4">Patient Name</dt>
-                    <dd class="col-sm-8">{{ $query->patientFamily->name }}</dd>
-                    <dt class="col-sm-4">Patient Phone Number</dt>
-                    <dd class="col-sm-8">{{ $query->patientFamily->number }}</dd>
-                    <dt class="col-sm-4">Patient Gender</dt>
-                    <dd class="col-sm-8">{{ $query->patientFamily->gender }}</dd>
-                    <dt class="col-sm-4">Patient Country</dt>
-                    <dd class="col-sm-8">{{ $query->patientFamily->treatment_country }}</dd>
-                    <dt class="col-sm-4">Patient Date Of Birth</dt>
-                    <dd class="col-sm-8">{{ $query->patientFamily->treatment_country }}</dd>
+                    <dd class="col-sm-8">{{ $query->patient_name }}</dd>
                     @endif
                     <dt class="col-sm-4">Name</dt>
                     <dd class="col-sm-8">{{ $query->patient->name }}</dd>

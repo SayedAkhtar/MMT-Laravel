@@ -30,6 +30,8 @@ class QueryResponse extends Model
     const stepTwoFields = [
         'doctor' => 'string',
         'patient.*' => 'nullable | string',
+        'proforma_invoice' => 'sometimes',
+        'document_required' => 'required| bool'
     ];
 
     const stepThreeFields = [
@@ -40,7 +42,9 @@ class QueryResponse extends Model
     ];
 
     const stepFourFields = [
-        'payment_id' => 'required | string'
+        'r_payment_id' => 'required | string',
+        'amount' => 'sometimes',
+        'response' => 'sometimes'
     ];
 
     const stepFiveFields = [

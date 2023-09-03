@@ -6,6 +6,7 @@ use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Device\CreateUserAPIRequest;
 use App\Http\Requests\Device\UpdateUserAPIRequest;
 use App\Http\Resources\Device\UserResource;
+use App\Models\Language;
 use App\Models\PatientDetails;
 use App\Models\User;
 use App\Repositories\UserRepository;
@@ -146,16 +147,17 @@ class UserController extends AppBaseController
             $mod->confirmed_queries = $mod->confirmedQuery->count();
             $mod->completed_queries = 0;
             $mod->confirmedQuery->each(function ($q) use ($mod) {
-                $mod->completed_queries += $q->queries->is_completed ? 1 : 0;
+                $mod->completed_queries += $q->queries?->is_completed ? 1 : 0;
             });
-            $mod->pending_queries = $mod->confirmed_queries - $mod->completed_queries;
+            $mod->pending_queries = $mod->confirmed_queries - ($mod->completed_queries ?? 0);
         }
         return $this->module_view('moderator-list', compact('moderators'));
     }
 
     public function createModerator()
     {
-        return $this->module_view('moderator-add');
+        $languages = Language::all();
+        return $this->module_view('moderator-add', compact('languages'));
     }
 
     public function storeModerator(Request $request)
@@ -164,10 +166,13 @@ class UserController extends AppBaseController
             'name' => 'required',
             'image' => 'required',
             'phone' => 'required',
-            'gender' => 'required'
+            'gender' => 'required',
+            'language' => 'required',
+            'password' => 'required',
         ]);
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('public');
+            $validated['password'] = Hash::make($request->input('password'));
         }
         try {
             $user = User::create(array_merge($validated, ['user_type' => User::TYPE_HCF]));
@@ -181,7 +186,30 @@ class UserController extends AppBaseController
 
     public function editModerator(User $user)
     {
+        $languages = Language::all();
+        return $this->module_view('moderator-add', compact('user', 'languages'));
+    }
 
-        return $this->module_view('moderator-add', compact('user'));
+    public function updateModerator(Request $request, User $user){
+        $validated = $request->validate([
+            'name' => 'required',
+            'country_code' => 'required',
+            'phone' => 'required',
+            'gender' => 'required',
+            'language' => 'required',
+            'password' => 'required',
+        ]);
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('public');
+        }
+        try {
+            $user->update($validated);
+            $user->languages()->sync($validated['language']);
+            if ($user) {
+                return redirect(route('moderators.index'))->with('success', "HCF updated");
+            }
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 }

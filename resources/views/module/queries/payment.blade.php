@@ -12,19 +12,19 @@
         </div>
     </div>
     <div class="card-body">
-        <div class="form-group">
+        {{-- <div class="form-group">
             <form action="{{ route('query.update', ['query' => $query->id]) }}" method="post">
                 @csrf
                 @method('PUT')
                 <div class="form-check">
                     <input type="hidden" name="set_payment_type" value="true"/>
                     <input class="form-check-input" type="checkbox" name="payment_required"
-                           @if($query->payment_required) checked @endif @if ($completed) disabled @endif />
+                           @if($query->payment_required) checked disabled @endif @if ($completed) disabled @endif />
                     <label class="form-check-label">Is Payment required</label>
                 </div>
                 <button class="btn btn-warning" @if ($completed) disabled @endif>Submit</button>
             </form>
-        </div>
+        </div> --}}
     </div>
 </div>
 

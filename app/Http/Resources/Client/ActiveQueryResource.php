@@ -21,10 +21,14 @@ class ActiveQueryResource extends BaseAPIResource
         }
         $total_step = 5;
         $current_step = $this->current_step;
+        $next_step = $this->current_step;
         $response = "";
         switch ($this->type) {
             case 1:
-                $response = $this->current_step != 1 ? $this->getStepResponse(2)['doctor'] : "Your query is under review. Please check back for update.";
+                $response = "Your query is under review. Please check back for update.";
+                if($this->current_step != 1){
+                    $response = array_values(array_slice($this->getStepResponse(2), -1))[0]['doctor'];
+                }
                 $total_step = $this->payment_required ? 5 : 4;
                 break;
             case 2:
@@ -46,6 +50,7 @@ class ActiveQueryResource extends BaseAPIResource
             'is_completed' => (bool)$this->is_completed,
             'is_confirmed' => (bool)$this->confirmed_details,
             'current_step' => $this->current_step,
+            'next_step' => $this->getNextStep(),
             'type' => $this->type,
             'created_at' => Carbon::make($this->created_at)->format('M d, Y | h:m a'),
         ];

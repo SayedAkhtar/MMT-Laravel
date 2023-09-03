@@ -15,16 +15,18 @@ class FirebaseNotification extends Notification
     protected $title;
     protected $body;
     protected $image;
+    protected array $data;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(String $title, String $body, String $image = "")
+    public function __construct(String $title, String $body, String $image = "", array $data = [])
     {
         $this->title = $title;
         $this->body = $body;
         $this->image = $image;
+        $this->data = $data;
     }
 
     /**
@@ -73,6 +75,11 @@ class FirebaseNotification extends Notification
         if(!empty($this->image)){
             $notification = $notification->setImage($this->image);
         }
-        return FcmMessage::create()->setNotification($notification);
+        if(!empty($this->data)){
+            return FcmMessage::create()->setData($this->data)->setNotification($notification);
+        }else{
+            return FcmMessage::create()->setNotification($notification);
+        }
+        
     }
 }

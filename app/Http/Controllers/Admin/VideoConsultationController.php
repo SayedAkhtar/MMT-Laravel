@@ -28,7 +28,7 @@ class VideoConsultationController extends Controller
      */
     public function index()
     {
-        $consultation = VideoConsultation::with(['doctor', 'patient'])->whereHas('doctor')->get();
+        $consultation = VideoConsultation::with(['doctor', 'patient'])->whereHas('doctor')->orderByDesc('created_at')->get();
         // dd($consultation);
         return $this->module_view('list', compact('consultation'));
     }

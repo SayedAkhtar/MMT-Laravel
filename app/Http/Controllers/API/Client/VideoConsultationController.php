@@ -17,11 +17,13 @@ class VideoConsultationController extends AppBaseController
 {
     public function index()
     {
-        $result = VideoConsultation::query()->whereHas('patient', function ($query) {
+        $result = VideoConsultation::query()->with(['doctor' => function($q){$q->with('user');}])->whereHas('patient', function ($query) {
             $query->where('user_id', Auth::id());
         })->get()->each(function ($r) {
+            $r->doctor_name = $r->doctor->user->name;
             $r->agora_id = env('AGORA_APP_ID');
             $r->scheduled_at = Carbon::createFromTimestampUTC($r->scheduled_at)->format('d M,Y h:m a');
+            unset($r->doctor);
         });
         if ($result) {
             return $this->successResponse($result);

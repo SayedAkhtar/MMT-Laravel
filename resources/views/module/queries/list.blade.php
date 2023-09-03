@@ -18,18 +18,22 @@
                     <th>Patient Phone</th>
                     <th>Query Type</th>
                     <th>Country</th>
-                    <th>Status</th>
+                    <th>Current Step</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
                     <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($queries as $data)
                     <tr>
-                        <td>{{ $data->query_hash }}</td>
+                        <td>{{ $data->query_hash }} @if($data->current_step == 1)<span class="badge bg-danger">NEW</span>@endif</td>
                         <td>{{ $data->patient->phone }}</td>
                         <td>{{ $data->query_type }}</td>
                         <td>{{ $data->preferred_country?? "No Preference"}}</td>
-                        <td>{{ $data->status }}</td>
+                        <td>{{ $data->current_step }}</td>
+                        <td>{{ $data->created_at->diffForHumans() }}</td>
+                        <td>{{ $data->updated_at->diffForHumans() }}</td>
                         <td class="text-right">
                             <a href="{{ route('query.show', ['query' => $data->id]) }}" class="btn btn-info btn-sm"><i
                                     class="fa fa-edit"></i></a>

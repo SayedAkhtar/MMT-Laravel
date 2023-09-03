@@ -589,20 +589,21 @@ a {
     cursor: pointer;
     display: none;
 }
-.loader{
+
+.loader {
     display: flex;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0, 0, 0, 0.7);
     justify-content: center;
     align-items: center;
     display: none;
 }
 
-.loader img{
+.loader img {
     width: 60px;
     height: 60px;
 }
@@ -613,10 +614,10 @@ a {
         <div class="app-main">
             <div class="video-call-wrapper">
                 <div class="video-participant main-user" id="remote-video">
-                    <div class="participant-actions">
+                    <ul class="participant-actions">
                         <button class="btn-mute"></button>
                         <button class="btn-camera"></button>
-                    </div>
+                    </ul>
                     <a href="#" class="name-tag">Patient</a>
                     <img v-if="this.patientJoined === false"
                         src="https://images.unsplash.com/photo-1566821582776-92b13ab46bb4?ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60"
@@ -688,7 +689,7 @@ a {
                             </svg>
                         </button>
                         <input type="file" id="uploadFile" style="display: none;" />
-                        <button class="send-button" @click="sendMessage" id="submit">
+                        <button class="send-button" @click="sendMessage" @keyup.enter="sendMessage" id="submit">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" class="feather feather-send"
                                 viewBox="0 0 24 24">
@@ -734,6 +735,10 @@ a {
         <section id="video-container">
             <div id="local-video"></div>
             <div id="remote-video"></div>
+
+            <div v-for="user in remoteUsers" :key="user.uid">
+                <div ref="videoContainer" :id="`video-${user.uid}`"></div>
+            </div>
 
             <div class="action-btns">
                 <button type="button" class="btn btn-info" @click="handleAudioToggle">
@@ -793,6 +798,7 @@ export default {
             messages: [],
             message: "",
             messageType: "text",
+            remoteUsers: [],
         };
     },
     computed: {
@@ -819,7 +825,6 @@ export default {
             }
             this.messageScrollBottom();
         });
-
     },
     created() {
     },
@@ -847,6 +852,7 @@ export default {
                 if (joiningUserIndex < 0) {
                     this.onlineUsers.push(user);
                 }
+                console.log(this.onlineUsers);
             });
 
             this.userOnlineChannel.leaving((user) => {
@@ -931,10 +937,10 @@ export default {
          * Agora Events and Listeners
          */
         initializeAgora() {
+            AgoraRTC.setLogLevel(4)
             this.client = markRaw(AgoraRTC.createClient({ mode: "rtc", codec: "h264" }));
             this.client.on('user-published', this.handleUserPublished)
             this.client.on('user-unpublished', this.handleUserLeft)
-            console.log(this.client);
             console.warn("Agora Initialized");
         },
 
@@ -971,12 +977,21 @@ export default {
         },
 
         async handleUserPublished(user, mediaType) {
+            // this.remoteUsers.push(user);
             await this.subscribe(user, mediaType);
             this.patientJoined = true;
         },
 
         async handleUserLeft(user) {
             console.warn("user Left");
+            for(let [i, usr] in this.remoteUsers.entries()){
+                if(usr.id == user.id){
+                    this.remoteUsers = this.remoteUsers.splice(i,1);
+                }
+            }
+            this.remoteUsers.forEach((u, i) => {
+                
+            })
             this.patientJoined = false;
         },
 
@@ -1021,14 +1036,17 @@ export default {
         },
 
         async subscribe(user, mediaType) {
+            // this.remoteUsers.forEach(async (user) => {
+            // });
             await this.client.subscribe(user, mediaType);
-            if (mediaType === 'audio') {
-                let audioTrack = user.audioTrack
-                audioTrack.play()
-            } else {
-                let videoTrack = user.videoTrack
-                videoTrack.play(`remote-video`)
-            }
+                if (mediaType === 'audio') {
+                    let audioTrack = user.audioTrack
+                    audioTrack.play()
+                } else {
+                    let videoTrack = user.videoTrack
+                    videoTrack.play(`remote-video`)
+                }
+
         },
 
         toggleChatWindow() {
@@ -1038,7 +1056,7 @@ export default {
                 this.showChat = "show";
             }
         },
-        sendMessage() {
+        async sendMessage() {
             this.console.log(this.message);
             const messagesRef = ref(db, 'messages/' + this.channelName)
             const newMessageRef = push(messagesRef);
@@ -1047,6 +1065,9 @@ export default {
                 message: this.message,
                 type: "text",
             });
+            this.messageScrollBottom();
+            this.message = "";
+            await fetch('https://admin.mymedtrip.com/notify-message/'+this.channelName);
         },
         uploadFile() {
             const storage = getStorage();
@@ -1078,7 +1099,11 @@ export default {
         },
         messageScrollBottom() {
             var t = document.querySelector('.chat-area');
-            t.scrollTo(0, t.scrollHeight);
+            t.scrollTo({
+                top: t.scrollHeight + 200,
+                left: 0,
+                behavior: 'smooth'
+            });
         }
 
     },

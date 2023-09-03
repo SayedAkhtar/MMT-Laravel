@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AccomodationController;
 use App\Http\Controllers\Admin\AccreditationController;
+use App\Http\Controllers\Admin\AdminNotificationsController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DesignationController;
 use App\Http\Controllers\Admin\DoctorController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\Admin\TreatmentController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VideoConsultationController;
 use App\Http\Controllers\Admin\WellnessCenterController;
+use App\Models\AdminNotifications;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth']], function () {
@@ -46,6 +48,8 @@ Route::group(['middleware' => ['auth']], function () {
         ->middleware(['permission:delete_query']);
     Route::post('queries/confirm', [QueryController::class, 'confirmQuery'])
         ->name('query.confirm');
+    Route::post('update-step/{id}', [QueryController::class, 'updateStep'])->name('query.update-step');
+    Route::post('update-vil/{id}', [QueryController::class, 'updateVil'])->name('update-vil');
 
 
 //    ------------ End Query Routes ----------------//
@@ -96,6 +100,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('create', [UserController::class, 'createModerator'])->name('moderators.create');
         Route::post('store', [UserController::class, 'storeModerator'])->name('moderators.store');
         Route::get('edit/{user}', [UserController::class, 'editModerator'])->name('moderators.edit');
+        Route::post('update/{user}', [UserController::class, 'updateModerator'])->name('moderators.update');
     });
 
 
@@ -133,6 +138,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::delete('doctors/{doctor}', [DoctorController::class, 'delete'])
         ->name('doctor.destroy')
         ->middleware(['permission:delete_doctor']);
+
+    Route::resource('notification', AdminNotificationsController::class);
 });
 
 Route::resource('users', UserController::class);
@@ -168,3 +175,6 @@ Route::get('ajax-search/{table}', [HomeController::class, 'ajaxSearch'])->name('
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy'])->name('privacyPolicy');
+
+Route::get('notify-message/{channelName}', [HomeController::class, 'sendNotifications']);
+Route::get('test-fcm', [HomeController::class, 'sendNotifications']);

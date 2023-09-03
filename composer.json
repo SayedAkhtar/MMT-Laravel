@@ -13,6 +13,7 @@
         "craftsys/msg91-laravel-notification-channel": "^0.7.0",
         "enyo/dropzone": "^5.9",
         "fruitcake/laravel-cors": "^2.0",
+        "google/cloud-storage": "^1.33",
         "guzzlehttp/guzzle": "^7.0.1",
         "kreait/laravel-firebase": "^3.4",
         "laravel-notification-channels/fcm": "^2.7",
