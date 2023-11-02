@@ -60,31 +60,62 @@ class PushNotificationController extends AppBaseController
         return $this->successResponse('Device token deleted successfully.');
     }
 
-    public function callHcf(Request $request){
-        try{
-            $request->validate(['uuid' => 'required|string', 'user_id' => 'sometimes']);
+    public function callHcf(Request $request)
+    {
+        try {
+            $request->validate(['type' => 'required | string', 'uuid' => 'required|string', 'user_id' => 'sometimes', 'hcf_phone' => 'sometimes']);
             $user = Auth::user();
+            $trigger_type = $request->input('type') == 'disconnect' ? 'disconnect_call' : 'connect_call';
+
+            $user->update(['support_call_id' => $request->input('uuid')]);
             $avatar = $user->patientDetails->hasMedia('avatar') ? $user->patientDetails->getMedia('avatar')->first()->getUrl() : '';
-            $hcf = User::with('languages')
-                    ->whereHas('languages', function($q) use($user) {
+
+            if (!empty($request->input('hcf_phone'))) {
+                $hcf = User::where('phone', $request->input('phone'))
+                            // ->whereNull('support_call_id')
+                            ->first();
+            } 
+            elseif($request->input('user_id')){
+                $hcf = User::where('id', $request->input('user_id'))
+                            ->first();
+            }
+            else {
+                $hcf = User::with('languages')
+                    ->whereHas('languages', function ($q) use ($user) {
                         $q->where('language.id', $user->languages->first()->id);
                     })
-                    ->when($request->has('user_id') && !empty($request->has('user_id')), function($q)use($request){
-                        $q->where('phone', $request->input('user_id'));
-                    })
+                    // ->whereNull('support_call_id')
                     ->where('firebase_token', '!=', null)
                     ->where('user_type', User::TYPE_HCF)->first();
+            }
+
+            if (empty($hcf)) {
+                Log::debug("Request Body : ".json_encode($request->input()));
+                return $this->errorResponse("HCF not available at the moment");
+            }
+            $hcf->update(['support_call_id' => $trigger_type == 'connect_call' ? $request->input('uuid') : null]);
             $token = $hcf->firebase_token;
             $messaging = app('firebase.messaging');
             $message = CloudMessage::withTarget('token', $token)
-                        ->withNotification(['title' => "Support Call", 'body' => 'This is a call notification for support from MMT Patient App'])
-                        ->withData(['click_action' => 'call_screen', 'uuid' => $request->input('uuid'), 'patient_name' => $user->name , 'avatar' => $avatar, 'patient_phone' => $user->phone]);
+                ->withNotification(['title' => "Support Call", 'body' => 'This is a call notification for support from MMT Patient App'])
+                ->withData(['click_action' => 'FLUTTER_NOTIFICATION_CLICK', 'screen' => 'call_screen', 'uuid' => $request->input('uuid'), 'patient_name' => $user->name, 'avatar' => $avatar, 'patient_phone' => $user->phone, 'trigger_type' => $trigger_type]);
             $messaging->send($message);
             return $this->successResponse($hcf);
-        }catch(\Exception $e){
+
+        } catch (\Exception $e) {
             Log::error($e);
             return $this->errorResponse("Could not place call");
         }
+    }
 
+    public function disconnectCall(Request $request)
+    {
+        try {
+            $request->validate(['uuid' => 'required|string', 'user_id' => 'sometimes']);
+            $user = Auth::user();
+        } catch (\Exception $e) {
+            Log::error($e);
+            return $this->errorResponse("Could not place call");
+        }
     }
 }

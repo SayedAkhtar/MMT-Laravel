@@ -7,8 +7,9 @@
 @endpush
 @section('content')
     <div class="card">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between align-items-center">
             <h3 class="card-title">Custom Notification</h3>
+            <a href="{{ route('notification.index') }}" class="btn btn-success">Show All Sent Notifications</a>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
@@ -27,6 +28,13 @@
                         <div class="form-group">
                             <label>Body</label>
                             <input type="text" class="form-control" placeholder="Notification Body" name="body" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <!-- text input -->
+                        <div class="form-group">
+                            <label>Promotional Url (Optional)</label>
+                            <input type="text" class="form-control" placeholder="Valid Url" name="url" />
                         </div>
                     </div>
                 </div>

@@ -111,7 +111,7 @@ class VideoConsultationController extends Controller
     public function startConsultation($id)
     {
         $consultation = VideoConsultation::where('channel_name', $id)->first();
-        $users = User::where('id', '<>', Auth::id())->get();
-        return view('agora-chat', ['users' => $users, 'channel_name' => $consultation->channel_name]);
+        // $users = User::where('id', '<>', Auth::id())->get();
+        return view('agora-chat', ['users' => [], 'channel_name' => $consultation->channel_name]);
     }
 }

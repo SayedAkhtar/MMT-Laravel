@@ -76,6 +76,7 @@ class FirebaseNotification extends Notification
             $notification = $notification->setImage($this->image);
         }
         if(!empty($this->data)){
+            
             return FcmMessage::create()->setData($this->data)->setNotification($notification);
         }else{
             return FcmMessage::create()->setNotification($notification);

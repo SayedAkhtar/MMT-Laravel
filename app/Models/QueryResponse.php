@@ -38,7 +38,9 @@ class QueryResponse extends Model
         'passport' => 'required | string',
         'attendant_passport.*' => 'string',
         'country' => 'required | string',
-        'city' => 'required | string'
+        'city' => 'required | string',
+        'from_country' => 'sometimes | string',
+        'from_city' => 'sometimes | string'
     ];
 
     const stepFourFields = [

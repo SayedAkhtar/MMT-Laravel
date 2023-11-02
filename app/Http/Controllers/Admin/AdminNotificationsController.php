@@ -60,21 +60,43 @@ class AdminNotificationsController extends AppBaseController
         }
         foreach($users as $user){
             try{
-                $user->notify(new FirebaseNotification($request->input('title'), $request->input('body')));
-                AdminNotifications::create([
-                    'user_id' => $user->id,
-                    'notification_title' => $request->input('title'),
-                    'notification_body' => $request->input('body'),
-                    'status' => true,
-                ]);
+                if($request->has('url')){
+                    $user->notify(new FirebaseNotification(
+                        $request->input('title'), 
+                        $request->input('body'),
+                        "https://picsum.photos/200/300",
+                        [
+                            "click_action" => "FLUTTER_NOTIFICATION_CLICK",
+                            "sound" => "default",
+                            "status" => "done",
+                            "screen" => "openUrl",
+                            "url" => $request->input('url'),
+                        ]
+                    ));
+                    
+                }else{
+                    $user->notify(new FirebaseNotification(
+                        $request->input('title'), $request->input('body'))
+                    );
+                }
+                
+                // AdminNotifications::create([
+                //     'user_id' => $user->id,
+                //     'notification_title' => $request->input('title'),
+                //     'notification_body' => $request->input('body'),
+                //     'notification_url' => $request->input('url'),
+                //     'status' => true,
+                // ]);
             }catch(\Exception $e){
                 Log::error($e->getMessage());
-                AdminNotifications::create([
-                    'user_id' => $user->id,
-                    'notification_title' => $request->input('title'),
-                    'notification_body' => $request->input('body'),
-                    'status' => false,
-                ]);
+                // AdminNotifications::create([
+                //     'user_id' => $user->id,
+                //     'notification_title' => $request->input('title'),
+                //     'notification_body' => $request->input('body'),
+                //     'notification_url' => $request->input('url'),
+                //     'status' => false,
+                // ]);
+                return back()->with('error', 'Notifications Sending Failed');
             }
         }
         return back()->with('success', 'Notifications Sent');

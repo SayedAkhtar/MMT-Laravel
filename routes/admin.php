@@ -93,7 +93,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('faq', FaqController::class);
 
     Route::resource('video-consultation', VideoConsultationController::class);
-    Route::get('consultation/{id}', [VideoConsultationController::class, 'startConsultation'])->name('start-consultation');
+
     Route::get('patients/list', [UserController::class, 'listPatients'])->name('patient.index');
     Route::prefix('hcf')->group(function () {
         Route::get('list', [UserController::class, 'listModerators'])->name('moderators.index');
@@ -141,6 +141,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('notification', AdminNotificationsController::class);
 });
+
+Route::get('consultation/{id}', [VideoConsultationController::class, 'startConsultation'])->name('start-consultation');
 
 Route::resource('users', UserController::class);
 

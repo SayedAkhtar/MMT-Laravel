@@ -21,6 +21,22 @@
                 </div>
             </div>
         </div>
+        @if(!empty($step_data['from_country']) && !empty($step_data['from_city']))
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col">
+                        <h6>Country applied from :</h6>
+                        <h5>{{ $step_data['from_country'] ?? 'No Country Preferred' }}</h5>
+                    </div>
+                    <div class="col">
+                        <h6>City applied from : </h6>
+                        <h5>{{ $step_data['from_city'] ?? 'No City Preferred' }}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
         <div class="row">
             @if (!empty($step_data['passport']))
                 <div class="col-md-3 col-sm-6 col-12">
@@ -66,12 +82,14 @@
                             </div>
                         @endforeach
                     @else
-                        <div class="col-4">
+                        <div class="col-md-4 col-sm-6 col-12">
                             <form method="POST" action="{{ route('update-vil', ['id' => $query->id]) }}"
                                 enctype="multipart/form-data">
                                 @csrf
+                                <span class="info-box-text">Upload Visa Invitation Letter:- </span>
                                 <div class="input-group">
-                                    <span class="info-box-text">Upload Visa Invitation Letter:- </span>
+                                    
+
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="exampleInputFile"
                                             name="vil[]" required multiple>

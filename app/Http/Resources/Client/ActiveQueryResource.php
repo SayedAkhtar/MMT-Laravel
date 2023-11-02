@@ -52,7 +52,7 @@ class ActiveQueryResource extends BaseAPIResource
             'current_step' => $this->current_step,
             'next_step' => $this->getNextStep(),
             'type' => $this->type,
-            'created_at' => Carbon::make($this->created_at)->format('M d, Y | h:m a'),
+            'created_at' => strtotime($this->created_at),
         ];
         return $data;
 

@@ -56,6 +56,7 @@ class User extends Authenticatable implements HasMedia
         'user_type',
         'country_code',
         'local_auth',
+        'support_call_id'
     ];
 
     /**

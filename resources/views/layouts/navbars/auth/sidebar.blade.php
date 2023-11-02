@@ -283,8 +283,8 @@
 
                 <li class="nav-header">Settings</li>
                 <li class="nav-item">
-                    <a href="{{ route('notification.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-calendar-alt"></i> Notifications Sent
+                    <a href="{{ route('notification.create') }}" class="nav-link">
+                        <i class="nav-icon fas fa-calendar-alt"></i> Send Push Notifications
                     </a>
                 </li>
                 <li class="nav-item">
