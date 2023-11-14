@@ -13,6 +13,7 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Translatable\HasTranslations;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -22,13 +23,14 @@ class User extends Authenticatable implements HasMedia
     use HasRoles;
     use InteractsWithMedia;
     use HasRecordOwnerProperties;
+    use HasTranslations;
 
 
     /**
      * @var string
      */
     protected $table = 'users';
-
+    public $translatable = ['name'];
     /**
      * @var string[]
      */

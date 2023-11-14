@@ -3,16 +3,17 @@
 namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
+use Spatie\Translatable\HasTranslations;
 
 class Accreditation extends BaseModel
 {
-    use HasRecordOwnerProperties;
+    use HasRecordOwnerProperties, HasTranslations;
 
     /**
      * @var string
      */
     protected $table = 'accreditations';
-
+    public $translatable = ['name'];
     /**
      * @var string[]
      */

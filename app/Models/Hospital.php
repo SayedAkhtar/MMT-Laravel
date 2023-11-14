@@ -4,16 +4,17 @@ namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
 use App\Traits\OnlyActive;
+use Spatie\Translatable\HasTranslations;
 
 class Hospital extends BaseModel
 {
-    use HasRecordOwnerProperties, OnlyActive;
+    use HasRecordOwnerProperties, OnlyActive, HasTranslations;
 
     /**
      * @var string
      */
     protected $table = 'hospitals';
-
+    public $translatable = ['name', 'address', 'description'];
     /**
      * @var string[]
      */

@@ -232,4 +232,10 @@ class HomeController extends Controller
         // dump($report);
         return response(201);
     }
+
+    public function switchLanguage(Request $request){
+        $validated = $request->validate(['language' => 'string| in:en,ru,ar,bn']);
+        session(['language' => $validated['language']]);
+        return response()->json([],201);
+    }
 }

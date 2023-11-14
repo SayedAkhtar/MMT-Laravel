@@ -3,16 +3,17 @@
 namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
+use Spatie\Translatable\HasTranslations;
 
 class WellnessCenter extends BaseModel
 {
-    use HasRecordOwnerProperties;
+    use HasRecordOwnerProperties, HasTranslations;
 
     /**
      * @var string
      */
     protected $table = 'wellness_centers';
-
+    public $translatable = ['name', 'address', 'description'];
     /**
      * @var string[]
      */
