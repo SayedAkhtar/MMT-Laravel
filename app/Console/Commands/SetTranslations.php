@@ -59,7 +59,8 @@ class SetTranslations extends Command
         $table_name = app("App\\Models\\" . $model)->getTable();
         if ($translatable_fields) {
             $data = DB::table($table_name)->select(['id', ...$translatable_fields])->get();
-
+            $columns = 0;
+            $ids = [];
             foreach ($data as $d) {
                 $updates = [];
                 foreach ($translatable_fields as $name) {
@@ -68,9 +69,16 @@ class SetTranslations extends Command
                     }
                 }
                 if(!empty($updates)){
-                    app("App\\Models\\" . $model)->where('id', $d->id)->update($updates);
+                    app("App\\Models\\" . $model)->withoutGlobalScopes()->where('id', $d->id)->update($updates);
+                    $columns++;
+                    $ids[] = $d->id;
                 }
             }
+            echo "$columns columns updated for model $model \t";
+            if(!empty($ids)){
+                echo "IDs Updated: ".implode(',',$ids)."\t";
+            }
+            echo "\n";
         }
     }
 }
