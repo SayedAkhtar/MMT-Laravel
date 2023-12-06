@@ -9,7 +9,7 @@ class NotificationStrings
         'DOCTOR_RESPONSE' => [
             'en' => [
                 'title' => "You have recieved doctor's Response",
-                'body' => "You Query was recieved successfully and the our doctor has provided a review for you. Please Open the query for further actions"
+                'body' => "Doctor has replied Please access the reply on the Query section"
             ],
             'ru' => [
                 'title' => "You have recieved doctor's Response",
@@ -27,7 +27,7 @@ class NotificationStrings
         'PROCEED_TO_NEXT_STEP' => [
             'en' => [
                 'title' => "Your documents have been reviewed.",
-                'body' => "HCF has Successfully verified your Documents. Please proceed with your Query Form."
+                'body' => "MyMedTrip has verified your documents. Please access your query to proceed ahead from the query section"
             ],
             'ru' => [
                 'title' => "You have recieved doctor's Response",
