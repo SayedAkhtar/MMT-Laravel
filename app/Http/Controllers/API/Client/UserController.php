@@ -184,11 +184,18 @@ class UserController extends AppBaseController
         try {
             $validated = $request->validate([
                 'uid' => 'required',
-                'token' => 'required'
+                'token' => 'required',
+                'device_type' => 'sometimes',
+                'voip_apn_token' => 'sometimes',
             ]);
             $user = Auth::user();
             $user->firebase_user = $validated['uid'];
             $user->firebase_token = $validated['token'];
+            $user->device_type = $validated['device_type'] ?? 'web';
+            if(!empty($validated['voip_apn_token'])){
+                $user->voip_apn_token = $validated['voip_apn_token'];
+            }
+            // $user->apn_token = $validated['device_type'] ?? null;
             if ($user->save()) {
                 return $this->successResponse($user);
             }
@@ -235,5 +242,9 @@ class UserController extends AppBaseController
     public function updateBiometric(Request $request)
     {
         $user = Auth::user();
+    }
+
+    public function currentUser(Request $request){
+        return $this->successResponse(Auth::user());
     }
 }

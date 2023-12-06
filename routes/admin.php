@@ -95,6 +95,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('video-consultation', VideoConsultationController::class);
 
     Route::get('patients/list', [UserController::class, 'listPatients'])->name('patient.index');
+    Route::post('patients/make-active', [UserController::class, 'patientActive'])->name('patient.make-active');
     Route::prefix('hcf')->group(function () {
         Route::get('list', [UserController::class, 'listModerators'])->name('moderators.index');
         Route::get('create', [UserController::class, 'createModerator'])->name('moderators.create');

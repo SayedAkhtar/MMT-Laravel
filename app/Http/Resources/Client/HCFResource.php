@@ -26,7 +26,7 @@ class HCFResource extends BaseAPIResource
             'patient_image' => $this->patient->patientDetails?->getMedia('avatar')->first()->getUrl(),
             'query_hash' => $this->getQueryHashAttribute(),
             'query_id' => $this->id,
-            'fcm_token' => $this->is_active,
+            'fcm_token' => $this->patient->firebase_token,
             'specialization' => $this->specialization?->name,
         ];
     }

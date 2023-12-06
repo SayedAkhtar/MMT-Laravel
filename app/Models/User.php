@@ -62,8 +62,7 @@ class User extends Authenticatable implements HasMedia
     /**
      * @var string[]
      */
-    protected $hidden = [
-    ];
+    protected $hidden = [];
 
     /**
      * @var string[]
@@ -138,6 +137,11 @@ class User extends Authenticatable implements HasMedia
         return $this->firebase_token;
     }
 
+    public function routeNotificationForApnVoip()
+    {
+        return $this->voip_apn_token;
+    }
+
     public function routeNotificationForTwilio()
     {
         return $this->country_code . $this->phone; // e.g "+91909945XXXX"
@@ -159,7 +163,7 @@ class User extends Authenticatable implements HasMedia
     public function attachImage(string $key, string $library, bool $isMultiple)
     {
         if ($isMultiple) {
-            $this->addMultipleMediaFromRequest([$key])->each(fn($fileAdder) => $fileAdder->toMediaCollection($library));
+            $this->addMultipleMediaFromRequest([$key])->each(fn ($fileAdder) => $fileAdder->toMediaCollection($library));
         } else {
             $this->addMediaFromRequest($key)->toMediaCollection($library);
         }
@@ -169,7 +173,7 @@ class User extends Authenticatable implements HasMedia
     {
         if ($isMultiple) {
             $this->clearMediaCollection($library);
-            return $this->addMultipleMediaFromRequest([$key])->each(fn($fileAdder) => $fileAdder->toMediaCollection($library));
+            return $this->addMultipleMediaFromRequest([$key])->each(fn ($fileAdder) => $fileAdder->toMediaCollection($library));
         } else {
             $this->media()->delete();
             return $this->addMediaFromRequest($key)->toMediaCollection($library);
@@ -250,6 +254,4 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->belongsToMany(Language::class);
     }
-
-
 }
