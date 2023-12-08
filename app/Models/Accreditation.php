@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
-use Spatie\Translatable\HasTranslations;
+use App\Traits\HasTranslations;
 
 class Accreditation extends BaseModel
 {

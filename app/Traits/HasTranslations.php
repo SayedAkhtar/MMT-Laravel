@@ -17,6 +17,6 @@ trait HasTranslations
     }
 
     // public static function where(){
-    //     // dd("here");q
+    //     // dd(parent::class);
     // }
 }

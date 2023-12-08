@@ -60,7 +60,7 @@ class AuthController extends AppBaseController
             $input['password'] = Hash::make($input['password']);
         }
         $input['user_type'] = User::TYPE_USER;
-
+        
         /** @var User $user */
         try {
             DB::beginTransaction();
@@ -123,6 +123,7 @@ class AuthController extends AppBaseController
             }
             $user->save();
         }
+        app()->setLocale('en');
         if (empty($user)) {
             throw new LoginFailedException('User not exists.');
         }

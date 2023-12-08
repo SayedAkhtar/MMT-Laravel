@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Spatie\Translatable\HasTranslations;
+use App\Traits\HasTranslations;
 
 class Faq extends BaseModel
 {

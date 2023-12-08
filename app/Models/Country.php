@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Traits\OnlyActive;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Translatable\HasTranslations;
+use App\Traits\HasTranslations;
 
 class Country extends Model
 {

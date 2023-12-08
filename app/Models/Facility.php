@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
 use Illuminate\Database\Eloquent\Model as Model;
-use Spatie\Translatable\HasTranslations;
+use App\Traits\HasTranslations;
 
 class Facility extends Model
 {

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
 use App\Traits\OnlyActive;
-use Spatie\Translatable\HasTranslations;
+use App\Traits\HasTranslations;
 
 class Doctor extends BaseModel
 {

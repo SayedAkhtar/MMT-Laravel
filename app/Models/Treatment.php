@@ -8,7 +8,7 @@ use Spatie\Image\Exceptions\InvalidManipulation;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Spatie\Translatable\HasTranslations;
+use App\Traits\HasTranslations;
 
 class Treatment extends BaseModel implements HasMedia
 {
