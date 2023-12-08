@@ -28,6 +28,8 @@ class SetLocale
         $language = $request->user()->languages->first();
         if (!empty($language) && !empty($language->locale) ) {
             app()->setLocale($language->locale);
+        }else{
+            app()->setLocale('en');
         }
  
         return $next($request);
