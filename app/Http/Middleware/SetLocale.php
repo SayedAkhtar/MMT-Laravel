@@ -25,10 +25,9 @@ class SetLocale
             return $next($request);
         }
  
-        $language = $request->user()->language;
- 
-        if (isset($language)) {
-            app()->setLocale($language);
+        $language = $request->user()->languages->first();
+        if (!empty($language) && !empty($language->locale) ) {
+            app()->setLocale($language->locale);
         }
  
         return $next($request);

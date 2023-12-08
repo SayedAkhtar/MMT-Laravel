@@ -85,10 +85,10 @@
         $('#example1').DataTable({
             "paging": true,
             "lengthChange": false,
-            "searching": false,
+            "searching": true,
             "ordering": false,
             "info": true,
-            "autoWidth": false,
+            "autoWidth": true,
             "responsive": true,
         });
     </script>

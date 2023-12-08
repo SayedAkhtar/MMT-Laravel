@@ -54,6 +54,15 @@ class QueryResponse extends Model
         'visa.*' => 'required | string',
     ];
 
+    const availableTabs = [
+        'details' => 1,
+        'doctor-review' => 2,
+        'upload-medical-visa' => 3,
+        'payment-required' => 4,
+        'upload-ticket' => 5,
+        'coordinator' => 10
+    ];
+
 
     protected $casts = [
         'response' => 'array'
