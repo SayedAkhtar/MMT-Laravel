@@ -16,6 +16,9 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next)
     {
+        if(!empty(request()->header('language'))){
+            app()->setLocale(request()->header('language'));
+        }
         if(! $request->user()) {
             return $next($request);
         }
@@ -25,7 +28,7 @@ class SetLocale
             return $next($request);
         }
  
-        $language = $request->user()->languages->first();
+        $language = $request->user()->languages->last();
         if (!empty($language) && !empty($language->locale) ) {
             app()->setLocale($language->locale);
         }else{

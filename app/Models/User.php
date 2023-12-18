@@ -178,6 +178,15 @@ class User extends Authenticatable implements HasMedia
         }
     }
 
+    public function unsetNotifications(){
+        $this->firebase_user = null;
+        $this->firebase_token = null;
+        $this->support_call_id = null;
+        $this->device_type = null;
+        $this->voip_apn_token = null;
+        $this->save();
+    }
+
     public function role()
     {
         return $this->hasManyThrough(Role::class, 'model_has_roles', 'model_id', 'role_id');

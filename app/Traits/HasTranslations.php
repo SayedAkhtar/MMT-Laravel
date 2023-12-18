@@ -15,8 +15,4 @@ trait HasTranslations
         }
         return $attributes;
     }
-
-    // public static function where(){
-    //     // dd(parent::class);
-    // }
 }

@@ -76,15 +76,25 @@ class AuthController extends AppBaseController
             $user->patientDetails()->create();
             $user->patientDetails->addMediaFromBase64($t)->usingFileName(Str::random(30).'.png')->toMediaCollection('avatar');
             $data['avatar'] = $user->patientDetails->getMedia('avatar')->first()->getUrl();
-            $user->is_active = false;
-            $user->save();
-            if(sendMsg91OTP($user->country_code . $user->phone, $user->otp) != 'success'){
-                throw new \Exception("Cannot Send OTP. Please try again in some time", 100);
+            $user->is_active = true;
+            if (!empty($input['language']) && !empty($user)) {
+                $language = Language::where('locale', $input['language'])->first();
+                if (!empty($language)) {
+                    $user->languages()->sync([$language->id]);
+                }
+                app()->setLocale($language->locale);
+            }else{
+                app()->setLocale('en');
             }
+            
+            $user->save();
+            // if(sendMsg91OTP($user->country_code . $user->phone, $user->otp) != 'success'){
+            //     throw new \Exception("Cannot Send OTP. Please try again in some time", 100);
+            // }
             DB::commit();
             
-            // $data = $user->toArray();
-            // $data['token'] = $user->createToken('Client Login')->plainTextToken;
+            $data = $user->toArray();
+            $data['token'] = $user->createToken('Client Login')->plainTextToken;
             // $user->patientDetails()->create();
             // $t = Avatar::create($user->name)->toBase64();
             // $user->patientDetails->addMediaFromBase64($t)->toMediaCollection('avatar');
@@ -122,8 +132,11 @@ class AuthController extends AppBaseController
                 $user->languages()->sync([$language->id]);
             }
             $user->save();
+            app()->setLocale($language->locale);
+        }else{
+            app()->setLocale('en');
         }
-        app()->setLocale('en');
+        
         if (empty($user)) {
             throw new LoginFailedException('User not exists.');
         }
@@ -268,8 +281,9 @@ class AuthController extends AppBaseController
      */
     public function logout(): JsonResponse
     {
-        Auth::user()->currentAccessToken()->delete();
-
+        $user = Auth::user();
+        $user->currentAccessToken()->delete();
+        $user->unsetNotifications();
         return $this->successResponse('Logout successfully.');
     }
 

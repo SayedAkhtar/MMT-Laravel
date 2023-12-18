@@ -72,10 +72,19 @@ class HomeController extends AppBaseController
     public function searchHospitalDoctor(Request $request)
     {
         $term = $request->input('term');
-        $hospitals = Hospital::query()->where('name', 'like', '%' . $term . '%')->select(['id', 'name', 'address'])->get();
-        $doctors = Doctor::with(['user', 'specializations'])->whereHas('user', function ($q) use ($term) {
-            $q->where('name', 'like', '%' . $term . '%');
-        })->get();
+        if(app()->getLocale() != "en"){
+            $locale = app()->getLocale();
+            $hospitals = Hospital::query()->whereRaw("JSON_EXTRACT(name, '$.$locale') LIKE ?", ["%$term%"])->select(['id', 'name', 'address'])->get();
+            $doctors = Doctor::with(['user', 'specializations'])->whereHas('user', function ($q) use ($term, $locale) {
+                $q->whereRaw("JSON_EXTRACT(name, '$.$locale') LIKE ?", ["%$term%"]);
+            })->get();
+        }else{
+            $hospitals = Hospital::query()->where('name', 'like', '%' . $term . '%')->select(['id', 'name', 'address'])->get();
+            $doctors = Doctor::with(['user', 'specializations'])->whereHas('user', function ($q) use ($term) {
+                $q->where('name', 'like', '%' . $term . '%');
+            })->get();
+        }
+        
         $results = [];
         foreach ($hospitals as $hospital) {
             $result['id'] = $hospital->id;
