@@ -97,6 +97,42 @@ class NotificationStrings
                 'body' => "You Query was recieved successfully and the our doctor has provided a review for you. Please Open the query for further actions"
             ],
         ],
+        'QUERY_CONFIRMED_UPDATED' =>[
+            'en' => [
+                'title' => "Query status has changed",
+                'body' => "Please move to confirmed Screen to view Details"
+            ],
+            'ru' => [
+                'title' => "Query status has changed",
+                'body' => "You Query was recieved successfully and the our doctor has provided a review for you. Please Open the query for further actions"
+            ],
+            'ar' => [
+                'title' => "You have recieved doctor's Response",
+                'body' => "You Query was recieved successfully and the our doctor has provided a review for you. Please Open the query for further actions"
+            ],
+            'bn' => [
+                'title' => "You have recieved doctor's Response",
+                'body' => "You Query was recieved successfully and the our doctor has provided a review for you. Please Open the query for further actions"
+            ],
+        ],
+        'DEFAULT_NOTIFICATION' =>[
+            'en' => [
+                'title' => "MyMedtrip Update",
+                'body' => "Please open the app to see the changes"
+            ],
+            'ru' => [
+                'title' => "Query status has changed",
+                'body' => "You Query was recieved successfully and the our doctor has provided a review for you. Please Open the query for further actions"
+            ],
+            'ar' => [
+                'title' => "You have recieved doctor's Response",
+                'body' => "You Query was recieved successfully and the our doctor has provided a review for you. Please Open the query for further actions"
+            ],
+            'bn' => [
+                'title' => "You have recieved doctor's Response",
+                'body' => "You Query was recieved successfully and the our doctor has provided a review for you. Please Open the query for further actions"
+            ],
+        ],
     ];
 
     public function __construct($locale = 'en')
@@ -106,6 +142,10 @@ class NotificationStrings
 
     public function get($key): array
     {
-        return $this->strings[$key][$this->locale];
+        if(isset($this->strings[$key][$this->locale])){
+            return $this->strings[$key][$this->locale];
+        }else{
+            return $this->strings['DEFAULT_NOTIFICATION'][$this->locale];
+        }
     }
 }

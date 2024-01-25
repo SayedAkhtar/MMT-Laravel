@@ -19,11 +19,11 @@
     <!-- /.login-logo -->
     @include('components.flash-message')
     <div class="card card-outline card-primary">
-        <div class="card-header text-center">
-            <a href="#" class="h1"><b>MMT</b> Admin</a>
+        <div class="card-header text-center border-0">
+            <a href="#" class="h1"><img src="https://mymedtrip.com/wp-content/uploads/2023/01/mmt.jpg" class="img-responsive" alt=""></a>
         </div>
-        <div class="card-body">
-            <p class="login-box-msg">Sign in to start your session</p>
+        <p class="login-box-msg text-center h5 text-bold" style="color:#073f84">Space Control Center 🚀</p>
+        <div class="card-body border-top">
             <form action="{{ route('login') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="input-group mb-3">

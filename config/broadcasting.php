@@ -59,6 +59,19 @@ return [
             'driver' => 'null',
         ],
 
+        'apn' => [
+            'app_bundle_id' => env('APN_BUNDLE_ID'),
+            'certificate_path' => env('APN_PRIVATE_KEY'),
+            'certificate_secret' => env('APN_SECRET_KEY'),
+            'production' => env('APN_PRODUCTION', false),
+
+            'key_id' => env('APN_KEY_ID'),
+            'team_id' => env('APN_TEAM_ID'),
+            // 'app_bundle_id' => env('APN_BUNDLE_ID', ""),
+            // 'private_key_content' => Storage::path('private/' . env('APN_PRIVATE_KEY', "")),
+            // 'production' => env('APN_PRODUCTION', false),
+        ],
+
     ],
 
 ];

@@ -11,6 +11,7 @@
         "php": "^7.4|^8.0",
         "craftsys/msg91-laravel": "^0.14.0",
         "craftsys/msg91-laravel-notification-channel": "^0.7.0",
+        "edamov/pushok": "^0.15.6",
         "enyo/dropzone": "^5.9",
         "fruitcake/laravel-cors": "^2.0",
         "google/cloud-storage": "^1.33",

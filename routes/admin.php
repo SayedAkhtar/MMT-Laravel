@@ -176,6 +176,7 @@ Route::get('ajax-search/{table}', [HomeController::class, 'ajaxSearch'])->name('
 
 
 Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy'])->name('privacyPolicy');
+Route::match(['GET', 'POST'],'/request-delete', [HomeController::class, 'requestDelete'])->name('requestDelete');
 
 Route::get('notify-message/{channelName}', [HomeController::class, 'sendNotifications']);
 Route::get('test-fcm', [HomeController::class, 'sendNotifications']);

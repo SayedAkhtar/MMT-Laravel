@@ -81,6 +81,9 @@ class AuthController extends AppBaseController
                 $language = Language::where('locale', $input['language'])->first();
                 if (!empty($language)) {
                     $user->languages()->sync([$language->id]);
+                }else{
+                    $language = Language::first()->id;
+                    $user->languages()->sync([$language]);
                 }
                 app()->setLocale($language->locale);
             }else{

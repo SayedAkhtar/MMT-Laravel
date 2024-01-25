@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Client\AjaxSearchResource;
 use App\Models\Doctor;
 use App\Models\Hospital;
 use App\Models\PatientDetails;
@@ -16,6 +17,7 @@ use App\Notifications\FirebaseNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Schema;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
@@ -134,8 +136,13 @@ class HomeController extends Controller
 
     public function ajaxSearch(string $table, Request $request)
     {
+        $local = app()->getLocale();
+        if(empty($local)){
+            app()->setLocale('en');
+        }
         $column = $request->get('column') ?? 'name';
         $term = $request->get('term');
+
         try {
             if ($table == 'doctors') {
                 return response()->json(["data" => User::query()
@@ -160,7 +167,7 @@ class HomeController extends Controller
                     ->get()->toArray()]);
             }
             if ($table == 'states') {
-                return response()->json(["data" => DB::table('states')
+                return response()->json(['data' => AjaxSearchResource::collection(DB::table('states')
                     ->selectRaw("id, $column as name")
                     ->when($request->has('country_id'), function ($q) use ($request) {
                         if (count(explode(',', $request->country_id)) > 0) {
@@ -173,32 +180,34 @@ class HomeController extends Controller
                     ->when(Schema::hasColumn($table, 'is_active'), function ($q) {
                         $q->where('is_active', true);
                     })
-                    ->get()->toArray()]);
+                    ->get()->toArray())]);
             }
             if ($table == 'cities') {
-                return response()->json(["data" => DB::table('cities')
-                    ->selectRaw("id, $column as name")
-                    ->when($request->has('country_id'), function ($q) use ($request) {
-                        if (count(explode(',', $request->country_id)) > 0) {
-                            $q->whereIn('country_id', explode(',', $request->country_id));
-                        } else {
-                            $q->where('country_id', '=', $request->country_id);
-                        }
-                    })
-                    ->when(!empty($request->state_id), function ($q) use ($request) {
-                        if (count(explode(',', $request->state_id)) > 0) {
-                            $q->whereIn('state_id', explode(',', $request->state_id));
-                        } else {
-                            $q->where('state_id', '=', $request->state_id);
-                        }
-                    })
-                    ->where($column, 'like', '%' . $term . '%')
-                    ->when(Schema::hasColumn($table, 'is_active'), function ($q) {
-                        $q->where('is_active', true);
-                    })
-                    ->get()->toArray()]);
+                $data = DB::table('cities')
+                ->selectRaw("id, $column as name")
+                ->when($request->has('country_id'), function ($q) use ($request) {
+                    if (count(explode(',', $request->country_id)) > 0) {
+                        $q->whereIn('country_id', explode(',', $request->country_id));
+                    } else {
+                        $q->where('country_id', '=', $request->country_id);
+                    }
+                })
+                ->when(!empty($request->state_id), function ($q) use ($request) {
+                    if (count(explode(',', $request->state_id)) > 0) {
+                        $q->whereIn('state_id', explode(',', $request->state_id));
+                    } else {
+                        $q->where('state_id', '=', $request->state_id);
+                    }
+                })
+                ->where($column, 'like', '%' . $term . '%')
+                ->when(Schema::hasColumn($table, 'is_active'), function ($q) {
+                    $q->where('is_active', true);
+                })
+                ->get()->toArray();
+                $data = AjaxSearchResource::collection($data);
+                return response()->json(['data'=>$data]);
             }
-            return response()->json(["data" => DB::table($table)
+            return response()->json(['data' => AjaxSearchResource::collection(DB::table($table)
                 ->selectRaw("id, $column as name")
                 ->where($column, 'like', '%' . $term . '%')
                 ->when(($request->has('patient_id') && !empty($request->patient_id)), function ($q) use ($request, $table) {
@@ -209,7 +218,7 @@ class HomeController extends Controller
                 ->when(Schema::hasColumn($table, 'is_active'), function ($q) {
                     $q->where('is_active', true);
                 })
-                ->get()->toArray()]);
+                ->get()->toArray())]);
         } catch (\Exception $e) {
             dump($e->getMessage());
         }
@@ -237,5 +246,31 @@ class HomeController extends Controller
         $validated = $request->validate(['language' => 'string| in:en,ru,ar,bn']);
         session(['language' => $validated['language']]);
         return response()->json([],201);
+    }
+
+    public function requestDelete(Request  $request){
+        if($request->method() == "GET"){
+            return view('request-delete');
+        }
+        if($request->method() == "POST"){
+            $request->validate(['name' => 'required', 'phone' => 'required', 'message' => 'required|max:350']);
+            $name = $request->name;
+            $email = $request->phone;
+            $message = $request->message;
+            $string = "Hi, $name user! with email $email, has sent a account deleteion request. \n\nREASON:\n\n".$message;
+            try{
+                Mail::raw($string, function ($message) {
+                    $message->to(['support@mymedtrip.com', 'mymedtrip25@gmail.com', 'sayed182@gmail.com'])
+                        ->from('support@mymedtrip.com')
+                      ->subject("Account deletion request");
+                  });
+                  return back()->with('success', "Request Submitted Successfully");
+            }catch(\Exception $e){
+                dd($e);
+                return back()->withErrors("Could not send request");
+            }
+            
+            
+        }
     }
 }

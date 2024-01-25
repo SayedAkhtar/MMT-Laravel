@@ -40,6 +40,9 @@ Route::group(['middleware' => ['auth:sanctum', 'validate.user', 'api']], functio
     });
 });
 
+Route::post('decline-call', [PushNotificationController::class,'disconnectCall'])->name('disconnectCall');
+
+
 Route::get('home', [HomeController::class, 'modules'])->middleware('api');
 Route::apiResource('doctors', DoctorController::class)->only(['index', 'show']);
 Route::apiResource('treatments', TreatmentController::class)->only(['index', 'show']);
