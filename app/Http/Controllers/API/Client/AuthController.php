@@ -70,8 +70,8 @@ class AuthController extends AppBaseController
             $userRole = Role::find($input['role']);
             $user->assignRole($userRole);
             $user->markEmailAsVerified();
-            // $user->otp = rand(100000,999999);
-            $user->otp = 987654;
+            $user->otp = rand(100000,999999);
+            // $user->otp = 987654;
             $t = Avatar::create($user->name)->toBase64();
             $user->patientDetails()->create();
             $user->patientDetails->addMediaFromBase64($t)->usingFileName(Str::random(30).'.png')->toMediaCollection('avatar');
@@ -91,9 +91,9 @@ class AuthController extends AppBaseController
             }
             
             $user->save();
-            // if(sendMsg91OTP($user->country_code . $user->phone, $user->otp) != 'success'){
-            //     throw new \Exception("Cannot Send OTP. Please try again in some time", 100);
-            // }
+            if(sendMsg91OTP($user->country_code . $user->phone, $user->otp) != 'success'){
+                throw new \Exception("Cannot Send OTP. Please try again in some time", 100);
+            }
             DB::commit();
             
             $data = $user->toArray();
@@ -301,20 +301,27 @@ class AuthController extends AppBaseController
      */
     public function forgotPassword(ForgotPasswordAPIRequest $request): JsonResponse
     {
-        $input = $request->all();
+        $input = $request->validated();
         /** @var User $user */
         $user = User::where('phone', $input['phone'])->firstOrFail();
 
         $resultOfEmail = false;
         $resultOfSMS = false;
         //        $code = $this->generateCode();
-        // $code = rand(100000, 999999);
-        $code = 987654;
-        if (User::FORGOT_PASSWORD_WITH['link']['email']) {
-            $resultOfEmail = $this->sendEmailForResetPasswordLink($user, $code);
-        }
-        if (User::FORGOT_PASSWORD_WITH['link']['sms']) {
-            $resultOfSMS = $this->sendSMSForResetPasswordLink($user, $code);
+        $code = rand(100000, 999999);
+        // $code = 987654;
+
+        // if (User::FORGOT_PASSWORD_WITH['link']['email']) {
+        //     $resultOfEmail = $this->sendEmailForResetPasswordLink($user, $code);
+        // }
+        // if (User::FORGOT_PASSWORD_WITH['link']['sms']) {
+        //     $resultOfSMS = $this->sendSMSForResetPasswordLink($user, $code);
+        // }
+        if(sendMsg91OTP($user->country_code . $user->phone, $user->otp) != 'success'){
+            throw new \Exception("Cannot Send OTP. Please try again in some time", 100);
+        }else{
+            $resultOfSMS = true;
+            return $this->successResponse('otp successfully send.');
         }
 
         if ($resultOfEmail && $resultOfSMS) {
@@ -515,6 +522,7 @@ class AuthController extends AppBaseController
                 $user->delete();
             }
             if ($request->type == 'forgot_password' && !empty($request->password)) {
+                // dump($user, $request);
                 if ($user->reset_password_code == $request->input('otp')) {
                     $user->reset_password_code = null;
                     $user->reset_password_expire_time = null;
