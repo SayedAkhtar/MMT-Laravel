@@ -13,6 +13,7 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
+use App\Traits\HasTranslations;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -22,13 +23,14 @@ class User extends Authenticatable implements HasMedia
     use HasRoles;
     use InteractsWithMedia;
     use HasRecordOwnerProperties;
+    use HasTranslations;
 
 
     /**
      * @var string
      */
     protected $table = 'users';
-
+    public $translatable = ['name'];
     /**
      * @var string[]
      */
@@ -178,6 +180,15 @@ class User extends Authenticatable implements HasMedia
             $this->media()->delete();
             return $this->addMediaFromRequest($key)->toMediaCollection($library);
         }
+    }
+
+    public function unsetNotifications(){
+        $this->firebase_user = null;
+        $this->firebase_token = null;
+        $this->support_call_id = null;
+        $this->device_type = null;
+        $this->voip_apn_token = null;
+        $this->save();
     }
 
     public function role()

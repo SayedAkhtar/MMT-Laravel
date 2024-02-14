@@ -289,7 +289,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('settings.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-calendar-alt"></i>
+                        <i class="nav-icon fas fa-gear-alt">Settings</i>
                     </a>
                 </li>
 

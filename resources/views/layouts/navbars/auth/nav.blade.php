@@ -20,10 +20,48 @@
                 <i class="fas fa-expand-arrows-alt"></i>
             </a>
         </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
+                Language ({{ session('language', 'en') }})
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
+                <a href="#" class="dropdown-item" onclick="changeLanguage('en')">
+                    <p>English (en)</p>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item" onclick="changeLanguage('bn')">
+                    <p>Bengali (bn)</p>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item" onclick="changeLanguage('ru')">
+                    <p>Russian (ru)</p>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item" onclick="changeLanguage('ar')">
+                    <p>Arabic (ar)</p>
+                </a>
+            </div>
+        </li>
         <li class="nav-item">
-            <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="{{ route('logout') }}" role="button">
+            <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="{{ route('logout') }}"
+                role="button">
                 <i class="fas fa-power-off"></i>
             </a>
         </li>
     </ul>
 </nav>
+
+@push('scripts')
+    <script>
+        function changeLanguage(language){
+            $.post("{{ route('change.language') }}",{
+                'language': language,
+                '_token': '{{ csrf_token() }}'
+            }, function(data, status){
+                if(status == 'success'){
+                    window.location.reload();
+                }
+            })
+        }
+    </script>
+@endpush

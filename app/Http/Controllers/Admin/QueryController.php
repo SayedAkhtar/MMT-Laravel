@@ -110,8 +110,8 @@ class QueryController extends AppBaseController
     public function show(Request $request, int $id)
     {
         $query = Query::with(['patient', 'patientFamily', 'specialization', 'doctor'])->findOrFail($id);
-        $first_tab = $query->type == Query::TYPE_MEDICAL_VISA ? 'upload-medical-visa' : 'details';
-        $tab = $request->get('tab') ?? $first_tab;
+        $tab = $this->getQueryTab($query, $request->get('tab'));
+
         $data = [];
         if ($tab == "coordinator" && !empty($query->confirmed_details)) {
             $confirmed_values = json_decode($query->confirmed_details, true);
@@ -159,7 +159,11 @@ class QueryController extends AppBaseController
             'accommodation_id' => 'required',
         ]);
         $query = Query::findOrFail($validated['query_id']);
-
+        if(empty($query->coordinator_id)){
+            $ns = (new NotificationStrings('en'))->get('QUERY_CONFIRMED');
+        }else{
+            $ns = (new NotificationStrings('en'))->get('QUERY_CONFIRMED_UPDATED');
+        }
         DB::beginTransaction();
         try {
             $user = User::where('users.id', $validated['coordinator_id'])
@@ -177,14 +181,20 @@ class QueryController extends AppBaseController
             $data['accommodation'] = $acc->select('name', 'address', 'geo_location', 'images')->first()->toArray();
             $data['accommodation']['category'] = $acc->category->pluck('name')->toArray();
             $data['cab'] = $request->has('cab') ? $request->input('cab') : [];
+            $query->coordinator_id = $validated['coordinator_id'];
+            $query->is_confirmed = true;
             $query->confirmed_details = json_encode($data);
             $query->save();
-
+            try {
+                $query->notify(new FirebaseNotification(strtr($ns['title'], [ 'QUERY_ID' => $query->getQueryHashAttribute()] ), $ns['body']));
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
+            }
             DB::commit();
             return back()->with('success', "Query Updated Success");
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
+            Log::error($e);
         }
     }
 
@@ -262,5 +272,35 @@ class QueryController extends AppBaseController
                 Log::error($e->getMessage());
                 return back()->withErrors($e->getMessage());
             }
+    }
+
+    public function getQueryTab($query, $tab){
+        $first_tab = $query->type == Query::TYPE_MEDICAL_VISA ? 'upload-medical-visa' : 'details';
+        if(!empty($tab) && !empty(QueryResponse::availableTabs[$tab])){
+            // if(QueryResponse::availableTabs[$tab] > $query->current_step){
+            //     return back()->with('error', "Either response for the step has not yet been recieved or Previous step has not bee fullfilled. Please complete all steps.");
+            // }
+            // dd(QueryResponse::availableTabs[$tab]);
+            return $tab;
+        }
+        switch($query->current_step){
+            case QueryResponse::generateQuery:
+                return $query->type == Query::TYPE_MEDICAL_VISA ? 'upload-medical-visa' : 'details';
+            case QueryResponse::doctorResponse:
+                return array_flip(QueryResponse::availableTabs)[QueryResponse::doctorResponse];;
+            case QueryResponse::documentForVisa:
+                return array_flip(QueryResponse::availableTabs)[QueryResponse::documentForVisa];
+            case QueryResponse::payment:
+                return array_flip(QueryResponse::availableTabs)[QueryResponse::payment];
+            case QueryResponse::ticketsAndVisa:
+                return array_flip(QueryResponse::availableTabs)[QueryResponse::ticketsAndVisa];
+            case QueryResponse::queryConfirmed:
+                return array_flip(QueryResponse::availableTabs)[QueryResponse::queryConfirmed];
+            default:
+                if($query->is_confirmed){
+                    return array_flip(QueryResponse::availableTabs)[QueryResponse::queryConfirmed];
+                }
+                return 'details';
+        }
     }
 }

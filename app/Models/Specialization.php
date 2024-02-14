@@ -4,16 +4,17 @@ namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\HasTranslations;
 
 class Specialization extends BaseModel
 {
-    use HasRecordOwnerProperties, HasFactory;
+    use HasRecordOwnerProperties, HasFactory, HasTranslations;
 
     /**
      * @var string
      */
     protected $table = 'specializations';
-
+    public $translatable = ['name'];
     /**
      * @var string[]
      */

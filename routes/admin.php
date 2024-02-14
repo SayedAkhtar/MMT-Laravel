@@ -176,8 +176,10 @@ Route::put('reset-password', [AuthController::class, 'resetPassword'])
 Route::get('ajax-search/{table}', [HomeController::class, 'ajaxSearch'])->name('ajaxSearch');
 
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy'])->name('privacyPolicy');
+Route::match(['GET', 'POST'],'/request-delete', [HomeController::class, 'requestDelete'])->name('requestDelete');
 
 Route::get('notify-message/{channelName}', [HomeController::class, 'sendNotifications']);
 Route::get('test-fcm', [HomeController::class, 'sendNotifications']);
+Route::post('change-language', [HomeController::class, 'switchLanguage'])->name('change.language');
+Route::get('/', [HomeController::class, 'index'])->name('home');

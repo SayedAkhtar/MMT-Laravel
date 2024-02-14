@@ -4,16 +4,17 @@ namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
 use App\Traits\OnlyActive;
+use App\Traits\HasTranslations;
 
 class Doctor extends BaseModel
 {
-    use HasRecordOwnerProperties, OnlyActive;
+    use HasRecordOwnerProperties, OnlyActive, HasTranslations;
 
     /**
      * @var string
      */
     protected $table = 'doctors';
-
+    public $translatable = ['awards', 'description', 'faq'];
     /**
      * @var string[]
      */

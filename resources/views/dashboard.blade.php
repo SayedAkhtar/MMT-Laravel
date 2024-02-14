@@ -95,7 +95,6 @@
                     <div class="card-header border-0">
                         <div class="d-flex justify-content-between">
                             <h3 class="card-title">Users</h3>
-                            <a href="javascript:void(0);">View Report</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -162,7 +161,6 @@
                     <div class="card-header border-0">
                         <div class="d-flex justify-content-between">
                             <h3 class="card-title">Queries By Country</h3>
-                            <a href="javascript:void(0);">View Report</a>
                         </div>
                     </div>
                     <div class="card-body">

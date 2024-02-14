@@ -73,6 +73,7 @@ class PushNotificationController extends AppBaseController
         $request->validate(['type' => 'required | string', 'uuid' => 'required|string', 'user_id' => 'sometimes', 'hcf_phone' => 'sometimes', 'from' => 'sometimes']);
         try {
             $user = Auth::user();
+            $error_string = "";
             if ($user->user_type == '3') {
                 $avatar = image_path($user->image);
             } else {
@@ -93,7 +94,13 @@ class PushNotificationController extends AppBaseController
             } else {
                 $hcf = User::with('languages')
                     ->whereHas('languages', function ($q) use ($user) {
-                        $q->where('language.id', $user->languages->first()->id);
+                        $currentUser = $user->languages->first();
+                        if (!empty($currentUser)) {
+                            $q->where('language.id', $currentUser->id);
+                        } else {
+                            $defaultLanguageID = 1;
+                            $q->where('language.id', $defaultLanguageID);
+                        }
                     })
                     // ->whereNull('support_call_id')
                     ->where('firebase_token', '!=', null)
@@ -112,17 +119,15 @@ class PushNotificationController extends AppBaseController
                 $alert = Alert::create()->setTitle('MMT HCF CALL');
                 $alert = $alert->setBody('MMT Hcf Calling');
 
-                
                 $payload = Payload::create()->setPushType('voip')->setBadge(1);
                 $payload->setCustomValue("id", $request->input('uuid'));
                 $payload->setCustomValue("nameCaller", $user->name);
                 $payload->setCustomValue("handle", $user->phone);
                 $payload->setCustomValue("isVideo", false);
                 $payload->setCustomValue('trigger_type', $trigger_type);
-                $payload->setCustomValue('isCustomNotification',false);
-                    
-                $deviceTokens = [$hcf->voip_apn_token];
+                $payload->setCustomValue('isCustomNotification', false);
 
+                $deviceTokens = [$hcf->voip_apn_token];
                 $notifications = [];
                 foreach ($deviceTokens as $deviceToken) {
                     $notifications[] = new Notification($payload, $deviceToken);
@@ -131,7 +136,7 @@ class PushNotificationController extends AppBaseController
                 // If you have issues with ssl-verification, you can temporarily disable it. Please see attached note.
                 // Disable ssl verification
                 // $client = new Client($authProvider, $production = false, [CURLOPT_SSL_VERIFYPEER=>false] );
-                $client = new Client($authProvider, $production = false);
+                $client = new Client($authProvider, $production = true);
                 $client->addNotifications($notifications);
 
 
@@ -144,15 +149,19 @@ class PushNotificationController extends AppBaseController
                     $response->getApnsId();
 
                     // Status code. E.g. 200 (Success), 410 (The device token is no longer active for the topic.)
-                    if($response->getStatusCode() != 200 ){
+                    if ($response->getStatusCode() != 200) {
+                        $string = $response->getReasonPhrase();
+                        $string .= " " . $response->getErrorReason();
+                        $string .= " " . $response->getErrorDescription();
+                        Log::error($string);
                         return $this->errorResponse("Could not place call. User has not activated call notifications.");
                     }
                     // E.g. The device token is no longer active for the topic.
-                    $response->getReasonPhrase();
+
                     // E.g. Unregistered
-                    $response->getErrorReason();
+
                     // E.g. The device token is inactive for the specified topic.
-                    $response->getErrorDescription();
+
                     $response->get410Timestamp();
                 }
                 return $this->successResponse($hcf);
@@ -178,8 +187,73 @@ class PushNotificationController extends AppBaseController
     public function disconnectCall(Request $request)
     {
         try {
-            $request->validate(['uuid' => 'required|string', 'user_id' => 'sometimes']);
-            $user = Auth::user();
+            $request->validate(['uuid' => 'sometimes|string', 'user_id' => 'sometimes']);
+            $uuid = $request->input('uuid');
+            $user_id = $request->input('user_id');
+            $messaging = app('firebase.messaging');
+            $users = [];
+            if (!empty($uuid)) {
+                $users = User::where('support_call_id', $uuid)->get();
+            }
+            if (!empty($user_id)) {
+                $users = User::where('id', $user_id)->get();
+            }
+
+            foreach ($users as $user) {
+                if ($user->device_type == 'ios') {
+                    $authProvider = AuthProvider\Certificate::create(config('broadcasting.connections.apn'));
+                    $alert = Alert::create()->setTitle('MMT HCF CALL');
+                    $alert = $alert->setBody('MMT Hcf Calling');
+                    $payload = Payload::create()->setPushType('voip')->setBadge(1);
+                    $payload->setCustomValue("id", $request->input('uuid'));
+                    $payload->setCustomValue("nameCaller", $user->name);
+                    $payload->setCustomValue("handle", $user->phone);
+                    $payload->setCustomValue("isVideo", false);
+                    $payload->setCustomValue('trigger_type', "disconnect");
+                    $payload->setCustomValue('isCustomNotification', false);
+
+                    $deviceTokens = [$user->voip_apn_token];
+                    $notifications = [];
+                    foreach ($deviceTokens as $deviceToken) {
+                        $notifications[] = new Notification($payload, $deviceToken);
+                    }
+                    $client = new Client($authProvider, $production = true);
+                    $client->addNotifications($notifications);
+                    $responses = $client->push(); // returns an array of ApnsResponseInterface (one Response per Notification)
+                    foreach ($responses as $response) {
+                        // The device token
+                        $response->getDeviceToken();
+                        // A canonical UUID that is the unique ID for the notification. E.g. 123e4567-e89b-12d3-a456-4266554400a0
+                        $response->getApnsId();
+
+                        // Status code. E.g. 200 (Success), 410 (The device token is no longer active for the topic.)
+                        if ($response->getStatusCode() != 200) {
+                            $string = $response->getReasonPhrase();
+                            $string .= " " . $response->getErrorReason();
+                            $string .= " " . $response->getErrorDescription();
+                            Log::error($string);
+                            return $this->errorResponse("Could not place call. User has not activated call notifications.");
+                        }
+                        // E.g. The device token is no longer active for the topic.
+
+                        // E.g. Unregistered
+
+                        // E.g. The device token is inactive for the specified topic.
+
+                        $response->get410Timestamp();
+                    }
+                }
+                if ($user->device_type == 'android') {
+                    $token = $user->firebase_token;
+                    $message = CloudMessage::withTarget('token', $token);
+                    $message = $message->withData(['click_action' => 'FLUTTER_NOTIFICATION_CLICK', 'uuid' => $request->input('uuid'), 'trigger_type' => 'disconnect']);
+                    $config = AndroidConfig::fromArray([
+                        'priority' => 'high'
+                    ]);
+                    $message = $message->withAndroidConfig($config);
+                    $messaging->send($message);
+                }
+            }
         } catch (\Exception $e) {
             Log::error($e);
             return $this->errorResponse("Could not place call");

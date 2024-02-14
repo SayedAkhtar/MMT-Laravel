@@ -306,7 +306,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Consultation Price: </label>
-                            <input type="number" class="form-control" placeholder="Enter price in Dollars" name="price" @old('price') value="0">
+                            <input type="text" class="form-control" placeholder="Enter price in Dollars" name="price" @old('price') pattern="[0-9]">
                         </div>
                     </div>
                     <div class="col-sm-12">

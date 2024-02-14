@@ -110,7 +110,7 @@ class UserController extends AppBaseController
         DB::beginTransaction();
         try {
             if (!empty($input['country'])) {
-                $input['country'] = Country::where('name', $input['country'])->first()->id;
+                $input['country'] = Country::where('name->en', $input['country'])->first()->id;
             }
             if(!empty($input['dob'])){
                 $input['dob'] =  \Carbon\Carbon::createFromFormat('d/m/Y', $input['dob']);
@@ -185,17 +185,14 @@ class UserController extends AppBaseController
             $validated = $request->validate([
                 'uid' => 'required',
                 'token' => 'required',
-                'device_type' => 'sometimes',
                 'voip_apn_token' => 'sometimes',
+                'device_type' => 'sometimes'
             ]);
             $user = Auth::user();
             $user->firebase_user = $validated['uid'];
             $user->firebase_token = $validated['token'];
-            $user->device_type = $validated['device_type'] ?? 'web';
-            if(!empty($validated['voip_apn_token'])){
-                $user->voip_apn_token = $validated['voip_apn_token'];
-            }
-            // $user->apn_token = $validated['device_type'] ?? null;
+            $user->voip_apn_token = $validated['voip_apn_token'];
+            $user->device_type = $validated['device_type'];
             if ($user->save()) {
                 return $this->successResponse($user);
             }

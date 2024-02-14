@@ -897,7 +897,7 @@ export default {
             console.log()
             try {
                 // channelName = the caller's and the callee's id. you can use anything. tho.
-                const channelName = `${this.authuser}_${calleeName}`;
+                const channelName = `${ this.channelName}`;
                 const tokenRes = await this.generateToken(channelName);
 
                 // Broadcasts a call event to the callee and also gets back the token

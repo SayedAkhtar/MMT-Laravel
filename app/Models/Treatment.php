@@ -8,15 +8,17 @@ use Spatie\Image\Exceptions\InvalidManipulation;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use App\Traits\HasTranslations;
 
 class Treatment extends BaseModel implements HasMedia
 {
-    use HasRecordOwnerProperties, InteractsWithMedia;
+    use HasRecordOwnerProperties, InteractsWithMedia, HasTranslations;
 
     /**
      * @var string
      */
     protected $table = 'treatments';
+    public $translatable = ['name', 'days_required', 'recovery_time', 'success_rate', 'covered', 'not_covered'];
 
     /**
      * @var string[]

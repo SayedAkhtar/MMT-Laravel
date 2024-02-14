@@ -4,16 +4,17 @@ namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
 use Illuminate\Database\Eloquent\Model as Model;
+use App\Traits\HasTranslations;
 
 class DetoxificationCategory extends Model
 {
-    use HasRecordOwnerProperties;
+    use HasRecordOwnerProperties, HasTranslations;
 
     /**
      * @var string
      */
     protected $table = 'detoxification_categories';
-
+    public $translatable = ['name'];
     /**
      * @var string[]
      */

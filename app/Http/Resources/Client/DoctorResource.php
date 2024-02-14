@@ -51,7 +51,7 @@ class DoctorResource extends BaseAPIResource
                 'description' => $this->description,
                 'designation' => $this->designations->pluck('name'),
                 'qualification' => $this->qualifications->pluck('name'),
-                'faq' => $this->faq,
+                // 'faq' => empty($this->faq),
                 'time_slots' => $data,
                 'specialization' => $this->specializations->pluck('name'),
                 'hospitals' => $hospital,

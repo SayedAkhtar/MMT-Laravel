@@ -112,6 +112,9 @@ class QueryController extends AppBaseController
         $query = Query::query()->with('responses')->where('patient_id', Auth::id());
         if ($step == QueryResponse::queryConfirmed && $id == 0) {
             $query = $query->where('confirmed_details', '!=', null)->select('confirmed_details', 'status')->latest()->first();
+            if(empty($query)){
+                return $this->successResponse([]);
+            }
             if (!empty($query->confirmed_details)) {
                 $data = json_decode($query->confirmed_details, true);
                 $data['status'] = json_decode($query->status, true);
@@ -120,10 +123,16 @@ class QueryController extends AppBaseController
             }
         } else if ($step == QueryResponse::queryConfirmed) {
             $query = $query->select('confirmed_details', 'status')->findOrFail($id);
+            if(empty($query)){
+                return $this->successResponse([]);
+            }
             $data = json_decode($query->confirmed_details, true);
             $data['status'] =  json_decode($query->status, true);
         } else {
             $query = $query->select('id', 'type', 'current_step', 'payment_required')->findOrFail($id);
+            if(empty($query)){
+                return $this->successResponse([]);
+            }
             $data = $query->toArray();
             if (!$query->payment_required && $step == 4) {
                 $step = 5;
@@ -135,7 +144,9 @@ class QueryController extends AppBaseController
                 $data['next_step'] = $step + 1;
             }
         }
-        $data['editable_steps'] = $query->responses->pluck('step')->toArray();
+        if(!empty($query->responses)){
+            $data['editable_steps'] = $query->responses->pluck('step')->toArray();
+        }
         unset($data['responses']);
         return $this->successResponse($data);
     }

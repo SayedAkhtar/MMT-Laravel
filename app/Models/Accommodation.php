@@ -3,15 +3,17 @@
 namespace App\Models;
 
 use App\Traits\HasRecordOwnerProperties;
+use App\Traits\HasTranslations;
 
 class Accommodation extends BaseModel
 {
-    use HasRecordOwnerProperties;
+    use HasRecordOwnerProperties, HasTranslations;
 
     /**
      * @var string
      */
     protected $table = 'accommodations';
+    public $translatable = ['name', 'address'];
 
     /**
      * @var string[]
