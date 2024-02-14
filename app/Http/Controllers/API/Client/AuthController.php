@@ -76,7 +76,7 @@ class AuthController extends AppBaseController
             $user->patientDetails()->create();
             $user->patientDetails->addMediaFromBase64($t)->usingFileName(Str::random(30).'.png')->toMediaCollection('avatar');
             $data['avatar'] = $user->patientDetails->getMedia('avatar')->first()->getUrl();
-            $user->is_active = true;
+            $user->is_active = false;
             if (!empty($input['language']) && !empty($user)) {
                 $language = Language::where('locale', $input['language'])->first();
                 if (!empty($language)) {
@@ -309,6 +309,10 @@ class AuthController extends AppBaseController
         $resultOfSMS = false;
         //        $code = $this->generateCode();
         $code = rand(100000, 999999);
+        $user->reset_password_code = $code;
+        $user->reset_password_expire_time = Carbon::now()->addMinutes(10);
+        $user->save();
+
         // $code = 987654;
 
         // if (User::FORGOT_PASSWORD_WITH['link']['email']) {
@@ -317,7 +321,7 @@ class AuthController extends AppBaseController
         // if (User::FORGOT_PASSWORD_WITH['link']['sms']) {
         //     $resultOfSMS = $this->sendSMSForResetPasswordLink($user, $code);
         // }
-        if(sendMsg91OTP($user->country_code . $user->phone, $user->otp) != 'success'){
+        if(sendMsg91OTP($user->country_code . $user->phone, $user->reset_password_code) != 'success'){
             throw new \Exception("Cannot Send OTP. Please try again in some time", 100);
         }else{
             $resultOfSMS = true;
@@ -508,36 +512,51 @@ class AuthController extends AppBaseController
         ]);
         try {
             $user = User::where('phone', $request->phone)->first();
-            if ($request->type == 'register') {
-                if ($user->otp == $request->input('otp')) {
-                    $user->is_active = 1;
-                    $user->save();
-                    $data = $user->toArray();
-                    $data['token'] = $user->createToken('Client Login')->plainTextToken;
-                    $data['avatar'] = $user->patientDetails->getMedia('avatar')->first()->getUrl();
+            if(!$user){
+                return $this->errorResponse("User Not found", 404);
+            }
+            if($request->type == "register" && $user->otp == $request->input('otp')){
+                $user->is_active = true;
+                $user->otp = null;
+                $user->save();
+                $data = $user->toArray();
+                $data['token'] = $user->createToken('Client Login')->plainTextToken;
+                $data['avatar'] = $user->patientDetails->getMedia('avatar')->first()->getUrl();
+                
+                return $this->successResponse($data);
+            }
+            elseif($request->type == "forgot_password" && $user->reset_password_code == $request->input('otp') && !empty($request->password)){
+                $user->reset_password_code = null;
+                $user->reset_password_expire_time = null;
+                $user->password = Hash::make($request->password);
+                $user->save();
+                $data = $user->toArray();
+                return $this->successResponse($data);
+            }
+            // elseif($request->type == "register" && $user->otp != $request->input('otp')){
+            //     $user->patientDetails->delete();
+            //     $user->delete();
+            // }
+            return $this->errorResponse("OTP validation failed", 404);
+            // if ($request->type == 'register') {
+            //     if ($user->otp == $request->input('otp')) {
                     
-                    return $this->successResponse($data);
-                }
-                $user->patientDetails->delete();
-                $user->delete();
-            }
-            if ($request->type == 'forgot_password' && !empty($request->password)) {
-                // dump($user, $request);
-                if ($user->reset_password_code == $request->input('otp')) {
-                    $user->reset_password_code = null;
-                    $user->reset_password_expire_time = null;
-                    $user->password = Hash::make($request->password);
-                    $user->save();
-                    $data = $user->toArray();
-                    return $this->successResponse($data);
-                }
-            }
+            //     }
+            //     $user->patientDetails->delete();
+            //     $user->delete();
+            // }
+            // if ($request->type == 'forgot_password' && !empty($request->password)) {
+            //     // dump($user, $request);
+            //     if () {
+                    
+            //     }
+            // }
         } catch (ValidationException $e) {
             return $this->errorResponse($e->getMessage());
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error($e->getMessage());
             return $this->errorResponse("Internal server error " . $e->getMessage());
         }
-        return $this->errorResponse("User Not found", 404);
+        return $this->errorResponse("Something went wrong", 500);
     }
 }

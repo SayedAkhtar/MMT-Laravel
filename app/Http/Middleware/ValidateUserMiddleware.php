@@ -32,7 +32,7 @@ class ValidateUserMiddleware
                 'Your account is not verified.'), Response::HTTP_UNAUTHORIZED);
         }
 
-        if (! $user->is_active) {
+        if (! $user->is_active && !str_contains( $request->url(), 'update-firebase')) {
             return response()->json(ResponseUtil::generateError('UNAUTHORIZED','Your account is deactivated. please contact your administrator.',
                 'Your account is deactivated. please contact your administrator.'), Response::HTTP_UNAUTHORIZED);
 
