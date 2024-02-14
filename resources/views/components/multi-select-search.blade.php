@@ -16,7 +16,7 @@
                 $('#{{ $name }}').select2({
                     theme: 'bootstrap4',
                     ajax: {
-                        url: route('ajaxSearch', {'table': '{{ $table }}'}),
+                        url: route('ajaxSearch', {'table': '{{ $table }}', 'id': '{{ $column }}'}),
                         dataType: 'json',
                         delay: 500,
                         data: (params) => {

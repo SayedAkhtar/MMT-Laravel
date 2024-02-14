@@ -58,19 +58,22 @@ class PatientTestimonyController extends AppBaseController
         $input = $request->all();
         $includedImages = explode(',', $input['photo_names']);
         $paths = [];
+        $videos = array_filter( $input['videos'], function ($value) {
+            // Filter out empty strings and null values
+            return !empty($value) || $value === 0 || $value === '0';
+        });
         foreach ($request->file('images') as $file) {
             if (in_array($file->getClientOriginalName(), $includedImages)) {
                 $paths[] = $file->store('public/patient_testimony');
             }
-
         }
         $testimony = PatientTestimony::create([
             'patient_id' => 27,
             'images' => implode(',', $paths),
-            'doctors_id' => $input['doctor_id'],
+            'doctor_id' => $input['doctor_id'],
             'hospital_id' => $input['hospital_id'],
-            'videos' => $input['videos'],
-            'description' => ''
+            'videos' => $videos ?? null,
+            'description' => $input['description'] ?? ""
         ]);
         return redirect(route('patient-testimonies.index'))->with('success', 'Patient Testimony Images Updated');
     }
@@ -102,6 +105,10 @@ class PatientTestimonyController extends AppBaseController
         $input = $request->all();
         $includedImages = explode(',', $input['photo_names']);
         $paths = [];
+        $videos = array_filter( $input['videos'], function ($value) {
+            // Filter out empty strings and null values
+            return !empty($value) || $value === 0 || $value === '0';
+        });
         try {
             if ($request->has('images')) {
                 foreach ($request->file('images') as $file) {
@@ -115,6 +122,7 @@ class PatientTestimonyController extends AppBaseController
                 }
             }
             $input['images'] = implode(',', array_unique(array_merge($includedImages, $paths)));
+            $input['videos'] = $videos;
             $patientTestimony = $this->patientTestimonyRepository->update($input, $id);
         } catch (Exception $e) {
             return back()->withErrors($e->getMessage());

@@ -145,9 +145,10 @@ class HomeController extends Controller
 
         try {
             if ($table == 'doctors') {
+                $id_column = $request->get('id') ?? 'id';
                 return response()->json(["data" => User::query()
                     ->join('doctors', 'doctors.user_id', 'users.id')
-                    ->selectRaw("doctors.id as id, $column as name")
+                    ->selectRaw("doctors.$id_column as id, $column as name")
                     ->where($column, 'like', '%' . $term . '%')
                     ->where('doctors.is_active', true)
                     ->get()->toArray()]);

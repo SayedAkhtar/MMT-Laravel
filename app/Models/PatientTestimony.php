@@ -88,6 +88,17 @@ class PatientTestimony extends Model
      */
     public function doctor()
     {
-        return $this->hasOne(Doctor::class, 'id', 'doctor_id');
+        //select `doctors`.*, `users`.`first_field` as `laravel_through_key` 
+        //from `doctors` inner join `users` on `users`.`forurth` = `doctors`.`second` 
+        //where `users`.`first_field` is null and `doctors`.`is_active` = 1 limit 1
+        return $this->hasOneThrough(
+            Doctor::class, // Target model
+            User::class, // Intermediate model
+            'id', // Foreign key on the intermediate model
+            'user_id', // Foreign key on the target model
+            'doctor_id', // Local key on this model
+            'id' // Local key on the intermediate model
+        );
+        // return $this->hasOneThrough(Doctor::class, User::class, 'id', 'user_id', 'doctor_id', 'id');
     }
 }

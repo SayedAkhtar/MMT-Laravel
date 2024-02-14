@@ -9,6 +9,7 @@ class MultiSelectSearch extends Component
 {
     public $name;
     public $table;
+    public $column;
     public $label;
     public bool $multiple;
     public $selectedOptions;
@@ -20,10 +21,11 @@ class MultiSelectSearch extends Component
      *
      * @return void
      */
-    public function __construct(string $name, string $label, string $table, $selectedOptions = [], bool $multiple = true, bool $shouldInsert = false, bool $required = false)
+    public function __construct(string $name, string $label, string $table, string $column="id", $selectedOptions = [], bool $multiple = true, bool $shouldInsert = false, bool $required = false)
     {
         $this->name = $name;
         $this->table = $table;
+        $this->column = $column;
         $this->label = $label;
         $this->multiple = $multiple;
         if ($selectedOptions instanceof Collection) {
