@@ -240,4 +240,8 @@ class UserController extends AppBaseController
     {
         $user = Auth::user();
     }
+
+    public function currentUser(Request $request){
+        return $this->successResponse(Auth::user());
+    }
 }

@@ -119,7 +119,6 @@ class PushNotificationController extends AppBaseController
                 $alert = Alert::create()->setTitle('MMT HCF CALL');
                 $alert = $alert->setBody('MMT Hcf Calling');
 
-
                 $payload = Payload::create()->setPushType('voip')->setBadge(1);
                 $payload->setCustomValue("id", $request->input('uuid'));
                 $payload->setCustomValue("nameCaller", $user->name);

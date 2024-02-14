@@ -122,6 +122,13 @@ class UserController extends AppBaseController
         return $this->module_view('patient-list', compact('patients'));
     }
 
+    public function patientActive(Request $request){
+        $user = User::findOrFail($request->user_id);
+        $user->is_active = true;
+        $user->save();
+        return redirect()->back()->with('success', "User Activated");
+    }
+
     public function deletePatients(int $id): JsonResponse
     {
         DB::beginTransaction();

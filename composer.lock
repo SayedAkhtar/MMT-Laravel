@@ -764,6 +764,75 @@
             "time": "2023-04-14T03:27:34+00:00"
         },
         {
+            "name": "edamov/pushok",
+            "version": "0.14.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/edamov/pushok.git",
+                "reference": "fe05cba22c93703cf715ccac42ab4d151172ef4f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/edamov/pushok/zipball/fe05cba22c93703cf715ccac42ab4d151172ef4f",
+                "reference": "fe05cba22c93703cf715ccac42ab4d151172ef4f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-intl": "*",
+                "ext-json": "*",
+                "ext-openssl": "*",
+                "ext-xml": "*",
+                "lib-curl": ">=7.46.0",
+                "lib-openssl": ">=1.0.2.5",
+                "php": "^8.0",
+                "web-token/jwt-key-mgmt": "^2.0",
+                "web-token/jwt-signature-algorithm-ecdsa": "^2.0"
+            },
+            "require-dev": {
+                "ext-xdebug": "*",
+                "php-coveralls/php-coveralls": "^2.0",
+                "phpunit/phpunit": "^8.4",
+                "squizlabs/php_codesniffer": "^3.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pushok\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Artur Edamov",
+                    "email": "edamov@gmail.com",
+                    "homepage": "https://github.com/edamov",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP client for Apple Push Notification Service (APNs) - Send push notifications to iOS using the new APNs HTTP/2 protocol with token-based (JWT with p8 private key) or certificate-based authentication",
+            "homepage": "https://github.com/edamov/pushok",
+            "keywords": [
+                "apns",
+                "p8",
+                "php apns",
+                "push notifications"
+            ],
+            "support": {
+                "issues": "https://github.com/edamov/pushok/issues",
+                "source": "https://github.com/edamov/pushok/tree/0.14.3"
+            },
+            "time": "2023-04-14T08:48:42+00:00"
+        },
+        {
             "name": "egulias/email-validator",
             "version": "2.1.25",
             "source": {
@@ -870,6 +939,82 @@
                 "source": "https://github.com/dropzone/dropzone-packagist/tree/v5.9.3"
             },
             "time": "2021-09-21T17:03:36+00:00"
+        },
+        {
+            "name": "fgrosse/phpasn1",
+            "version": "v2.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fgrosse/PHPASN1.git",
+                "reference": "42060ed45344789fb9f21f9f1864fc47b9e3507b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fgrosse/PHPASN1/zipball/42060ed45344789fb9f21f9f1864fc47b9e3507b",
+                "reference": "42060ed45344789fb9f21f9f1864fc47b9e3507b",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1 || ^8.0"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "~2.0",
+                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0"
+            },
+            "suggest": {
+                "ext-bcmath": "BCmath is the fallback extension for big integer calculations",
+                "ext-curl": "For loading OID information from the web if they have not bee defined statically",
+                "ext-gmp": "GMP is the preferred extension for big integer calculations",
+                "phpseclib/bcmath_compat": "BCmath polyfill for servers where neither GMP nor BCmath is available"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "FG\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Friedrich Große",
+                    "email": "friedrich.grosse@gmail.com",
+                    "homepage": "https://github.com/FGrosse",
+                    "role": "Author"
+                },
+                {
+                    "name": "All contributors",
+                    "homepage": "https://github.com/FGrosse/PHPASN1/contributors"
+                }
+            ],
+            "description": "A PHP Framework that allows you to encode and decode arbitrary ASN.1 structures using the ITU-T X.690 Encoding Rules.",
+            "homepage": "https://github.com/FGrosse/PHPASN1",
+            "keywords": [
+                "DER",
+                "asn.1",
+                "asn1",
+                "ber",
+                "binary",
+                "decoding",
+                "encoding",
+                "x.509",
+                "x.690",
+                "x509",
+                "x690"
+            ],
+            "support": {
+                "issues": "https://github.com/fgrosse/PHPASN1/issues",
+                "source": "https://github.com/fgrosse/PHPASN1/tree/v2.5.0"
+            },
+            "abandoned": true,
+            "time": "2022-12-19T11:08:26+00:00"
         },
         {
             "name": "fig/http-message-util",
@@ -2036,6 +2181,69 @@
                 }
             ],
             "time": "2021-12-04T14:15:18+00:00"
+        },
+        {
+            "name": "laravel-notification-channels/apn",
+            "version": "v4.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-notification-channels/apn.git",
+                "reference": "6828a4e3c6246294653303d3988344a79d28c38c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-notification-channels/apn/zipball/6828a4e3c6246294653303d3988344a79d28c38c",
+                "reference": "6828a4e3c6246294653303d3988344a79d28c38c",
+                "shasum": ""
+            },
+            "require": {
+                "edamov/pushok": "^0.14",
+                "illuminate/cache": "^8.0|^9.0|^10.0",
+                "illuminate/config": "^8.0|^9.0|^10.0",
+                "illuminate/events": "^8.0|^9.0|^10.0",
+                "illuminate/notifications": "^8.0|^9.0|^10.0",
+                "illuminate/support": "^8.0|^9.0|^10.0",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.4",
+                "phpunit/phpunit": "^9.0",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.2-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "NotificationChannels\\Apn\\ApnServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "NotificationChannels\\Apn\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fruitcake",
+                    "email": "info@fruitcake.nl",
+                    "homepage": "https://fruitcake.nl"
+                }
+            ],
+            "description": "Apple APN Push Notification Channel",
+            "homepage": "https://github.com/laravel-notification-channels/apn",
+            "support": {
+                "issues": "https://github.com/laravel-notification-channels/apn/issues",
+                "source": "https://github.com/laravel-notification-channels/apn/tree/v4.4.0"
+            },
+            "time": "2023-01-30T20:50:57+00:00"
         },
         {
             "name": "laravel-notification-channels/fcm",

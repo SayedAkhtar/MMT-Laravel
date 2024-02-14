@@ -40,7 +40,13 @@
                         <td>{{ $data->user->phone }}</td>
                         <td>{{ $data->specialization?->name }}</td>
                         <td>{{ $data->treatment_country }}</td>
-                        <td><span>{{ $data->is_active?'Active' : 'False'  }}</span></td>
+                        <td><span>{{ $data->user->is_active?'Active' : 'False'  }}</span></td>
+                        <td>
+                            <form action="{{ route('patient.make-active') }}">
+                                <input type="hidden" name="user_id" value="{{$data->user->id}}" />
+                                <button class="btn btn-submit {{ $data->user->is_active ?  '':'btn-success' }}" {{ $data->user->is_active ?  'disabled':'' }}>Make Active</button>
+                            </form>
+                        </td>
                         <td class="text-right">
                             {{--                            <a href="{{ route('accreditation.show', ['accreditation' => $data->id]) }}"--}}
                             {{--                               class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>--}}
