@@ -337,7 +337,7 @@
                     </div>
                     <div class="col-sm-6">
                         <!-- text input -->
-                        @livewire('time-slots-component', ['slots' => $doctor->time_slots])
+                        @livewire('time-slots-component', ['slots' => $doctor->time_slots, 'doctorId' => $doctor->id])
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">

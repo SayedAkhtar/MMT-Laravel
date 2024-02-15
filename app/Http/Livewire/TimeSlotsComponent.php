@@ -9,10 +9,12 @@ use Livewire\Component;
 class TimeSlotsComponent extends Component
 {
     public $slots = [];
+    public $doctorId;
 
-    public function mount(Collection $slots)
+    public function mount(Collection $slots, int $doctorId)
     {
         $this->slots = $slots->toArray();
+        $this->doctorId = $doctorId;
     }
 
     public function addSlot(string $day, string $slot)
@@ -22,7 +24,10 @@ class TimeSlotsComponent extends Component
                 return;
             }
         }
-        $this->slots[] = ['day' => $day, 'time' => $slot, 'timestamp' => TimeSlot::getTimestamp($slot)];
+        $update = ['day' => $day, 'time' => $slot, 'timestamp' => TimeSlot::getTimestamp($slot)];
+        $this->slots[] = $update;
+        $update['doctor_id'] = $this->doctorId;
+        TimeSlot::insert($update);
         // array_push($this->slots,$day." ".$slot);
     }
 
