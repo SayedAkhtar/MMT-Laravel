@@ -68,7 +68,7 @@
                     <div class="form-group">
                         <label for="exampleInputFile">Upload Proforma Invoice</label>
                         <div class="input-group">
-                            <input type="file" name="response[proforma_invoice]" id="exampleInputFile">
+                            <input type="file" name="response[proforma_invoice]" id="exampleInputFile" accept="application/pdf,image/jpeg,image/png">
                         </div>
                     </div>
                 </div>
