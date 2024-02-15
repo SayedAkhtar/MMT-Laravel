@@ -312,7 +312,7 @@
                         <!-- text input -->
                         <div class="form-group">
                             <label>Listing Placement Order in App</label>
-                            <input type="number" class="form-control" placeholder="Sponsorship order" name="order">
+                            <input type="number" class="form-control" placeholder="Sponsorship order" name="order" value="{{ $hospital->order }}">
                         </div>
                     </div>
                 </div>

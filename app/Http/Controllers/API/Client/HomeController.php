@@ -32,7 +32,7 @@ class HomeController extends AppBaseController
             }
         }
 
-        $hospitals = Hospital::query()->where('is_active', 1)->orderByDesc('created_at')->limit(10)->get();
+        $hospitals = Hospital::query()->where('is_active', 1)->orderByRaw("IFNULL('order', 999999), 'order' ASC")->limit(10)->get();
         $doctors = Doctor::with(['user', 'specializations', 'designations'])->where('is_active', 1)->orderByDesc('created_at')->limit(10)->get();
         $doctors = DoctorHomeResource::collection($doctors)->resolve();
         $stories = PatientTestimony::query()

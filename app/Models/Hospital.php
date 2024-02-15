@@ -26,6 +26,7 @@ class Hospital extends BaseModel
         'logo',
         'images',
         'is_active',
+        'order',
         'created_at',
         'updated_at',
         'added_by',

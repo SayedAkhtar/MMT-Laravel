@@ -27,6 +27,7 @@ class UpdateHospitalAPIRequest extends FormRequest
             'logo' => ['nullable', 'file'],
             'images' => ['nullable'],
             'is_active' => ['boolean'],
+            'order' => ['sometimes', 'numeric'],
             'doctors.*' => ['sometimes'],
             'treatments.*' => ['sometimes'],
             'accreditations.*' => ['sometimes'],

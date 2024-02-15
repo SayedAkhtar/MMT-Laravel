@@ -27,6 +27,7 @@ class CreateHospitalAPIRequest extends FormRequest
             'logo' => ['nullable', 'file'],
             'images.*' => ['nullable', 'file'],
             'is_active' => ['boolean'],
+            'order' => ['sometimes', 'numeric'],
         ];
     }
 }

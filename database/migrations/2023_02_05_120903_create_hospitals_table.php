@@ -22,6 +22,7 @@ class CreateHospitalsTable extends Migration
             $table->string('logo')->nullable();
             $table->json('images')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->unsignedInteger('order')->nullable()->default(null);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
             $table->unsignedBigInteger('added_by')->nullable();
