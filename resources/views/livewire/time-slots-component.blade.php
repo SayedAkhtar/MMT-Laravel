@@ -1,26 +1,23 @@
 <div>
     <label>Time Slots:</label>
-    <input type="hidden" name="time_slots" value="{{ !empty($slots)? $slots:"" }}" required>
-    @php
-        $slots = json_decode($slots, true);
-    @endphp
+    {{-- <input type="hidden" name="time_slots" value="{{ !empty($slots)? $slots:"" }}" required> --}}
+    <div class="d-flex flex-wrap justify-content-between">
     @if(!empty($slots))
-        @foreach($slots as $day => $slot)
-            <div class="row mb-3">
-                @foreach($slot as $index => $time)
-                    <div class="col-6">
-                        <div class="input-group">
-                            <input type="text" class="form-control text-capitalize" value="{{ $day." ".$time }}"
-                                   disabled/>
-                            <div class="input-group-append" wire:click="deleteSlot('{{$day}}' ,{{ $index }})">
-                                <div class="btn btn-danger"><i class="fa fa-trash-alt"></i></div>
-                            </div>
+        @foreach($slots as $index => $slot)
+            <div class="mb-3">
+                <div class="w-100">
+                    <div class="input-group">
+                        <input type="text" class="form-control text-capitalize" value="{{ $slot['day']." ".$slot['time'] }}"
+                                disabled/>
+                        <div class="input-group-append" wire:click="deleteSlot({{ $index }})">
+                            <div class="btn btn-danger"><i class="fa fa-trash-alt"></i></div>
                         </div>
                     </div>
-                @endforeach
+                </div>
             </div>
         @endforeach
     @endif
+    </div>
     <div class="row">
         <div class="col-6">
             <div class="form-group">
@@ -60,7 +57,7 @@
                 return;
             }
             let day = $("#daySelect").find(':selected').val();
-        @this.addSlot(day, slot);
+            @this.addSlot(day, slot);
             $("input[data-target='#time_slots']").val('');
         })
     </script>

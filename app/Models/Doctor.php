@@ -46,11 +46,12 @@ class Doctor extends BaseModel
         'designation_id' => 'string',
         'qualification_id' => 'integer',
         'faq' => 'array',
-        'time_slots' => 'string',
         'is_active' => 'boolean',
         'added_by' => 'integer',
         'updated_by' => 'integer',
     ];
+
+    protected $with = ['time_slots'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
@@ -129,5 +130,9 @@ class Doctor extends BaseModel
     public function city()
     {
         return $this->belongsTo(City::class);
+    }
+
+    public function time_slots(){
+        return $this->hasMany(TimeSlot::class, 'doctor_id', 'id');
     }
 }

@@ -15,11 +15,13 @@ class CreateTimeSlotsTable extends Migration
     {
         Schema::create('time_slots', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('doctor_id');
+            $table->foreignId('doctor_id')->i;
             $table->enum('day', ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']);
             $table->string('time');
-            $table->time('unix_timestamp')->nullable();
+            $table->integer('timestamp')->nullable();
             $table->timestamps();
+            $table->index('doctor_id');
+            $table->index('day');
         });
     }
 

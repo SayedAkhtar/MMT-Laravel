@@ -19,7 +19,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Designation</th>
-                    <th>Time Slots</th>
+                    <th >Time Slots</th>
                     <th>Qualification</th>
                     <th>Actions</th>
                 </tr>
@@ -28,12 +28,12 @@
                 @foreach($doctors as $doctor)
                     <tr>
                         <td>{{ $doctor->user->name }}</td>
-                        <td>{{ $doctor->designations->pluck('name')->join(' | ') }}
+                        <td>{{ $doctor->designations->pluck('name')->join(" | ") }}
                         </td>
                         <td>
                             @if(!empty($doctor->time_slots))
-                                @forelse(json_decode($doctor->time_slots) as $day => $slots)
-                                    <b class="text-capitalize">{{$day}}</b> : {{ implode(',', $slots) }} <br/>
+                                @forelse($doctor->time_slots as $slots)
+                                    <b class="text-capitalize">{{$slots->day}}</b> : {{ $slots->time }} <br/>
                                 @empty
                                 @endforelse
                             @endif
@@ -50,15 +50,6 @@
                     </tr>
                 @endforeach
                 </tbody>
-                <tfoot>
-                <tr>
-                    <th>Name</th>
-                    <th>Designation</th>
-                    <th>Time Slots</th>
-                    <th>Qualification</th>
-                    <th>Actions</th>
-                </tr>
-                </tfoot>
             </table>
         </div>
         <!-- /.card-body -->
