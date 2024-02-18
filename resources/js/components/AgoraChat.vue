@@ -206,59 +206,56 @@ a {
 }
 
 .message {
-    margin-top: 8px;
-    padding: 8px 16px;
-    border-radius: 0 12px 12px 12px;
-    font-size: 12px;
-    line-height: 16px;
-    max-width: 60%;
-    color: var(--message-text);
-    background: #fff;
-}
-
-.message-wrapper {
-    padding: 16px 0;
+  margin-top: 8px;
+  padding: 8px 16px;
+  border-radius: 0 12px 12px 12px;
+  font-size: 12px;
+  line-height: 16px;
+  max-width: 60%;
+  color: var(--message-text);
+  background: #fff;
+  box-sizing: content-box;
 }
 
 .message-wrapper.reverse {
-    flex-direction: row-reverse;
+  flex-direction: row-reverse;
 }
 
 .message-wrapper.reverse .message {
-    color: #000;
-    margin-left: auto;
-    border-radius: 16px 0px 16px 16px;
-    display: flex;
-    flex-direction: row-reverse;
-    text-align: right;
-    background: #fff;
+  color: #000;
+  margin-left: auto;
+  border-radius: 16px 0px 16px 16px;
+  text-align: right;
+  background: #fff;
+  box-sizing: content-box;
 }
 
 .message-wrapper.reverse .profile-picture {
-    margin-right: 0px;
-    margin-left: 12px;
+  margin-right: 0px;
+  margin-left: 12px;
 }
 
 .message-wrapper.reverse .name {
-    text-align: right;
+  text-align: right;
 }
 
 .message p {
-    width: 100%;
-    min-width: 100px;
+  width: 100%;
+  min-width: 100px;
+  text-align: left;
 }
 
 .message-image--img {
-    max-width: 100%;
+  max-width: 100%;
 }
 
 .message-file {
-    border: 1px solid var(--message-bg);
-    width: 100%;
-    margin-top: 16px;
-    border-radius: 4px;
-    padding: 8px;
-    display: flex;
+  border: 1px solid var(--message-bg);
+  width: 100%;
+  margin-top: 16px;
+  border-radius: 4px;
+  padding: 8px;
+  display: flex;
 }
 
 .message-file .sketch {
@@ -373,7 +370,7 @@ a {
 
 .video-participant.main-user {
     width: 100%;
-    height: 100%;
+    height: auto;
     position: relative;
 }
 
@@ -577,10 +574,24 @@ a {
     color: var(--message-text);
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 .expand-btn.show {
     display: flex;
+}
+.expand-btn .message-counter{
+    position: absolute;
+    background: #259ec9;
+    color: white;
+    font-weight: 700;
+    width: 24px;
+    height: 24px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: -10px;
 }
 
 .btn-close-right {
@@ -618,16 +629,29 @@ a {
     <div class="app-container">
         <div class="app-main">
             <div class="video-call-wrapper">
-                <div class="video-participant main-user" id="remote-video">
+
+                <div v-if="this.remoteUsers.length == 0" class="video-participant main-user">
                     <ul class="participant-actions">
                         <button class="btn-mute"></button>
                         <button class="btn-camera"></button>
                     </ul>
-                    <a href="#" class="name-tag">Patient</a>
+                    <a href="#" class="name-tag">Loby</a>
+                    <img src="https://images.unsplash.com/photo-1566821582776-92b13ab46bb4?ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60"
+                        alt="participant">
+                </div>
+
+                <div v-for="(data, index) in this.remoteUsers" :key="data.uid" class="video-participant main-user"
+                    :id="'remote-video-' + data.uid">
+                    <ul class="participant-actions">
+                        <button class="btn-mute"></button>
+                        <button class="btn-camera"></button>
+                    </ul>
+                    <a href="#" class="name-tag">{{ data.uid == 1 ? "Patient" : data.uid }}</a>
                     <img v-if="this.patientJoined === false"
                         src="https://images.unsplash.com/photo-1566821582776-92b13ab46bb4?ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60"
                         alt="participant">
                 </div>
+
                 <div class="video-participant remote-user" id="local-video">
                     <div class="participant-actions">
                         <button class="btn-mute"></button>
@@ -641,10 +665,15 @@ a {
                 </div>
             </div>
             <div class="video-call-actions">
-                <button class="video-action-button mic" :style="{ 'background-color': this.mutedAudio ? 'lightgrey': 'white' }"  @click="handleAudioToggle"></button>
-                <button class="video-action-button camera" :style="{ 'background-color': this.mutedVideo ? 'lightgrey': 'white' }" @click="handleVideoToggle"></button>
+                <button class="video-action-button mic"
+                    :style="{ 'background-color': this.mutedAudio ? 'lightgrey' : 'white' }"
+                    @click="handleAudioToggle"></button>
+                <button class="video-action-button camera"
+                    :style="{ 'background-color': this.mutedVideo ? 'lightgrey' : 'white' }"
+                    @click="handleVideoToggle"></button>
                 <button class="video-action-button endcall">Leave</button>
                 <button class="expand-btn" @click="toggleChatWindow">
+                    <span class="message-counter" v-if="this.incommingMsg > 0">{{ this.incommingMsg }}</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="feather feather-message-circle">
@@ -681,7 +710,8 @@ a {
                 </div>
                 <div class="chat-typing-area-wrapper">
                     <div class="chat-typing-area">
-                        <input type="text" placeholder="Type your meesage..." class="chat-input" v-model="message" @keydown.enter="sendMessage">
+                        <input type="text" placeholder="Type your meesage..." class="chat-input" v-model="message"
+                            @keydown.enter="sendMessage">
                         <button class="send-button" @click="uploadFile">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -693,7 +723,7 @@ a {
                             </svg>
                         </button>
                         <input type="file" id="uploadFile" style="display: none;" />
-                        <button class="send-button" @click="sendMessage"  id="submit">
+                        <button class="send-button" @click="sendMessage" id="submit">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" class="feather feather-send"
                                 viewBox="0 0 24 24">
@@ -715,48 +745,6 @@ a {
             </button>
         </div>
     </div>
-    <main style="display: none;">
-        <div class="container my-5">
-            <!-- Incoming Call  -->
-            <div class="row my-5" v-if="incomingCall">
-                <div class="col-12">
-                    <p>
-                        Incoming Call From <strong>{{ incomingCaller }}</strong>
-                    </p>
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" @click="declineCall">
-                            Decline
-                        </button>
-                        <button type="button" class="btn btn-success ml-5" @click="acceptCall">
-                            Accept
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <!-- End of Incoming Call  -->
-        </div>
-
-        <section id="video-container">
-            <div id="local-video"></div>
-            <div id="remote-video"></div>
-
-            <div v-for="user in remoteUsers" :key="user.uid">
-                <div ref="videoContainer" :id="`video-${user.uid}`"></div>
-            </div>
-
-            <div class="action-btns">
-                <button type="button" class="btn btn-info" @click="handleAudioToggle">
-                    {{ mutedAudio ? "Unmute" : "Mute" }}
-                </button>
-                <button type="button" class="btn btn-primary mx-4" @click="handleVideoToggle">
-                    {{ mutedVideo ? "ShowVideo" : "HideVideo" }}
-                </button>
-                <button type="button" class="btn btn-danger" @click="endCall">
-                    EndCall
-                </button>
-            </div>
-        </section>
-    </main>
 </template>
 
 <script>
@@ -803,10 +791,25 @@ export default {
             message: "",
             messageType: "text",
             remoteUsers: [],
+            incommingMsg: 0,
+            messagesFetched: false
         };
     },
     computed: {
-        console: () => console
+        console: () => console,
+        uniqueRemoteUsers: () => {
+            const uniqueUids = new Set();
+            // Filter the array to keep only objects with unique uid values
+            return this.remoteUsers.filter(obj => {
+                // If uid is not in the Set, add it and return true (to keep the object)
+                if (!uniqueUids.has(obj.uid)) {
+                    uniqueUids.add(obj.uid);
+                    return true;
+                }
+                // If uid is already in the Set, return false (to remove the object)
+                return false;
+            });
+        }
     },
 
     mounted() {
@@ -824,11 +827,18 @@ export default {
             console.error(error);
         });
         onValue(messagesRef, (snapshot) => {
+            const currentSize = Object.entries(this.messages).length;
             if (snapshot.exists()) {
                 this.messages = snapshot.val();
             }
+            this.console.log("SIZE  ==== >>>>>",currentSize, Object.entries(this.messages).length);
+            if(this.messagesFetched){
+                this.incommingMsg =  Object.entries(this.messages).length - currentSize;
+            }
+            this.messagesFetched = true;
             this.messageScrollBottom();
         });
+        this.remoteUsers = [];
     },
     created() {
     },
@@ -897,7 +907,7 @@ export default {
             console.log()
             try {
                 // channelName = the caller's and the callee's id. you can use anything. tho.
-                const channelName = `${ this.channelName}`;
+                const channelName = `${this.channelName}`;
                 const tokenRes = await this.generateToken(channelName);
 
                 // Broadcasts a call event to the callee and also gets back the token
@@ -925,8 +935,6 @@ export default {
         },
 
         declineCall() {
-            // You can send a request to the caller to
-            // alert them of rejected call
             this.incomingCall = false;
         },
 
@@ -949,7 +957,6 @@ export default {
         },
 
         async joinRoom(token, channel) {
-            console.log("called join room");
             await this.client.join(
                 this.agora_id,
                 this.channelName,
@@ -958,51 +965,29 @@ export default {
             await this.createLocalStream();
         },
 
-        async initializedAgoraListeners() {
-            //   Register event listeners
-            console.warn("Events Registered");
-            this.client.on("user-published", async (user, mediaType) => {
-                await this.client.subscribe(user, mediaType);
-                console.error("Subscription success");
-                console.warn()
-                if (mediaType === "video") {
-                    console.log("subscribe video success");
-                    user.videoTrack.play("remote-video");
-                }
-                if (mediaType === "audio") {
-                    console.log("subscribe audio success");
-                    user.audioTrack.play();
-                }
-            })
-
-            this.client.on("user-unpublished", (evt) => {
-                console.log(evt);
-            });
-        },
-
         async handleUserPublished(user, mediaType) {
-            // this.remoteUsers.push(user);
+            const uniqueUids = new Set();
+            this.remoteUsers.push(user);
+            this.remoteUsers = this.remoteUsers.filter(obj => {
+                if (!uniqueUids.has(obj.uid)) {
+                    uniqueUids.add(obj.uid);
+                    return true;
+                }
+                return false;
+            });
             await this.subscribe(user, mediaType);
             this.patientJoined = true;
         },
 
         async handleUserLeft(user) {
-            console.warn("user Left");
-            for(let [i, usr] in this.remoteUsers.entries()){
-                if(usr.id == user.id){
-                    this.remoteUsers = this.remoteUsers.splice(i,1);
-                }
-            }
-            this.remoteUsers.forEach((u, i) => {
-                
-            })
-            this.patientJoined = false;
+            this.remoteUsers = this.remoteUsers.filter(item => item.uid !== user.uid);
         },
 
         async createLocalStream() {
             this.localAudioStream = await AgoraRTC.createMicrophoneAudioTrack();
             this.localVideoStream = await AgoraRTC.createCameraVideoTrack();
             await this.localVideoStream.play('local-video');
+            await this.localAudioStream.play();
             await this.client.publish(this.localVideoStream);
             await this.client.publish(this.localAudioStream);
         },
@@ -1023,38 +1008,22 @@ export default {
         handleAudioToggle() {
             this.mutedAudio = !this.mutedAudio
             this.localAudioStream.setMuted(this.mutedAudio);
-            // if (this.mutedAudio) {
-                
-            //     this.mutedAudio = false;
-            // } else {
-            //     this.localAudioStream.muteAudio();
-            //     this.mutedAudio = true;
-            // }
         },
 
         handleVideoToggle() {
             this.mutedVideo = !this.mutedVideo
-            this.localVideoStream.setMuted(this.mutedAudio);
-            // if (this.mutedVideo) {
-            //     this.localVideoStream.unmuteVideo();
-            //     this.mutedVideo = false;
-            // } else {
-            //     this.localVideoStream.muteVideo();
-            //     this.mutedVideo = true;
-            // }
+            this.localVideoStream.setMuted(this.mutedVideo);
         },
 
         async subscribe(user, mediaType) {
-            // this.remoteUsers.forEach(async (user) => {
-            // });
             await this.client.subscribe(user, mediaType);
-                if (mediaType === 'audio') {
-                    let audioTrack = user.audioTrack
-                    audioTrack.play()
-                } else {
-                    let videoTrack = user.videoTrack
-                    videoTrack.play(`remote-video`)
-                }
+            if (mediaType === 'audio') {
+                let audioTrack = user.audioTrack
+                audioTrack.play()
+            } else {
+                let videoTrack = user.videoTrack
+                videoTrack.play(`remote-video-${user.uid}`)
+            }
 
         },
 
@@ -1063,6 +1032,7 @@ export default {
                 this.showChat = "";
             } else {
                 this.showChat = "show";
+                this.incommingMsg = 0;
             }
         },
         async sendMessage() {
@@ -1076,7 +1046,7 @@ export default {
             });
             this.messageScrollBottom();
             this.message = "";
-            await fetch('https://admin.mymedtrip.com/notify-message/'+this.channelName);
+            await fetch('https://admin.mymedtrip.com/notify-message/' + this.channelName);
         },
         uploadFile() {
             const storage = getStorage();
@@ -1109,7 +1079,7 @@ export default {
         messageScrollBottom() {
             var t = document.querySelector('.chat-area');
             t.scrollTo({
-                top: t.scrollHeight + 500,
+                top: t.scrollHeight + 1000,
                 left: 0,
                 behavior: 'smooth'
             });
