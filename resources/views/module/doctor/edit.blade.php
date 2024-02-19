@@ -342,7 +342,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Consultation Price: </label>
-                            <input type="text" pattern="[0-9]" title="Valid dollar value minimum is $1" class="form-control" placeholder="Enter price in Dollars" name="price"
+                            <input type="text" pattern="[0-9]{0,10}" title="Valid dollar value minimum is $1" class="form-control" placeholder="Enter price in Dollars" name="price"
                                    value="{{ $doctor->price }}" required>
                         </div>
                     </div>
