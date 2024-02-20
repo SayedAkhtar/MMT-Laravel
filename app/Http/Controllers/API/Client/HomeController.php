@@ -50,7 +50,7 @@ class HomeController extends AppBaseController
                     'thumbnail' => $images[0],
                     'images' => $images,
                     'description' => $testimony->description,
-                    'video' => !empty(json_decode($testimony->videos)) ? json_decode($testimony->videos): [],
+                    'video' => !empty($testimony->videos) ? $testimony->videos: [],
                 ];
             }
         }
