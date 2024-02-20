@@ -11,6 +11,7 @@ use App\Http\Resources\Client\UserResource;
 use App\Models\Country;
 use App\Models\Language;
 use App\Models\PatientDetails;
+use App\Models\PatientFamilyDetails;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Carbon\Carbon;
@@ -229,6 +230,20 @@ class UserController extends AppBaseController
                 if (!empty($language)) {
                     $user->languages()->sync([$language->id]);
                 }
+            }
+            return response()->json(["DATA" => $user], 201);
+        } catch (\Exception $e) {
+            return response()->json(["STATUS" => "Opps!", "MESSAGE" => "Internal server error. Please try again"], 400);
+        }
+    }
+
+    public function updateFamilyNotification(Request $request)
+    {
+        try {
+            if ($request->has('family_id')) {
+                $user = PatientFamilyDetails::findOrFail($request->input('family_id'));
+                $user->notification_status = !$user->notification_status;
+                $user->save();
             }
             return response()->json(["DATA" => $user], 201);
         } catch (\Exception $e) {

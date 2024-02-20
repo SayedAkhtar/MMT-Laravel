@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth:sanctum', 'validate.user', 'api']], functio
     Route::post('update-firebase', [UserController::class, 'updateFirebase']);
     Route::post('update-avatar/{user}', [UserController::class, 'updateAvatar']);
     Route::post('update-language', [UserController::class, 'updateLanguage']);
+    Route::post('/update-family-notification', [UserController::class, 'updateFamilyNotification']);
     // Route::post('family', [PatientFamilyController::class, 'store']);
     Route::post('trigger-support-call', [PushNotificationController::class,'callHcf'])->name('placeHcfCall');
 

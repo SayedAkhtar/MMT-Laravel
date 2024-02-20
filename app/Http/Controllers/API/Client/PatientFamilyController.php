@@ -49,7 +49,8 @@ class PatientFamilyController extends AppBaseController
         $user = User::with(['patientFamilyDetails' => function ($q) {
             $q->leftJoin('users as u', function ($join) {
                 $join->on(DB::raw("CONCAT(u.country_code, '', u.phone)"), '=', 'patient_family_details.phone')->where('u.is_active', true);
-            })->select([DB::raw('u.id as family_user_id'), 'patient_family_details.*']);
+            })
+            ->select([DB::raw('u.id as family_user_id'), 'patient_family_details.*', 'q.*']);
         }])->find(Auth::id());
         $patientFamilies = $user->patientFamilyDetails;
         return $this->successResponse(PatientFamilyResource::collection($patientFamilies));
