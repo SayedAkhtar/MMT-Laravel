@@ -37,19 +37,21 @@ class HomeController extends AppBaseController
         $doctors = DoctorHomeResource::collection($doctors)->resolve();
         $stories = PatientTestimony::query()
             ->whereNotNull('images')
-            ->select(['images', 'id'])
+            ->select(['images', 'id', 'description', 'videos'])
             ->orderByDesc('created_at')->limit(10)->get();
         $faq = Faq::query()->select(['question', 'answer'])->limit(10)->get();
         $processedTestimony = [];
         if (!empty($stories)) {
             foreach ($stories as $testimony) {
-                $images = explode(',', $testimony->images);
-                foreach ($images as $path) {
-                    $processedTestimony[] = [
-                        'type' => 'image',
-                        'value' => env('APP_URL') . Storage::url($path),
-                    ];
-                }
+                $images = array_map(function($path){
+                    return env('APP_URL') . Storage::url($path);
+                },explode(',', $testimony->images));
+                $processedTestimony[] = [
+                    'thumbnail' => $images[0],
+                    'images' => $images,
+                    'description' => $testimony->description,
+                    'video' => !empty(json_decode($testimony->videos)) ? json_decode($testimony->videos): [],
+                ];
             }
         }
         $processedHospitals = [];
