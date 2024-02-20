@@ -22,13 +22,15 @@ class HospitalResource extends BaseAPIResource
         $processedTestimony = [];
         if (!empty($this->testimony)) {
             foreach ($this->testimony as $testimony) {
-                $images = explode(',', $testimony->images);
-                foreach ($images as $path) {
-                    $processedTestimony[] = [
-                        'type' => 'image',
-                        'value' => env('APP_URL') . Storage::url($path),
-                    ];
-                }
+                $images = array_map(function($path){
+                    return env('APP_URL') . Storage::url($path);
+                },explode(',', $testimony->images));
+                $processedTestimony[] = [
+                    'thumbnail' => $images[0],
+                    'images' => $images,
+                    'description' => $testimony->description,
+                    'video' => !empty($testimony->videos) ? $testimony->videos: [],
+                ];
             }
         }
         $originalImage = [];
