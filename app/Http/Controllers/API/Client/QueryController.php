@@ -107,9 +107,14 @@ class QueryController extends AppBaseController
      *
      * @return QueryResource
      */
-    public function show(int $id, int $step)
+    public function show(Request $request,int $id, int $step)
     {
-        $query = Query::query()->with('responses')->where('patient_id', Auth::id());
+        if($request->has('family_id')){
+            $query = Query::query()->with('responses')->where('patient_id', $request->input('family_id'));
+        }else{
+            $query = Query::query()->with('responses')->where('patient_id', Auth::id());
+        }
+        
         if ($step == QueryResponse::queryConfirmed && $id == 0) {
             $query = $query->where('confirmed_details', '!=', null)->select('confirmed_details', 'status')->latest()->first();
             if(empty($query)){

@@ -17,6 +17,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class PatientFamilyController extends AppBaseController
@@ -45,7 +46,11 @@ class PatientFamilyController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $user = User::with('patientFamilyDetails')->find(Auth::id());
+        $user = User::with(['patientFamilyDetails' => function ($q) {
+            $q->join('users as u', function ($join) {
+                $join->on(DB::raw("CONCAT(u.country_code, '', u.phone)"), '=', 'patient_family_details.phone')->where('u.is_active', true);
+            })->select([DB::raw('u.id as family_user_id'), 'patient_family_details.*']);
+        }])->find(Auth::id());
         $patientFamilies = $user->patientFamilyDetails;
         return $this->successResponse(PatientFamilyResource::collection($patientFamilies));
     }
@@ -61,9 +66,9 @@ class PatientFamilyController extends AppBaseController
     public function store(CreatePatientFamilyAPIRequest $request)
     {
         $input = $request->all();
-        $input['patient_id'] = Auth::id(); 
+        $input['patient_id'] = Auth::id();
         $family = PatientFamilyDetails::create($input);
-       return $this->successResponse($family);
+        return $this->successResponse($family);
     }
 
     /**
@@ -112,5 +117,4 @@ class PatientFamilyController extends AppBaseController
         PatientFamilyDetails::find($id)->delete();
         return $this->successResponse('PatientFamily deleted successfully.');
     }
-
 }

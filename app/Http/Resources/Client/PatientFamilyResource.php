@@ -28,6 +28,7 @@ class PatientFamilyResource extends BaseAPIResource
             'gender' => $this->gender,
             'treatment_country' => $this->treatment_country,
             'is_active' => $this->is_active,
+            'family_user_id' => $this->family_user_id,
         ];
     }
 }
