@@ -31,7 +31,7 @@ class RegisterAPIRequest extends FormRequest
             'username' => ['nullable', 'string'],
             'password' => ['nullable', 'string'],
             'email' => ['nullable', 'string'],
-            'phone' => ['required', 'integer', 'unique:users,phone'],
+            'phone' => ['required', 'integer'],
             'email_verified_at' => ['nullable'],
             'is_active' => ['boolean'],
             'image' => ['nullable', 'string'],

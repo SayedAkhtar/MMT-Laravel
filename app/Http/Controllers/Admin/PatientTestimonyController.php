@@ -68,7 +68,7 @@ class PatientTestimonyController extends AppBaseController
             }
         }
         $testimony = PatientTestimony::create([
-            'patient_id' => 27,
+            'patient_id' => $input['patient_id'] ?? 0,
             'images' => implode(',', $paths),
             'doctor_id' => $input['doctor_id'],
             'hospital_id' => $input['hospital_id'],
@@ -103,6 +103,7 @@ class PatientTestimonyController extends AppBaseController
     public function update(UpdatePatientTestimonyAPIRequest $request, int $id)
     {
         $input = $request->all();
+        $input['patient_id'] = $input['patient_id'] ?? 0;
         $includedImages = explode(',', $input['photo_names']);
         $paths = [];
         $videos = array_filter( $input['videos'], function ($value) {

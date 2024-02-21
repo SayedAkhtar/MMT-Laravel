@@ -21,6 +21,7 @@ class ForgotPasswordAPIRequest extends FormRequest
     {
         return [
             'phone' => ['required'],
+            'password' => ['sometimes', 'string']
         ];
     }
 }

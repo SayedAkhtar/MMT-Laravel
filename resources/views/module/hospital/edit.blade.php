@@ -303,8 +303,8 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label>Map Embed Link</label>
-                            <input type="text" class="form-control" placeholder="Google map embed links"
+                            <label>Map Link</label>
+                            <input type="text" class="form-control" placeholder="Google maplinks"
                                 name="geo_location" value="{{ $hospital->geo_location }}">
                         </div>
                     </div>
@@ -312,7 +312,7 @@
                         <!-- text input -->
                         <div class="form-group">
                             <label>Listing Placement Order in App</label>
-                            <input type="number" class="form-control" placeholder="Sponsorship order" name="order" value="{{ $hospital->order }}">
+                            <input type="number" class="form-control" placeholder="Sponsorship order" name="order" @old('order') value="{{ $hospital->order ?? 0 }}">
                         </div>
                     </div>
                 </div>

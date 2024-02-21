@@ -54,7 +54,7 @@ class DoctorController extends AppBaseController
             $doctors = Doctor::whereHas('specializations', function ($q) use ($request) {
                 return $q->where('specializations.id', $request->input('specialization_id'));
             })
-                ->whereNotNull('time_slots');
+                ->whereHas('time_slots');
                 
         } else if ($request->has('specialization_id')) {
             $doctors = Doctor::whereHas('specializations', function ($q) use ($request) {

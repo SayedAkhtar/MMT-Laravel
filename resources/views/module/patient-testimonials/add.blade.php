@@ -53,9 +53,12 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <x-multi-select-search label="Patient" name="patient_id" table="patient" :multiple="false"
-                                :required="true" />
+                            
+                            <x-multi-select-search label="Patient (Leave Empty for Demo User)" name="patient_id" table="patient" :multiple="false"
+                                :required="false" />
+                                
                         </div>
+                        
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group">
@@ -101,7 +104,7 @@
                             <div class="youtubeLinkValidationMessage" style="display: none; color: red;">Please enter a
                                 valid YouTube link</div>
                             <div class="input-group">
-                                <div id="tag-inputs">
+                                <div id="tag-inputs" class="w-100">
                                     <input type="text" name="videos[]" class="form-control mb-2" pattern="(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})" title="Please enter a valid YouTube link" placeholder="Enter Link" onblur="validateYouTubeLink(this)">
                                 </div>
                                 <button type="button" id="add-tag" class="btn btn-primary mt-2">Add More</button>

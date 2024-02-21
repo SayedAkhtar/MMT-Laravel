@@ -37,8 +37,10 @@ class HomeController extends AppBaseController
         $doctors = DoctorHomeResource::collection($doctors)->resolve();
         $stories = PatientTestimony::query()
             ->whereNotNull('images')
+            ->where('patient_id', 0)
             ->select(['images', 'id', 'description', 'videos'])
-            ->orderByDesc('created_at')->limit(10)->get();
+            // ->orderByDesc('created_at')
+            ->limit(10)->get();
         $faq = Faq::query()->select(['question', 'answer'])->limit(10)->get();
         $processedTestimony = [];
         if (!empty($stories)) {
