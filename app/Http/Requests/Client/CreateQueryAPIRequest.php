@@ -31,6 +31,7 @@ class CreateQueryAPIRequest extends FormRequest
             'type' => ['required', Rule::in([Query::TYPE_QUERY, Query::TYPE_MEDICAL_VISA])],
             'current_step' => ['required', 'integer'],
             'response' => ['required', 'array'],
+            'from_patient' => ['nullable'],
         ];
     }
 }

@@ -74,10 +74,10 @@ class QueryController extends AppBaseController
             $data = [];
             if ($input['current_step'] == QueryResponse::generateQuery && $input['type'] == Query::TYPE_QUERY) {
                 $query = Query::create($input);
-                $data = (new QueryResponseService($query->id, 1, $input['response']))->execute();
+                $data = (new QueryResponseService($query->id, 1, $input['response'], true))->execute();
             } elseif ($input['current_step'] == QueryResponse::documentForVisa && $input['type'] == Query::TYPE_MEDICAL_VISA) {
                 $query = Query::create($input);
-                $data = (new QueryResponseService($query->id, 3, $input['response']))->execute();
+                $data = (new QueryResponseService($query->id, 3, $input['response'], true))->execute();
             } else {
                 if (empty($input['query_id'])) {
                     return $this->errorResponse('query_id is required', 422);
@@ -85,7 +85,7 @@ class QueryController extends AppBaseController
                 $query = Query::find($input['query_id']);
                 $query->current_step = $input['current_step'];
                 $query->save();
-                $data = (new QueryResponseService($input['query_id'], $input['current_step'], $input['response']))->execute();
+                $data = (new QueryResponseService($input['query_id'], $input['current_step'], $input['response'], $input['from_patient']))->execute();
             }
             DB::commit();
             return $this->successResponse($data);

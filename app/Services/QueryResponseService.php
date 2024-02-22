@@ -9,6 +9,7 @@ use App\Models\QueryResponse;
 use App\Notifications\FirebaseNotification;
 use Google\Cloud\Storage\Notification;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
@@ -20,12 +21,14 @@ class QueryResponseService
     private int $query_id;
     private int $step_no;
     private array $response;
+    private bool $from_patient;
 
-    public function __construct(int $query_id, int $step_no, array $response)
+    public function __construct(int $query_id, int $step_no, array $response, bool $from_patient)
     {
         $this->query_id = $query_id;
         $this->step_no = $step_no;
         $this->response = $response;
+        $this->from_patient = $from_patient;
     }
 
     public function execute()
@@ -75,6 +78,27 @@ class QueryResponseService
      */
     private function processStepTwo(): QueryResponse
     {
+        if ($this->from_patient) {
+            try {
+                DB::beginTransaction();
+                QueryResponse::where('query_id', $this->query_id)->where('step', $this->step_no)->delete();
+                $insert = [];
+                foreach ($this->response as $docResponse) {
+                    $insert[] = [
+                        'query_id' => $this->query_id,
+                        'step' => $this->step_no,
+                        'response' => json_encode($docResponse)
+                    ];
+                }
+                $res = QueryResponse::create($insert);
+                DB::commit();
+                return $res;
+            } catch (\Exception $e) {
+                DB::rollback();
+                Log::error($e);
+                throw $e;
+            }
+        }
         $folderPath = 'query_docs/';
         $url = "";
         $notify = !empty($this->response['notify']);
@@ -90,7 +114,7 @@ class QueryResponseService
                     ['name' => $folderPath . $fileName, 'predefinedAcl' => 'publicRead',], // Upload to the specified folder
                 );
                 $url = "https://storage.googleapis.com/{$bucket->name()}/{$folderPath}{$fileName}";
-            }else{
+            } else {
                 $url = $file;
             }
         }
