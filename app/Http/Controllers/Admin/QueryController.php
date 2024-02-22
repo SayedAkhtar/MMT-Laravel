@@ -84,7 +84,7 @@ class QueryController extends AppBaseController
         DB::beginTransaction();
         try {
             $query = Query::findOrFail($request->query_id);
-            $result = (new QueryResponseService($request->query_id, $request->current_step, $request->response))->execute();
+            $result = (new QueryResponseService($request->query_id, $request->current_step, $request->response, false))->execute();
             if ($result) {
                 $query->current_step = $request->current_step;
                 $query->save();
