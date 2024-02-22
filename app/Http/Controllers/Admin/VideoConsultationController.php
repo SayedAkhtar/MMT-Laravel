@@ -110,8 +110,20 @@ class VideoConsultationController extends Controller
 
     public function startConsultation($id)
     {
-        $consultation = VideoConsultation::where('channel_name', $id)->first();
+        $string = base64_decode($id);
+        $channel_name = explode('#', $string)[0];
+        $user = last(explode('#', $string));
+        $user_name = "User";
+        $consultation = VideoConsultation::where('channel_name', $channel_name)->first();
+        if($user == 2){
+            $user_name = "Admin";
+        }elseif($user == 3){
+            $user_name = "MMT HCF";
+        }
+        elseif($user== 4){
+            $user_name == "Doctor";
+        }
         // $users = User::where('id', '<>', Auth::id())->get();
-        return view('agora-chat', ['users' => [], 'channel_name' => $consultation->channel_name]);
+        return view('agora-chat', ['user_id' => $user, 'channel_name' => $consultation->channel_name, "user_name" => $user_name]);
     }
 }

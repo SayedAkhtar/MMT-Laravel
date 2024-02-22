@@ -1,9 +1,9 @@
 @extends('layouts.user_type.auth')
 @push('plugin-styles')
-    <link rel="stylesheet" href="{{ asset("plugins/daterangepicker/daterangepicker.css")}}">
-    <link rel="stylesheet" href="{{ asset("plugins/select2/css/select2.min.css")}}">
-    <link rel="stylesheet" href="{{ asset("plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css")}}">
-    <link rel="stylesheet" href="{{ asset("plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css")}}">
+    <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
 @endpush
 @section('content')
     <div class="card">
@@ -12,9 +12,7 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            <form action=""
-                  method="post"
-                  enctype="multipart/form-data">
+            <form action="" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="row">
@@ -24,9 +22,9 @@
                             <label>Date and time:</label>
                             <div class="input-group date" id="reservationdatetime" data-target-input="nearest">
                                 <input type="text" class="form-control datetimepicker-input"
-                                       data-target="#reservationdatetime" name="scheduled_at"/>
+                                    data-target="#reservationdatetime" name="scheduled_at" />
                                 <div class="input-group-append" data-target="#reservationdatetime"
-                                     data-toggle="datetimepicker">
+                                    data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                             </div>
@@ -40,29 +38,25 @@
         <div class="card-footer">
             <div class="row">
                 <div class="col-md-2 col-sm-12">
-                    <a href="{{ route('start-consultation', ['id' => $consultation->channel_name]) }}"
-                       class="btn btn-info btn-xl" target="_blank">Go to chat screen</a>
+                    <a href="{{ route('start-consultation', ['id' => base64_encode($consultation->channel_name.'#2')]) }}"
+                        class="btn btn-info btn-xl" target="_blank">Go to chat screen</a>
                 </div>
-                @if(!$consultation->is_active)
+                @if (!$consultation->is_active)
                     <div class="col-md-2 col-sm-12">
-                        <form action=""
-                              method="post"
-                              enctype="multipart/form-data" class="m-0">
+                        <form action="" method="post" enctype="multipart/form-data" class="m-0">
                             @csrf
                             @method('PUT')
-                            <input type="hidden" name="status" value="active"/>
+                            <input type="hidden" name="status" value="active" />
                             <button class="btn btn-info btn-xl">Make Call Active</button>
                         </form>
                     </div>
                 @endif
-                @if($consultation->is_active)
+                @if ($consultation->is_active)
                     <div class="col-md-2 col-sm-12">
-                        <form action=""
-                              method="post"
-                              enctype="multipart/form-data" class="my-0">
+                        <form action="" method="post" enctype="multipart/form-data" class="my-0">
                             @csrf
                             @method('PUT')
-                            <input type="hidden" name="status" value="complete"/>
+                            <input type="hidden" name="status" value="complete" />
                             <button class="btn btn-danger btn-xl">Mark Call As Completed</button>
                         </form>
                     </div>
@@ -70,20 +64,21 @@
             </div>
         </div>
     </div>
+    @livewire('consultation-link-generator', ['channelName' => $consultation->channel_name])
 @endsection
 
 @push('plugin-scripts')
-    <script src="{{ asset("plugins/select2/js/select2.full.min.js")}}"></script>
-    <script src="{{ asset("plugins/bs-custom-file-input/bs-custom-file-input.min.js")}}"></script>
-    <script src="{{ asset("plugins/moment/moment.min.js")}}"></script>
-    <script src="{{ asset("plugins/inputmask/jquery.inputmask.min.js") }}"></script>
-    <script src="{{ asset("plugins/daterangepicker/daterangepicker.js") }}"></script>
-    <script src="{{ asset("plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js") }}"></script>
+    <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
+    <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('plugins/inputmask/jquery.inputmask.min.js') }}"></script>
+    <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>
+    <script src="{{ asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
 @endpush
 
 @push('scripts')
     <script>
-        $(function () {
+        $(function() {
             bsCustomFileInput.init();
             $('[data-mask]').inputmask();
 
@@ -92,11 +87,11 @@
             theme: 'bootstrap4'
         });
         console.log(new Date('30-04-2023T20:04:56'));
-        $('#reservationdatetime').datetimepicker(
-            {
-                icons: {time: 'far fa-clock'},
-                defaultDate: new Date('{{ $consultation->scheduled_at }}'),
-            }
-        );
+        $('#reservationdatetime').datetimepicker({
+            icons: {
+                time: 'far fa-clock'
+            },
+            defaultDate: new Date('{{ $consultation->scheduled_at }}'),
+        });
     </script>
 @endpush
