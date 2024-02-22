@@ -27,15 +27,14 @@ class DoctorResource extends BaseAPIResource
             }
         }
         $time_slot = !empty($this->time_slots)?json_decode($this->time_slots, true):[];
+        
         $data = [];
         if (!empty($time_slot)) {
             foreach ($time_slot as $key => $value) {
-                foreach ($value as $v) {
-                    $data[Str::headline($key)][] = [
-                        "time" => $v,
-                        "utc" => Carbon::parse($key . " " . $v)->getTimestamp()
-                    ];
-                }
+                $data[Str::headline($value['day'])][] = [
+                    "time" => $value['time'],
+                    "utc" => $value['timestamp']
+                ];
             }
         }
         if($this->is_active == 1){

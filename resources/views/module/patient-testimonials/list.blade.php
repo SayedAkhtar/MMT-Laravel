@@ -33,8 +33,8 @@
                 @forelse($testimonials as $data)
                     <tr>
                         <td>{{ $loop->index + 1 }}</td>
-                        <td>{{ $data->user->name }}</td>
-                        <td>{{ $data->description }}</td>
+                        <td>{{ empty($data->user)? 'Demo User' : $data->user->name }}</td>
+                        <td>{!! $data->description !!}</td>
                         <td class="text-right" colspan="">
                             <a href="{{ route('patient-testimonies.update', ['patient_testimony' => $data->id]) }}"
                                class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>

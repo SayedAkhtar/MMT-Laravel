@@ -27,14 +27,11 @@ class RegisterAPIRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['nullable', 'string'],
+            'name' => ['required', 'string'],
             'username' => ['nullable', 'string'],
-            'password' => ['nullable', 'string'],
+            'password' => ['required', 'string'],
             'email' => ['nullable', 'string'],
-            'phone' => ['required', 'integer', 'unique:users,phone'],
-            'email_verified_at' => ['nullable'],
-            'is_active' => ['boolean'],
-            'image' => ['nullable', 'string'],
+            'phone' => ['required', 'integer'],
             'gender' => ['required', 'in:male,female,other'],
             'country_code' => ['required', 'string'],
             'country' => ['nullable', 'string'],

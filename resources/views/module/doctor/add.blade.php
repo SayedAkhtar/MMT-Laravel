@@ -37,8 +37,11 @@
                                     <select name="country_code" id="" class="form-select">
                                         @foreach(\App\Constants\CountryCodes::getList() as $data)
                                             <option value="{{ $data['dial_code'] }}"
-                                                @if(!empty(old('country_code')) && old('country_code') == $data['dial_code']) selected @endif
-                                                    @if($data['code'] == 'IN') selected @endif>
+                                                @if(!empty(old('country_code')) && old('country_code') == $data['dial_code']) 
+                                                selected 
+                                                @elseif($data['code'] == 'IN') 
+                                                selected 
+                                                @endif>
                                                 {{ $data['code'] }}
                                                 ({{ $data['dial_code'] }})
                                             </option>

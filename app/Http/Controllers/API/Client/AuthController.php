@@ -128,7 +128,7 @@ class AuthController extends AppBaseController
     {
         $input = $request->all();
         /** @var User $user */
-        $user = User::where('phone', $input['phone'])->first();
+        $user = User::where('phone', $input['phone'])->where('user_type', $input['role'])->first();
         if (!empty($input['language']) && !empty($user)) {
             $language = Language::where('locale', $input['language'])->first();
             if (!empty($language)) {
@@ -303,39 +303,16 @@ class AuthController extends AppBaseController
     {
         $input = $request->validated();
         /** @var User $user */
-        $user = User::where('phone', $input['phone'])->firstOrFail();
+        $user = User::where('phone', $input['phone'])->where('user_type', User::TYPE_USER)->firstOrFail();
 
-        $resultOfEmail = false;
-        $resultOfSMS = false;
-        //        $code = $this->generateCode();
         $code = rand(100000, 999999);
         $user->reset_password_code = $code;
         $user->reset_password_expire_time = Carbon::now()->addMinutes(10);
         $user->save();
-
-        // $code = 987654;
-
-        // if (User::FORGOT_PASSWORD_WITH['link']['email']) {
-        //     $resultOfEmail = $this->sendEmailForResetPasswordLink($user, $code);
-        // }
-        // if (User::FORGOT_PASSWORD_WITH['link']['sms']) {
-        //     $resultOfSMS = $this->sendSMSForResetPasswordLink($user, $code);
-        // }
         if(sendMsg91OTP($user->country_code . $user->phone, $user->reset_password_code) != 'success'){
             throw new \Exception("Cannot Send OTP. Please try again in some time", 100);
         }else{
-            $resultOfSMS = true;
             return $this->successResponse('otp successfully send.');
-        }
-
-        if ($resultOfEmail && $resultOfSMS) {
-            return $this->successResponse('otp successfully send.');
-        } elseif ($resultOfEmail && !$resultOfSMS) {
-            return $this->successResponse('otp successfully send to your email.');
-        } elseif (!$resultOfEmail && $resultOfSMS) {
-            return $this->successResponse('otp successfully send to your mobile number.');
-        } else {
-            throw new FailureResponseException('otp can not be sent due to some issue try again later.');
         }
     }
 
@@ -499,8 +476,22 @@ class AuthController extends AppBaseController
 
     public function resendOtp(Request $request)
     {
-        $user = User::find(Auth::id());
-        $phone = $user->phone;
+        $user = User::where('phone', $request->phone)->where('user_type', User::TYPE_USER)->firstOrFail();
+        $code = rand(100000, 999999);
+        if($user->otp != null){
+            $user->otp = $code;
+        }
+        if($user->reset_password_code != null){
+            $user->reset_password_code = $code;
+            $user->reset_password_expire_time = Carbon::now()->addMinutes(10);
+        }
+        $user->save();
+
+        if(sendMsg91OTP($user->country_code . $user->phone, $code) != 'success'){
+            throw new \Exception("Cannot Send OTP. Please try again in some time", 100);
+        }else{
+            return $this->successResponse('OTP sent successfully');
+        }
     }
 
     public function validateOtp(Request $request)
@@ -511,11 +502,11 @@ class AuthController extends AppBaseController
             'type' => 'required|in:register,forgot_password'
         ]);
         try {
-            $user = User::where('phone', $request->phone)->first();
+            $user = User::where('phone', $request->phone)->where('user_type', User::TYPE_USER)->first();
             if(!$user){
                 return $this->errorResponse("User Not found", 404);
             }
-            if($request->type == "register" && $user->otp == $request->input('otp')){
+            if($request->type == "register" && $user->otp == $request->input('otp') && empty($request->password)){
                 $user->is_active = true;
                 $user->otp = null;
                 $user->save();
@@ -533,24 +524,7 @@ class AuthController extends AppBaseController
                 $data = $user->toArray();
                 return $this->successResponse($data);
             }
-            // elseif($request->type == "register" && $user->otp != $request->input('otp')){
-            //     $user->patientDetails->delete();
-            //     $user->delete();
-            // }
             return $this->errorResponse("OTP validation failed", 404);
-            // if ($request->type == 'register') {
-            //     if ($user->otp == $request->input('otp')) {
-                    
-            //     }
-            //     $user->patientDetails->delete();
-            //     $user->delete();
-            // }
-            // if ($request->type == 'forgot_password' && !empty($request->password)) {
-            //     // dump($user, $request);
-            //     if () {
-                    
-            //     }
-            // }
         } catch (ValidationException $e) {
             return $this->errorResponse($e->getMessage());
         } catch (\Exception $e) {

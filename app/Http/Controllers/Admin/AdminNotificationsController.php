@@ -64,13 +64,14 @@ class AdminNotificationsController extends AppBaseController
                     $user->notify(new FirebaseNotification(
                         $request->input('title'), 
                         $request->input('body'),
-                        "https://picsum.photos/200/300",
+                        $request->input('image', ''),
                         [
                             "click_action" => "FLUTTER_NOTIFICATION_CLICK",
                             "sound" => "default",
                             "status" => "done",
                             "screen" => "openUrl",
                             "url" => $request->input('url'),
+                            "content_available" => "true"
                         ]
                     ));
                     
@@ -89,6 +90,7 @@ class AdminNotificationsController extends AppBaseController
                 // ]);
             }catch(\Exception $e){
                 Log::error($e->getMessage());
+                dd($e);
                 // AdminNotifications::create([
                 //     'user_id' => $user->id,
                 //     'notification_title' => $request->input('title'),

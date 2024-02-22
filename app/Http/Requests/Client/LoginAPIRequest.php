@@ -23,6 +23,7 @@ class LoginAPIRequest extends FormRequest
             'phone' => ['required'],
             'password' => ['required'],
             'language' => ['nullable'],
+            'role' => ['required', 'integer'],
         ];
     }
 }

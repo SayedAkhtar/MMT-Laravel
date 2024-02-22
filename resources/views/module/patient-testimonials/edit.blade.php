@@ -55,8 +55,13 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
+                            @if($testimony->user !=0)
                             <x-multi-select-search label="Patient" name="patient_id" table="patient" :multiple="false"
                                 :required="true" :selectedOptions="$testimony->user" />
+                            @else
+                            <x-multi-select-search label="Patient" name="patient_id" table="patient" :multiple="false"
+                                :required="false" />
+                            @endif
                         </div>
                     </div>
                     <div class="col-sm-4">
