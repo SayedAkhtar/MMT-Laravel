@@ -85,7 +85,7 @@ class QueryController extends AppBaseController
                 $query = Query::find($input['query_id']);
                 $query->current_step = $input['current_step'];
                 $query->save();
-                $data = (new QueryResponseService($input['query_id'], $input['current_step'], $input['response'], $input['from_patient']))->execute();
+                $data = (new QueryResponseService($input['query_id'], $input['current_step'], $input['response'], true))->execute();
             }
             DB::commit();
             return $this->successResponse($data);
