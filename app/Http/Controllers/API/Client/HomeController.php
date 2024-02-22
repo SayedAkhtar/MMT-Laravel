@@ -13,12 +13,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends AppBaseController
 {
     public function __construct()
     {
-
     }
 
     public function modules()
@@ -32,7 +32,16 @@ class HomeController extends AppBaseController
             }
         }
 
-        $hospitals = Hospital::query()->where('is_active', 1)->orderByRaw("IFNULL('order', 999999), 'order' ASC")->limit(10)->get();
+        $hospitals = Hospital::select('*', DB::raw('
+                                        CASE
+                                            WHEN `order` = 0 THEN 99999
+                                            WHEN `order` IS NULL THEN 99999
+                                            ELSE `order`
+                                        END as ordering_column
+                                    '))->where('is_active', 1)
+            ->orderBy('ordering_column')
+            ->orderBy('created_at')
+            ->limit(10)->get();
         $doctors = Doctor::with(['user', 'specializations', 'designations'])->where('is_active', 1)->orderByDesc('created_at')->limit(10)->get();
         $doctors = DoctorHomeResource::collection($doctors)->resolve();
         $stories = PatientTestimony::query()
@@ -45,14 +54,14 @@ class HomeController extends AppBaseController
         $processedTestimony = [];
         if (!empty($stories)) {
             foreach ($stories as $testimony) {
-                $images = array_map(function($path){
+                $images = array_map(function ($path) {
                     return env('APP_URL') . Storage::url($path);
-                },explode(',', $testimony->images));
+                }, explode(',', $testimony->images));
                 $processedTestimony[] = [
                     'thumbnail' => $images[0],
                     'images' => $images,
                     'description' => $testimony->description,
-                    'video' => !empty($testimony->videos) ? $testimony->videos: [],
+                    'video' => !empty($testimony->videos) ? $testimony->videos : [],
                 ];
             }
         }
@@ -76,19 +85,19 @@ class HomeController extends AppBaseController
     public function searchHospitalDoctor(Request $request)
     {
         $term = $request->input('term');
-        if(app()->getLocale() != "en"){
+        if (app()->getLocale() != "en") {
             $locale = app()->getLocale();
             $hospitals = Hospital::query()->whereRaw("JSON_EXTRACT(name, '$.$locale') LIKE ?", ["%$term%"])->select(['id', 'name', 'address'])->get();
             $doctors = Doctor::with(['user', 'specializations'])->whereHas('user', function ($q) use ($term, $locale) {
                 $q->whereRaw("JSON_EXTRACT(name, '$.$locale') LIKE ?", ["%$term%"]);
             })->get();
-        }else{
+        } else {
             $hospitals = Hospital::query()->where('name', 'like', '%' . $term . '%')->select(['id', 'name', 'address'])->get();
             $doctors = Doctor::with(['user', 'specializations'])->whereHas('user', function ($q) use ($term) {
                 $q->where('name', 'like', '%' . $term . '%');
             })->get();
         }
-        
+
         $results = [];
         foreach ($hospitals as $hospital) {
             $result['id'] = $hospital->id;
@@ -109,7 +118,8 @@ class HomeController extends AppBaseController
         return $this->successResponse($results);
     }
 
-    public function getCountries(){
+    public function getCountries()
+    {
         $countries = \App\Models\Country::all();
         return $this->successResponse($countries);
     }

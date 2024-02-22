@@ -39,7 +39,7 @@
                                 <div class="input-group-prepend w-25">
                                     <select name="country_code" id="" class="form-select">
                                         @foreach(\App\Constants\CountryCodes::getList() as $data)
-                                            <option value="{{ $data['dial_code'] }}">
+                                            <option value="{{ $data['dial_code'] }}" {{ $doctor->user->country_code == $data['dial_code'] ? 'selected': '' }}>
                                                 {{ $data['code'] }}
                                                 ({{ $data['dial_code'] }})
                                             </option>

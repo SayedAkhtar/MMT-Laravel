@@ -128,7 +128,7 @@ class AuthController extends AppBaseController
     {
         $input = $request->all();
         /** @var User $user */
-        $user = User::where('phone', $input['phone'])->where('user_type', User::TYPE_USER)->first();
+        $user = User::where('phone', $input['phone'])->where('user_type', $input['role'])->first();
         if (!empty($input['language']) && !empty($user)) {
             $language = Language::where('locale', $input['language'])->first();
             if (!empty($language)) {
